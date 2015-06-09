@@ -8,7 +8,8 @@ var TalkSchema = new Schema({
   subject: String,
   date: Date,
   reference: String,
-  outline: [String]
+  outline: [String],
+  version: {type: Number, default: 0}
 })
 
 TalkSchema.set('toObject', {
