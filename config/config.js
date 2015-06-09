@@ -30,9 +30,9 @@ var config = {
     app: {
       name: 'ccm'
     },
-    port: 9000,
+    port: 9010,
     env: 'production',
-    seed: false,
+    seed: true,
     db: 'mongodb://localhost/ccm'
   }
 };

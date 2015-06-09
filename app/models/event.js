@@ -7,7 +7,8 @@ var EventSchema = new Schema({
   title: String,
   location: String,
   date: Date,
-  description: String
+  description: String,
+  version: {type:Number, default: 0}
 })
 
 EventSchema.virtual('to').get(function(){
@@ -17,6 +18,11 @@ EventSchema.virtual('to').get(function(){
 EventSchema.set('toObject', {
    virtuals: true
 });
+
+EventSchema.method.addVersion = function(cb){
+	this.version = this.version + 1;
+	this.save(cb);
+}
 
 
 
