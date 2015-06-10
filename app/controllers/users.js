@@ -26,8 +26,6 @@ var validationError = function(res, err) {
 //new user
 router.post('/', function(req, res, next){
 	var newUser = new User(req.body);
-	console.log(req);
-	console.log(req.body);
 	newUser.provider = 'local';
 	newUser.role = 'user';
 
