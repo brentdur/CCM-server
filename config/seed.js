@@ -11,7 +11,7 @@ var Msg = require('../app/models/message');
 var User = require('../app/models/user');
 
 User.find({}).remove(function(){
-    consoe.log('Finished deleting users');
+    console.log('Finished deleting users');
 });
 
 Event.find({}).remove(function(){
