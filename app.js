@@ -4,6 +4,8 @@ var express = require('express'),
   config = require('./config/config'),
   glob = require('glob'),
   mongoose = require('mongoose');
+var session = require('express-session');
+var mongoStore = require('connect-mongo')(session);
 
 mongoose.connect(config.db);
 var db = mongoose.connection;
@@ -22,6 +24,13 @@ var app = express();
 require('./config/express')(app, config);
 
 app.listen(config.port);
+
+app.use(session({
+	secret: config.session,
+	resave: true,
+	saveUninitialized: true,
+	store: new mongoStore({ mongooseConnection: mongoose.connection })
+}));
 
 console.log('Server started on port '+ config.port + ' in ' + config.env + ' mode');
 

@@ -11,7 +11,27 @@ var config = {
     port: 9000,
     seed: true,
     env: 'development',
-    db: 'mongodb://localhost/ccm-development'
+    session: 'session',
+    domain: 'http://localhost:9000/',
+    userRoles: ['guest', 'user', 'admin'],
+    db: 'mongodb://localhost/ccm-development',
+    facebook: {
+      clientID:     process.env.FACEBOOK_ID || 'id',
+      clientSecret: process.env.FACEBOOK_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/facebook/callback'
+    },
+
+    twitter: {
+      clientID:     process.env.TWITTER_ID || 'id',
+      clientSecret: process.env.TWITTER_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/twitter/callback'
+    },
+
+    google: {
+      clientID:     process.env.GOOGLE_ID || 'id',
+      clientSecret: process.env.GOOGLE_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+    }
   },
 
   test: {
@@ -22,7 +42,27 @@ var config = {
     port: 9000,
     env: 'test',
     seed: true,
-    db: 'mongodb://localhost/ccm-test'
+    session: 'session',
+    domain: 'http://localhost:9000/',
+    userRoles: ['guest', 'user', 'admin'],
+    db: 'mongodb://localhost/ccm-test',
+    facebook: {
+      clientID:     process.env.FACEBOOK_ID || 'id',
+      clientSecret: process.env.FACEBOOK_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/facebook/callback'
+    },
+
+    twitter: {
+      clientID:     process.env.TWITTER_ID || 'id',
+      clientSecret: process.env.TWITTER_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/twitter/callback'
+    },
+
+    google: {
+      clientID:     process.env.GOOGLE_ID || 'id',
+      clientSecret: process.env.GOOGLE_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+    }
   },
 
   production: {
@@ -33,7 +73,27 @@ var config = {
     port: 9010,
     env: 'production',
     seed: true,
-    db: 'mongodb://localhost/ccm'
+    session: 'session',
+    domain: 'http://ccm.brentondurkee.com/',
+    userRoles: ['guest', 'user', 'admin'],
+    db: 'mongodb://localhost/ccm',
+    facebook: {
+      clientID:     process.env.FACEBOOK_ID || 'id',
+      clientSecret: process.env.FACEBOOK_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/facebook/callback'
+    },
+
+    twitter: {
+      clientID:     process.env.TWITTER_ID || 'id',
+      clientSecret: process.env.TWITTER_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/twitter/callback'
+    },
+
+    google: {
+      clientID:     process.env.GOOGLE_ID || 'id',
+      clientSecret: process.env.GOOGLE_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+    }
   }
 };
 

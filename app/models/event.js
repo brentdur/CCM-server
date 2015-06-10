@@ -15,6 +15,7 @@ EventSchema.virtual('to').get(function(){
 	return new Date(this.date - Date.now()).getTime()/1000;
 });
 
+
 EventSchema.set('toObject', {
    virtuals: true
 });
