@@ -8,7 +8,8 @@ var MsgSchema = new Schema({
   to: String,
   date: Date,
   subject: String,
-  message: String
+  message: String,
+  version: {type: Number, default: 0}
 })
 
 MsgSchema.set('toObject', {
