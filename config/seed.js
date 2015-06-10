@@ -8,6 +8,11 @@
 var Event = require('../app/models/event');
 var Talk = require('../app/models/talk');
 var Msg = require('../app/models/message');
+var User = require('../app/models/user');
+
+User.find({}).remove(function(){
+    consoe.log('Finished deleting users');
+});
 
 Event.find({}).remove(function(){
     Event.create(
