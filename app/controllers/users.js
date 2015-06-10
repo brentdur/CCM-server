@@ -45,6 +45,17 @@ router.get('/', function(req, res, next){
 	});
 });
 
+router.post('/gcm', auth.isAuthenticated(), function(req, res, next){
+	User.findById(req.user._id, function(err, user) {
+		if(err){ return next(err); }
+		user.gcm=req.body.gcm;
+		user.save(function(err, user){
+			if(err){ return next(err); }
+			res.status(200).send();
+		});
+	});
+});
+
 //get me
 router.get('/me', auth.isAuthenticated(), function(req, res, next){
 	var userId = req.user._id;
