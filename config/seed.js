@@ -10,9 +10,9 @@ var Talk = require('../app/models/talk');
 var Msg = require('../app/models/message');
 var User = require('../app/models/user');
 
-// User.find({}).remove(function(){
-//     console.log('Finished deleting users');
-// });
+User.find({}).remove(function(){
+     console.log('Finished deleting users');
+ });
 
 Event.find({}).remove(function(){
     Event.create(
