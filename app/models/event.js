@@ -8,6 +8,8 @@ var EventSchema = new Schema({
   location: String,
   date: Date,
   description: String,
+  lat: Number,
+  lng: Number,
   version: {type:Number, default: 0}
 })
 

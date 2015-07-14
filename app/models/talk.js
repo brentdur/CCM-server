@@ -8,6 +8,7 @@ var TalkSchema = new Schema({
   subject: String,
   date: Date,
   reference: String,
+  fullVerse: String,
   outline: [String],
   version: {type: Number, default: 0}
 })

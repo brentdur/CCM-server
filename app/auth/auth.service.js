@@ -67,10 +67,9 @@ function inGroup(groupReq) {
           next();
         }
         else {
-          res.status(403).send();
+          res.sendStatus(403);
         }
       })
-        next();
     });
 }
 
