@@ -19,31 +19,31 @@ Event.find({}).remove(function(){
         {
             title: 'first event',
             location: 'Reedemer West Side',
-            date: 'June 14, 2015',
+            date: 'September 14, 2015',
             description: 'This is the first event'
         }, 
         {
             title: 'second event',
             location: 'Church Offices',
-            date: 'June 15, 2015',
+            date: 'September 15, 2015',
             description: 'This is the second event'
         },
         {
             title: 'third event',
             location: 'Reedemer West Side',
-            date: 'June 16, 2015',
+            date: 'September 16, 2015',
             description: 'This is the third event'
         },
         {
             title: 'fourth event',
             location: 'Reedemer West Side',
-            date: 'June 17, 2015',
+            date: 'September 17, 2015',
             description: 'This is the fourth event'
         },
         {
             title: 'fifth event',
             location: 'church',
-            date: 'June 18, 2015',
+            date: 'September 18, 2015',
             description: 'This is the fifth event'
         },
         function(){
@@ -55,7 +55,7 @@ Talk.find({}).remove(function(){
     Talk.create(
         {
             author: 'Eric',
-            date: 'June 1, 2015',
+            date: 'September 1, 2015',
             subject: 'WLG - Sorrow',
             reference: 'John 1:1-16',
             outline: [
@@ -66,7 +66,7 @@ Talk.find({}).remove(function(){
         }, 
         {
             author: 'Tim',
-            date: 'June 2, 2015',
+            date: 'September 2, 2015',
             subject: 'SC - Sorrow in Relationships',
             reference: 'John 2:1-16',
             outline: [
@@ -78,7 +78,7 @@ Talk.find({}).remove(function(){
         }, 
         {
             author: 'Michael',
-            date: 'June 3, 2015',
+            date: 'September 3, 2015',
             subject: 'WLG - Happiness',
             reference: 'John 3:1-16',
             outline: [
@@ -91,7 +91,7 @@ Talk.find({}).remove(function(){
         }, 
         {
             author: 'Eric',
-            date: 'June 4, 2015',
+            date: 'September 4, 2015',
             subject: 'SC - Dating',
             reference: 'John 4:1-16',
             outline: [
@@ -105,7 +105,7 @@ Talk.find({}).remove(function(){
         }, 
         {
             author: 'Eric',
-            date: 'June 5, 2015',
+            date: 'September 5, 2015',
             subject: 'WLG - Plans',
             reference: 'John 5:1-16',
             outline: [
@@ -131,35 +131,35 @@ Msg.find({}).remove(function(){
             from: 'Michael',
             to: 'all',
             subject: 'Hello',
-            date: 'June 9, 2015',
+            date: 'September 9, 2015',
             message: 'Hey guys, welcome to RUF'
         }, 
         {
             from: 'Michael',
             to: 'ministry team',
             subject: 'MT retreat',
-            date: 'June 8, 2015',
+            date: 'September 8, 2015',
             message: 'It\'s coming up'
         }, 
         {
             from: 'Michael',
             to: 'you',
             subject: 'I miss you',
-            date: 'June 7, 2015',
+            date: 'September 7, 2015',
             message: 'Hey you'
         }, 
         {
             from: 'Michael',
             to: 'all',
             subject: 'WLG cancelled',
-            date: 'June 6, 2015',
+            date: 'September 6, 2015',
             message: 'It\'s cancelled, get over it'
         }, 
         {
             from: 'Michael',
             to: 'all',
             subject: '41411',
-            date: 'June 5, 2015',
+            date: 'September 5, 2015',
             message: 'Boom'
         }, 
         function(){
