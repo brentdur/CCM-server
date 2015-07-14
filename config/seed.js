@@ -9,10 +9,47 @@ var Event = require('../app/models/event');
 var Talk = require('../app/models/talk');
 var Msg = require('../app/models/message');
 var User = require('../app/models/user');
+var Group = require('../app/models/group');
 
 User.find({}).remove(function(){
-     console.log('Finished deleting users');
+     User.create(
+        {
+            name: 'admin',
+            email: 'admin@brentondurkee.com',
+            password: '123'
+        },
+        function(){
+            console.log('Finished adding users');
+            User.findOne({name: 'admin'}, function(err, user){
+                console.log(user);
+                Group.findOne({name: 'admin'}, function(err, group){
+                    if(err) { return next(err); }
+                    user.addGroup(group._id, function(err, number){
+                        if(err) {return next(err);}
+                        group.addUser(user._id, function(err, number){
+                            if(err) {return next(err);}
+                            console.log('Admin User Group Set');
+                        });
+                    });
+                });
+            });
+        });
  });
+
+Group.find({}).remove(function(){
+    Group.create(
+        {
+            name: 'admin'
+        },
+        {
+            name: 'users'
+        },
+        function(){
+            console.log('Finished starting groups');
+        });
+ });
+
+
 
 Event.find({}).remove(function(){
     Event.create(
