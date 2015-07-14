@@ -2,12 +2,13 @@ var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
   Group = mongoose.model('Group');
+  var auth = require('../auth/auth.service');
 
 module.exports = function (app) {
   app.use('/api/groups', router);
 }
 
-router.get('/', function (req, res, next) {
+router.get('/', auth.inGroup('admin'), function (req, res, next) {
   Group.find({})
   .populate('members', '-hashedPassword -salt')
   .exec(function (err, groups) {
@@ -16,7 +17,7 @@ router.get('/', function (req, res, next) {
     });
   });
 
-router.post('/', function(req, res, next){
+router.post('/', auth.inGroup('admin'), function(req, res, next){
   var group = new Group(req.body).save(function(err){
     if (err) return next(err);
     console.log('saved');
