@@ -21,7 +21,6 @@ User.find({}).remove(function(){
         function(){
             console.log('Finished adding users');
             User.findOne({name: 'admin'}, function(err, user){
-                console.log(user);
                 Group.findOne({name: 'admin'}, function(err, group){
                     if(err) { return next(err); }
                     user.addGroup(group._id, function(err, number){
