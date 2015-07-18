@@ -59,6 +59,9 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
       }
     },
     function(callback){
+      if(!req.body.date){
+        req.body.date = Date();
+      }
       console.log(req.body.to);
       var message = new Message(req.body).save(function(err) {
         console.log('saved');
