@@ -62,3 +62,28 @@
     {{/each}}
     </ol>
  </p>
+ <p>Users: 
+    <ol>
+    {{#each users}}
+    <li><ul>
+      <p><b>Name:</b> {{name}} </p>
+      <p><b>Email:</b> {{email}} </p>
+      <p><b>GCM:</b> {{gcm}} </p>
+      <p><b>Groups:</b> {{groups}} </p>
+    </ul></li>
+    {{/each}}
+    </ol>
+ </p>
+ <p>Groups: 
+    <ol>
+    {{#each groups}}
+    <li><ul>
+      <p><b>Name:</b> {{name}} </p>
+      <p><b>Address:</b> {{members}} </p>
+      <p><b>WriteTalks:</b> {{writeTalks}} </p>
+      <p><b>WriteMsgs:</b> {{writeMsgs}} </p>
+      <p><b>WriteEvents:</b> {{writeEvents}} </p>
+    </ul></li>
+    {{/each}}
+    </ol>
+ </p>

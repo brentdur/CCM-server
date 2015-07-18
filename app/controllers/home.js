@@ -5,7 +5,8 @@ var express = require('express'),
   Talk = mongoose.model('Talk');
   Message = mongoose.model('Message'),
   Location = mongoose.model('Location'),
-  User = mongoose.model('User')
+  User = mongoose.model('User'),
+  Group = mongoose.model('Group'),
   async = require('async');
 
 module.exports = function (app) {
@@ -38,16 +39,22 @@ router.get('/', function (req, res, next) {
         User.find(function(err, users){
           callback(err, users);
         });
+      },
+      function(callback){
+        Group.find(function(err, groups){
+          callback(err, groups);
+        });
       }
     ], function(err, results){
       if (err) return next(err);
       res.render('index', {
           title: 'Generator-Express MVC',
           events: results[0],
-          talks: results[1],
-          msgs: results[2],
+          msgs: results[1],
+          talks: results[2],
           locs: results[3],
-          users: results[4]
+          users: results[4],
+          groups: results[5]
           });
 
   });
