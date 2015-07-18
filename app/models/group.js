@@ -6,9 +6,9 @@ var Schema = mongoose.Schema;
 var GroupSchema = new Schema({
   name: String,
   members: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-  writeTalks: Boolean,
-  writeMsgs: Boolean,
-  writeEvents: Boolean,
+  writeTalks: {type:Boolean, default: false},
+  writeMsgs: {type:Boolean, default: false},
+  writeEvents: {type:Boolean, default: false},
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   version: {type:Number, default: 0}
 });
