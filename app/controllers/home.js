@@ -3,7 +3,8 @@ var express = require('express'),
   mongoose = require('mongoose'),
   Event = mongoose.model('Event');
   Talk = mongoose.model('Talk');
-  Message = mongoose.model('Message');
+  Message = mongoose.model('Message'),
+  Location = mongoose.model('Location');
 
 module.exports = function (app) {
   app.use('/', router);
@@ -16,11 +17,15 @@ router.get('/', function (req, res, next) {
       if(err) return next(err);
       Talk.find(function (err, talks){
         if(err) return next(err);
-        res.render('index', {
-        title: 'Generator-Express MVC',
-        events: events,
-        talks: talks,
-        msgs: messages
+        Location.find(function(err, locations){
+          if(err) return next(err);
+          res.render('index', {
+          title: 'Generator-Express MVC',
+          events: events,
+          talks: talks,
+          msgs: messages,
+          locs: locations
+          });
         });
       });
     });

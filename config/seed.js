@@ -10,7 +10,7 @@ var Talk = require('../app/models/talk');
 var Msg = require('../app/models/message');
 var User = require('../app/models/user');
 var Group = require('../app/models/group');
-var Location = require('../app/models/location')
+var Location = require('../app/models/location');
 
 // User.find({}).remove(function(){
 //      User.create(
@@ -209,40 +209,44 @@ Talk.find({}).remove(function(){
             console.log('Finished populating talks');
         });
 });
+var group;
+Group.findOne({name: 'admin'}, function(err, groupe){
+    group = groupe._id;
+});
 
 Msg.find({}).remove(function(){
     Msg.create(
         {
             from: 'Michael',
-            to: 'all',
+            to: group,
             subject: 'Hello',
             date: 'September 9, 2015',
             message: 'Hey guys, welcome to RUF'
         }, 
         {
             from: 'Michael',
-            to: 'ministry team',
+            to: group,
             subject: 'MT retreat',
             date: 'September 8, 2015',
             message: 'It\'s coming up'
         }, 
         {
             from: 'Michael',
-            to: 'you',
+            to: group,
             subject: 'I miss you',
             date: 'September 7, 2015',
             message: 'Hey you'
         }, 
         {
             from: 'Michael',
-            to: 'all',
+            to: group,
             subject: 'WLG cancelled',
             date: 'September 6, 2015',
             message: 'It\'s cancelled, get over it'
         }, 
         {
             from: 'Michael',
-            to: 'all',
+            to: group,
             subject: '41411',
             date: 'September 5, 2015',
             message: 'Boom'

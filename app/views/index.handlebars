@@ -50,3 +50,15 @@
   	{{/each}}
   	</ol>
  </p>
+ <p>Locations: 
+    <ol>
+    {{#each locs}}
+    <li><ul>
+      <p><b>Name:</b> {{name}} </p>
+      <p><b>Address:</b> {{address}} </p>
+      <p><b>Lat:</b> {{lat}} </p>
+      <p><b>Lng:</b> {{lng}} </p>
+    </ul></li>
+    {{/each}}
+    </ol>
+ </p>
