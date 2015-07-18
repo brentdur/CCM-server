@@ -44,6 +44,7 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
   console.log(req.body.to);
   async.waterfall([
     function(callback){
+      req.body.simpleTo = req.body.to;
       if(req.body.groupid){
         req.body.to = req.body.groupid;
         callback();

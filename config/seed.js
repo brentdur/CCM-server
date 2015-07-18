@@ -105,31 +105,41 @@ Event.find({}).remove(function(){
             title: 'first event',
             location: 'Reedemer West Side',
             date: 'September 14, 2015',
-            description: 'This is the first event'
+            description: 'This is the first event',
+            lat: '40.786122', 
+            lng: '-73.975738'
         }, 
         {
             title: 'second event',
             location: 'Church Offices',
             date: 'September 15, 2015',
-            description: 'This is the second event'
+            description: 'This is the second event',
+            lat: '40.786122', 
+            lng: '-73.975738'
         },
         {
             title: 'third event',
             location: 'Reedemer West Side',
             date: 'September 16, 2015',
-            description: 'This is the third event'
+            description: 'This is the third event',
+            lat: '40.786122', 
+            lng: '-73.975738'
         },
         {
             title: 'fourth event',
             location: 'Reedemer West Side',
             date: 'September 17, 2015',
-            description: 'This is the fourth event'
+            description: 'This is the fourth event',
+            lat: '40.786122', 
+            lng: '-73.975738'
         },
         {
             title: 'fifth event',
             location: 'church',
             date: 'September 18, 2015',
-            description: 'This is the fifth event'
+            description: 'This is the fifth event',
+            lat: '40.786122', 
+            lng: '-73.975738'
         },
         function(){
             console.log('Finished populating events');
@@ -143,6 +153,7 @@ Talk.find({}).remove(function(){
             date: 'September 1, 2015',
             subject: 'WLG - Sorrow',
             reference: 'John 1:1-16',
+            fullVerse: 'full verse goes here',
             outline: [
                 'Be sorry',
                 'No Need',
@@ -154,6 +165,7 @@ Talk.find({}).remove(function(){
             date: 'September 2, 2015',
             subject: 'SC - Sorrow in Relationships',
             reference: 'John 2:1-16',
+            fullVerse: 'full verse goes here',
             outline: [
                 'You will',
                 'He/she will',
@@ -166,6 +178,7 @@ Talk.find({}).remove(function(){
             date: 'September 3, 2015',
             subject: 'WLG - Happiness',
             reference: 'John 3:1-16',
+            fullVerse: 'full verse goes here',
             outline: [
                 'Be happy',
                 'God\'s happy',
@@ -179,6 +192,7 @@ Talk.find({}).remove(function(){
             date: 'September 4, 2015',
             subject: 'SC - Dating',
             reference: 'John 4:1-16',
+            fullVerse: 'full verse goes here',
             outline: [
                 'Note A',
                 'Note B',
@@ -193,6 +207,7 @@ Talk.find({}).remove(function(){
             date: 'September 5, 2015',
             subject: 'WLG - Plans',
             reference: 'John 5:1-16',
+            fullVerse: 'full verse goes here',
             outline: [
                 'Note A',
                 'Note B',
@@ -219,6 +234,7 @@ Msg.find({}).remove(function(){
         {
             from: 'Michael',
             to: group,
+            simpleTo: 'admin',
             subject: 'Hello',
             date: 'September 9, 2015',
             message: 'Hey guys, welcome to RUF'
@@ -226,6 +242,7 @@ Msg.find({}).remove(function(){
         {
             from: 'Michael',
             to: group,
+            simpleTo: 'admin',
             subject: 'MT retreat',
             date: 'September 8, 2015',
             message: 'It\'s coming up'
@@ -233,6 +250,7 @@ Msg.find({}).remove(function(){
         {
             from: 'Michael',
             to: group,
+            simpleTo: 'admin',
             subject: 'I miss you',
             date: 'September 7, 2015',
             message: 'Hey you'
@@ -240,6 +258,7 @@ Msg.find({}).remove(function(){
         {
             from: 'Michael',
             to: group,
+            simpleTo: 'admin',
             subject: 'WLG cancelled',
             date: 'September 6, 2015',
             message: 'It\'s cancelled, get over it'
@@ -247,6 +266,7 @@ Msg.find({}).remove(function(){
         {
             from: 'Michael',
             to: group,
+            simpleTo: 'admin',
             subject: '41411',
             date: 'September 5, 2015',
             message: 'Boom'

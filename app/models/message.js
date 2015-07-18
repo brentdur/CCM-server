@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
 var MsgSchema = new Schema({
   from: String,
   to: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'},
+  simpleTo: String,
   date: Date,
   subject: String,
   message: String,
