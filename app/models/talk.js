@@ -10,6 +10,7 @@ var TalkSchema = new Schema({
   reference: String,
   fullVerse: String,
   outline: [String],
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   version: {type: Number, default: 0}
 })
 
@@ -20,6 +21,11 @@ TalkSchema.set('toObject', {
 TalkSchema.methods.addNote = function(note, cb){
 	this.outline.push(note);
 	this.save(cb);
+}
+
+TalkSchema.methods.incVersion = function(cb){
+  this.version += 1;
+  this.save(cb);
 }
 
 

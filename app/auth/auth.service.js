@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var config = require('../../config/config');
 var jwt = require('jsonwebtoken');
+var async = require('async');
 var expressJwt = require('express-jwt');
 var compose = require('composable-middleware');
 var User = mongoose.model('User');
@@ -73,6 +74,37 @@ function inGroup(groupReq) {
     });
 }
 
+function canWrite(type){
+  if(!type) throw new Error('Required type needs to be set');
+
+  return compose()
+    .use(isAuthenticated())
+    .use(function meetsRequirements(req, res, next) {
+      var forward = 'write'+type;
+      var groups = req.user.groups;
+      var good = false;
+      async.forEachOf(groups, function(item, key, callback){
+        Group.findById({_id: item}, forward, function(err, group){
+          
+          if(group && group.toString().indexOf('true') > -1) {
+            next();
+            good = true;
+          }
+          else {
+            console.log(group.toString());
+            console.log(forward);
+          }
+          callback(err);
+        });
+      }, function(err){
+        if(err) return next(err);
+        if(!good){
+          res.sendStatus(403);
+        }
+      });
+    });
+}
+
 /**
  * Returns a jwt token signed by the app secret
  */
@@ -93,5 +125,6 @@ function setTokenCookie(req, res) {
 exports.isAuthenticated = isAuthenticated;
 exports.hasRole = hasRole;
 exports.inGroup = inGroup;
+exports.canWrite = canWrite;
 exports.signToken = signToken;
 exports.setTokenCookie = setTokenCookie;

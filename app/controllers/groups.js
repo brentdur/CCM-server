@@ -18,6 +18,7 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
   });
 
 router.post('/', auth.inGroup('admin'), function(req, res, next){
+  req.body.creator = req.user._id;
   var group = new Group(req.body).save(function(err){
     if (err) return next(err);
     console.log('saved');

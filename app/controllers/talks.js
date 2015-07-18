@@ -17,10 +17,10 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
     });
   });
 
-router.post('/', auth.inGroup("admin"), function(req, res, next){
+router.post('/', auth.canWrite('Talks'), function(req, res, next){
 
   
-
+  req.body.creator = req.user._id;
   async.waterfall([
       function(callback){
         http.get('http://www.esvapi.org/v2/rest/passageQuery?passage='+req.body.reference+'&key=IP&output-format=plain-text&include-passage-references=0&include-footnotes=0&include-short-copyright=0&include-passage-horizontal-lines=0&include-heading-horizontal-lines=0&include-headings=0', function(res){
@@ -60,7 +60,10 @@ router.put('/note', auth.inGroup("admin"), function(req, res, next){
     console.log(req.body.note);
     talk.addNote(req.body.note, function(err, number){
       if (err) { return next(err); }
-      res.json(number)
+      talk.incVersion(function(err){
+        if(err) { return next(err); }
+        res.json(number);
+      });
     });
   });
 });

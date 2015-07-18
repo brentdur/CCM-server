@@ -10,43 +10,92 @@ var Talk = require('../app/models/talk');
 var Msg = require('../app/models/message');
 var User = require('../app/models/user');
 var Group = require('../app/models/group');
+var Location = require('../app/models/location')
 
-User.find({}).remove(function(){
-     User.create(
+// User.find({}).remove(function(){
+//      User.create(
+//         {
+//             name: 'admin',
+//             email: 'admin@brentondurkee.com',
+//             password: '123'
+//         },
+//         {
+//             name: 'user',
+//             email: 'user@brentondurkee.com',
+//             password: '123'
+//         },
+//         function(){
+//             console.log('Finished adding users');
+//             User.findOne({name: 'admin'}, function(err, user){
+//                 Group.findOne({name: 'admin'}, function(err, group){
+//                     if(err) { return next(err); }
+//                     user.addGroup(group._id, function(err, number){
+//                         if(err) {return next(err);}
+//                         group.addUser(user._id, function(err, number){
+//                             if(err) {return next(err);}
+//                             console.log('Admin User Group Set');
+//                         });
+//                     });
+//                 });
+//             });
+//             User.findOne({name: 'user'}, function(err, user){
+//                 Group.findOne({name: 'users'}, function(err, group){
+//                     if(err) { return next(err); }
+//                     user.addGroup(group._id, function(err, number){
+//                         if(err) {return next(err);}
+//                         group.addUser(user._id, function(err, number){
+//                             if(err) {return next(err);}
+//                             console.log('User User Group Set');
+//                         });
+//                     });
+//                 });
+//             });
+//         });
+//  });
+
+// Group.find({}).remove(function(){
+//     Group.create(
+//         {
+//             name: 'admin',
+//             writeTalks: true,
+//             writeMsgs: true,
+//             writeEvents: true
+//         },
+//         {
+//             name: 'users'
+//         },
+//         function(){
+//             console.log('Finished starting groups');
+//         });
+//  });
+//  
+//  
+// 
+
+Location.find({}).remove(function(){
+    Location.create(
         {
-            name: 'admin',
-            email: 'admin@brentondurkee.com',
-            password: '123'
+            name: 'Redeemer UWS',
+            address: 'W83 Ministry Center, 150 W. 83rd St., New York, New York',
+            lat: '40.786122', 
+            lng: '-73.975738'
+        },
+        {
+            name: 'Redeemer Offices',
+            address: '1166 Avenue of the Americas, 16th Floor, New York, NY 10036',
+            lat: '40.757029', 
+            lng: '-73.982293'
+        },
+        {
+            name: 'Redeemer Downtown',
+            address: '120 W 14th St New York, NY 10011',
+            lat: '40.737602',
+            lng: '-73.998305'
         },
         function(){
-            console.log('Finished adding users');
-            User.findOne({name: 'admin'}, function(err, user){
-                Group.findOne({name: 'admin'}, function(err, group){
-                    if(err) { return next(err); }
-                    user.addGroup(group._id, function(err, number){
-                        if(err) {return next(err);}
-                        group.addUser(user._id, function(err, number){
-                            if(err) {return next(err);}
-                            console.log('Admin User Group Set');
-                        });
-                    });
-                });
-            });
+            console.log('Finished adding pre-fab locations');
         });
- });
-
-Group.find({}).remove(function(){
-    Group.create(
-        {
-            name: 'admin'
-        },
-        {
-            name: 'users'
-        },
-        function(){
-            console.log('Finished starting groups');
-        });
- });
+});
 
 
 

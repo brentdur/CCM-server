@@ -5,10 +5,11 @@ var mongoose = require('mongoose'),
 
 var MsgSchema = new Schema({
   from: String,
-  to: String,
+  to: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'},
   date: Date,
   subject: String,
   message: String,
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   version: {type: Number, default: 0}
 })
 

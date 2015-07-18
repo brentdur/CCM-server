@@ -1,7 +1,8 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  Event = mongoose.model('Event');
+  Event = mongoose.model('Event'),
+  Location = mongoose.model('Location');
 var auth = require('../auth/auth.service');
 var http = require('https');
 var async = require('async');
@@ -17,31 +18,45 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
     });
   });
 
-router.post('/', auth.inGroup("admin"), function(req, res, next){
-  var location = req.body.location.toString();
+router.post('/', auth.canWrite('Events'), function(req, res, next){
   var key = 'AIzaSyD9OrxkDhvWpiuKDajoXp4hlHGgu-4B4TQ';
+  req.body.creator = req.user._id;
 
   async.waterfall([
       function(callback){
-        http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
-          console.log(res.statusCode);
-          var data = '';
-          res.on('data', function (chunk){
-              data += chunk;
+        Location.findOne({name: req.body.location}, function(err, location){
+          if(err) callback(err);
+          if(location) callback(null, true, location.lat, location.lng);
+          else callback(null, false, 0, 0);
+        })
+      },
+      function(skip, lat, lng, callback){
+        if(skip){
+          console.log('skip geocode');
+          callback(null, lat, lng);
+        }
+        else {
+          var location = req.body.address.toString();
+          http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
+            console.log(res.statusCode);
+            var data = '';
+            res.on('data', function (chunk){
+                data += chunk;
+            });
+            res.on('end',function(){
+                var obj = JSON.parse(data);
+                if(obj.status==='OK'){
+                  obj = obj.results[0].geometry.location;
+                  console.log( obj );
+                  callback(null, obj.lat, obj.lng);
+                }
+                else{
+                  callback(obj.status);
+                }
+                
+            })
           });
-          res.on('end',function(){
-              var obj = JSON.parse(data);
-              if(obj.status==='OK'){
-                obj = obj.results[0].geometry.location;
-                console.log( obj );
-                callback(null, obj.lat, obj.lng);
-              }
-              else{
-                callback(obj.status);
-              }
-              
-          })
-        });
+        }
       },
       function(lat, lng, callback){
         var event = new Event({

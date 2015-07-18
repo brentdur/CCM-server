@@ -10,7 +10,8 @@ var EventSchema = new Schema({
   description: String,
   lat: Number,
   lng: Number,
-  version: {type:Number, default: 0}
+  version: {type:Number, default: 0},
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 })
 
 EventSchema.virtual('to').get(function(){
