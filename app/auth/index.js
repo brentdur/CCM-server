@@ -1,5 +1,10 @@
 'use strict';
 
+/*
+	Index file loading all the different authentication strategies
+	Currently only local is working
+ */
+
 var express = require('express');
 var passport = require('passport');
 var config = require('../../config/config');

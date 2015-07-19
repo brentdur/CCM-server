@@ -1,3 +1,7 @@
+/*
+  Location Controller
+ */
+
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
@@ -9,13 +13,15 @@ module.exports = function (app) {
   app.use('/api/locations', router);
 }
 
-router.get('/', function(req, res, next){
+//get all locations
+router.get('/', auth.isAuthenticated(), function(req, res, next){
 	Location.find({}, function(err, locations){
 		res.json(locations);
 	});
 })
 
-router.post('/', function(req, res, next){
+//creates new location
+router.post('/', auth.inGroup('admin'), function(req, res, next){
 	var location = new Location(req.body).save(function(err) {
         console.log('saved');
         if(err) return next(err);

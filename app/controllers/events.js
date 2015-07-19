@@ -1,3 +1,7 @@
+/*
+  Event Controller
+ */
+
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
@@ -11,6 +15,7 @@ module.exports = function (app) {
   app.use('/api/events', router);
 }
 
+//returns list of events
 router.get('/', auth.isAuthenticated(), function (req, res, next) {
   Event.find(function (err, events) {
     if (err) return next(err);
@@ -18,6 +23,8 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
     });
   });
 
+//creates new event, if the location name exists in the database as a Location then the lat and lng are pulled from there,
+//else they are geocoded from the address field
 router.post('/', auth.canWrite('Events'), function(req, res, next){
   var key = 'AIzaSyD9OrxkDhvWpiuKDajoXp4hlHGgu-4B4TQ';
   req.body.creator = req.user._id;

@@ -1,3 +1,7 @@
+/*
+  Talks Controller
+ */
+
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
@@ -10,6 +14,7 @@ module.exports = function (app) {
   app.use('/api/talks', router);
 }
 
+//gets all talks
 router.get('/', auth.isAuthenticated(), function (req, res, next) {
   Talk.find(function (err, talks) {
     if (err) return next(err);
@@ -17,9 +22,9 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
     });
   });
 
+//creates a new talk, replacing the reference with the full passage pulled from esvapi.org
 router.post('/', auth.canWrite('Talks'), function(req, res, next){
 
-  
   req.body.creator = req.user._id;
   async.waterfall([
       function(callback){
@@ -52,6 +57,8 @@ router.post('/', auth.canWrite('Talks'), function(req, res, next){
     });
 });
 
+//adds outline-notes to a previously created talk
+//currently not avaliable in the app, more of a future feature
 router.put('/note', auth.inGroup("admin"), function(req, res, next){
   var id = req.body.talk;
   Talk.findById(id, function(err, talk){

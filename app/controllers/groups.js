@@ -1,3 +1,7 @@
+/*
+  Groups Controller
+ */
+
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
@@ -8,6 +12,7 @@ module.exports = function (app) {
   app.use('/api/groups', router);
 }
 
+//gets all groups with populated members names
 router.get('/', auth.inGroup('admin'), function (req, res, next) {
   Group.find({})
   .populate('members', '-hashedPassword -salt')
@@ -17,6 +22,7 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
     });
   });
 
+//creates a new, empty group
 router.post('/', auth.inGroup('admin'), function(req, res, next){
   req.body.creator = req.user._id;
   var group = new Group(req.body).save(function(err){

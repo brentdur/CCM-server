@@ -1,5 +1,11 @@
 'use strict';
 
+/*
+  Grunt file for developmental purposes.
+  Allows following commands:
+    grunt - compiles all sass and runs server, reloading on file updates
+ */
+
 var request = require('request');
 
 module.exports = function (grunt) {

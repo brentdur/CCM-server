@@ -1,5 +1,9 @@
 'use strict';
 
+/*
+  Main authentication middleware
+ */
+
 var mongoose = require('mongoose');
 var passport = require('passport');
 var config = require('../../config/config');

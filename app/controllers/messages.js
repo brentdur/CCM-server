@@ -1,3 +1,7 @@
+/*
+  Messages Controller
+ */
+
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
@@ -10,13 +14,15 @@ module.exports = function (app) {
   app.use('/api/messages', router);
 }
 
-router.get('/', auth.isAuthenticated(), function (req, res, next) {
+//gets all messages
+router.get('/', auth.inGroup('admin'), function (req, res, next) {
   Message.find(function (err, messages) {
     if (err) return next(err);
     res.json(messages);
     });
   });
 
+//gets messages only addressed to the user-group of the current user
 router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
   var groups = req.user.groups;
   var messages = [];
@@ -39,6 +45,8 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
   });
 });
 
+//checks if logged-in user has write permission, then creates the message
+//either takes in the group id or group name, if the second is given it finds the id automatically
 router.post('/', auth.canWrite('Msgs'), function(req, res, next){
   req.body.creator = req.user._id;
   console.log(req.body.to);

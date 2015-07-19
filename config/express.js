@@ -1,3 +1,7 @@
+/*
+  Express application file
+ */
+
 var express = require('express');
 var glob = require('glob');
 

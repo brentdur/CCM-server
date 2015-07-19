@@ -1,4 +1,6 @@
-
+/*
+	Main application file
+ */
 
 var express = require('express'),
   config = require('./config/config'),

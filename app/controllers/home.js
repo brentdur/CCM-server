@@ -1,3 +1,7 @@
+/*
+  Home, html Controller
+ */
+
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
@@ -13,6 +17,7 @@ module.exports = function (app) {
   app.use('/', router);
 }
 
+//gets all the different information and assigns the arrays to variables delivered to the webpage
 router.get('/', function (req, res, next) {
   async.series([
       function(callback){

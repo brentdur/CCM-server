@@ -1,3 +1,7 @@
+/*
+  Users Controller
+ */
+
 'use strict';
 
 var mongoose = require('mongoose');
@@ -45,6 +49,7 @@ router.get('/', function(req, res, next){
 	});
 });
 
+//adds the gcm key to the user, to allow gcm-sync messages to be sent
 router.post('/gcm', auth.isAuthenticated(), function(req, res, next){
 	User.findById(req.user._id, function(err, user) {
 		if(err){ return next(err); }
