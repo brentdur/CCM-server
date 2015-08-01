@@ -61,6 +61,7 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
       if(req.body.groupid){
         req.body.to = req.body.groupid;
         callback();
+        return;
       }
       else {
         Group.findOne({name: req.body.to}, '_id', function(err, group){
@@ -69,6 +70,7 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
           console.log(group);
           req.body.to = group.id;
           callback(err);
+          return;
         })
       }
     },
@@ -80,6 +82,7 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
       var message = new Message(req.body).save(function(err) {
         console.log('saved');
         callback(err);
+        return;
       });
     }
 
