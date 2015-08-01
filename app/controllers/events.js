@@ -53,7 +53,7 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
           }
           var location = req.body.address.toString();
           console.log('a');
-          var request = http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
+          http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
             console.log(res.statusCode);
             console.log('b');
             var data = '';
@@ -76,11 +76,6 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
                 }
             })
           });
-          request.on('error', function(error){
-            console.log('c');
-            callback(error);
-            return;
-          })
           console.log('d');
         }
       },

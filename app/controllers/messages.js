@@ -34,6 +34,7 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
       console.log(msgs);
       for(var i = 0; i < msgs.length; i++){
          messages.push(msgs[i]);
+         console.log(messages.indexOf(msgs[i]));
       }
       callback();
     })
