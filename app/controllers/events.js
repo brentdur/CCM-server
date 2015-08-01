@@ -75,6 +75,7 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
             callback(error);
             return
           });
+          request.end();
         }
       },
       function(lat, lng, callback){
