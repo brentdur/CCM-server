@@ -88,22 +88,29 @@ function canWrite(type){
       var groups = req.user.groups;
       var good = false;
       async.forEachOf(groups, function(item, key, callback){
-        Group.findById({_id: item}, forward, function(err, group){
-          
-          if(group && group.toString().indexOf('true') > -1) {
-            next();
-            good = true;
-          }
-          else {
-            console.log(group.toString());
-            console.log(forward);
-          }
+        if(!good){
+          Group.findById({_id: item}, forward, function(err, group){
+            if(group && group.toString().indexOf('true') > -1) {
+              good = true;
+            }
+            else {
+              console.log(group.toString());
+              console.log(forward);
+            }
+            callback(err);
+          });
+        }
+        else {
           callback(err);
-        });
+        }
+        
       }, function(err){
         if(err) return next(err);
         if(!good){
           res.sendStatus(403);
+        }
+        else {
+          next();
         }
       });
     });
