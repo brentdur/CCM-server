@@ -29,19 +29,22 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
   //TODO: move key to keys file
   var key = 'AIzaSyD9OrxkDhvWpiuKDajoXp4hlHGgu-4B4TQ';
   req.body.creator = req.user._id;
-
+  console.log('a');
   async.waterfall([
       function(callback){
         Location.findOne({name: req.body.location}, function(err, location){
           if(err) callback(err);
+
           if(location) callback(null, true, location.lat, location.lng);
           else callback(null, false, 0, 0);
+          return;
         })
       },
       function(skip, lat, lng, callback){
         if(skip){
           console.log('skip geocode');
           callback(null, lat, lng);
+          return;
         }
         else {
           if(!req.body.address){
@@ -49,7 +52,7 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
             return;
           }
           var location = req.body.address.toString();
-          http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
+          var request = http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
             console.log(res.statusCode);
             var data = '';
             res.on('data', function (chunk){
@@ -61,12 +64,16 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
                   obj = obj.results[0].geometry.location;
                   console.log( obj );
                   callback(null, obj.lat, obj.lng);
+                  return;
                 }
                 else{
                   callback(obj.status);
+                  return;
                 }
-                
             })
+          }).on('error', function(error){
+            callback(error);
+            return
           });
         }
       },
