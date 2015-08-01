@@ -52,32 +52,38 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
             return;
           }
           var location = req.body.address.toString();
+          // var request = http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
+          //   console.log(res.statusCode);
+          //   var data = '';
+          //   res.on('data', function (chunk){
+          //       data += chunk;
+          //   });
+          //   res.on('end',function(){
+          //       var obj = JSON.parse(data);
+          //       if(obj.status==='OK'){
+          //         obj = obj.results[0].geometry.location;
+          //         console.log( obj );
+          //         callback(null, obj.lat, obj.lng);
+          //         return;
+          //       }
+          //       else{
+          //         callback(obj.status);
+          //         return;
+          //       }
+          //   })
+          // });
+
+          // request.end();
+          // request.on('error', function(error){
+          //   callback(error);
+          //   return;
+          // })
+          
           var request = http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
             console.log(res.statusCode);
-            var data = '';
-            res.on('data', function (chunk){
-                data += chunk;
-            });
-            res.on('end',function(){
-                var obj = JSON.parse(data);
-                if(obj.status==='OK'){
-                  obj = obj.results[0].geometry.location;
-                  console.log( obj );
-                  callback(null, obj.lat, obj.lng);
-                  return;
-                }
-                else{
-                  callback(obj.status);
-                  return;
-                }
-            })
+          }).on('error', function(e){
+            console.log(e);
           });
-          
-          request.end();
-          request.on('error', function(error){
-            callback(error);
-            return;
-          })
         }
       },
       function(lat, lng, callback){
