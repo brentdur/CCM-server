@@ -92,7 +92,7 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
       console.log('done');
       res.sendStatus(200);
       return;
-  });
+  })
   
   
-});
+})
