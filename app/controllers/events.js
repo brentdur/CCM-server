@@ -26,6 +26,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 //creates new event, if the location name exists in the database as a Location then the lat and lng are pulled from there,
 //else they are geocoded from the address field
 router.post('/', auth.canWrite('Events'), function(req, res, next){
+  //TODO: move key to keys file
   var key = 'AIzaSyD9OrxkDhvWpiuKDajoXp4hlHGgu-4B4TQ';
   req.body.creator = req.user._id;
 
@@ -43,6 +44,10 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
           callback(null, lat, lng);
         }
         else {
+          if(!req.body.address){
+            callback('No location found and no address given');
+            return;
+          }
           var location = req.body.address.toString();
           http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
             console.log(res.statusCode);
@@ -74,14 +79,13 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
           lng: lng,
           description: req.body.description
         }).save(function(err) {
-          if (err) return next(err);
           console.log('saved');
-          callback(null, 'done');
+          callback(err, 'done');
         });
-      }
-    ], 
+      
+ }   ], 
     function(err, results){
-      if (err) { res.send({Error: err}); }
+      if (err) { res.status(403).send({Error: err}); }
       res.status(200).send();
     });
 
