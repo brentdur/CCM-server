@@ -4,11 +4,11 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var TalkSchema = new Schema({
-  author: String,
-  subject: String,
-  date: Date,
-  reference: String,
-  fullVerse: String,
+  author: {type: String, required: true},
+  subject: {type: String, required: true},
+  date: {type: Date, required: true},
+  reference: {type: String, required: true},
+  fullVerse: {type: String, required: true},
   outline: [String],
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   version: {type: Number, default: 0}

@@ -44,12 +44,6 @@ module.exports = function(app, config) {
   controllers.forEach(function (controller) {
     require(controller)(app);
   });
-
-  app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  });
   
   if(app.get('env') === 'development'){
     app.use(function (err, req, res, next) {
@@ -69,6 +63,12 @@ module.exports = function(app, config) {
         error: {},
         title: 'error'
       });
+  });
+
+  app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
   });
 
 };

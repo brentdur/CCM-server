@@ -4,12 +4,12 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var MsgSchema = new Schema({
-  from: String,
-  to: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'},
-  simpleTo: String,
-  date: Date,
-  subject: String,
-  message: String,
+  from: {type: String, required: true},
+  to: {type: mongoose.Schema.Types.ObjectId, ref: 'Group', required:true},
+  simpleTo: {type: String, required: true},
+  date: {type: Date, required: true},
+  subject: {type: String, required: true},
+  message: {type: String, required: true},
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   version: {type: Number, default: 0}
 })

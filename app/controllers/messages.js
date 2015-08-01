@@ -9,10 +9,12 @@ var express = require('express'),
   Group = mongoose.model('Group');
   var auth = require('../auth/auth.service');
   var async = require('async');
+  var gcm = require('../gcm');
 
 module.exports = function (app) {
   app.use('/api/messages', router);
 }
+
 
 //gets all messages
 router.get('/', auth.inGroup('admin'), function (req, res, next) {
@@ -65,8 +67,8 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
       }
       else {
         Group.findOne({name: req.body.to}, '_id', function(err, group){
-          if(err) return next(err);
-          if(!group) return next();
+          if(err) return callback(err);
+          if(!group) return callback({message: 'No group found', status: 404, title:'Group not found'});
           console.log(group);
           req.body.to = group.id;
           callback(err);
@@ -90,8 +92,8 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
       console.log(err);
       if(err) return next(err);
       console.log('done');
+      gcm.sendGCM(1);
       res.status(200).send();
-      return;
   });
   
   

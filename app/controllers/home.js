@@ -12,6 +12,7 @@ var express = require('express'),
   User = mongoose.model('User'),
   Group = mongoose.model('Group'),
   async = require('async');
+  var gcm = require('../gcm');
 
 module.exports = function (app) {
   app.use('/', router);

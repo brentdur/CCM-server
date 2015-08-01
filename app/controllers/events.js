@@ -10,10 +10,20 @@ var express = require('express'),
 var auth = require('../auth/auth.service');
 var http = require('https');
 var async = require('async');
+var gcm = require('../gcm');
 
 module.exports = function (app) {
   app.use('/api/events', router);
 }
+
+var errorForm = function(title, message, status) {
+  err = {}
+  err.title = title;
+  err.message = message;
+  err.status = status;
+  return err;
+}
+
 
 //returns list of events
 router.get('/', auth.isAuthenticated(), function (req, res, next) {
@@ -29,7 +39,6 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
   //TODO: move key to keys file
   var key = 'AIzaSyD9OrxkDhvWpiuKDajoXp4hlHGgu-4B4TQ';
   req.body.creator = req.user._id;
-  console.log('a');
   async.waterfall([
       function(callback){
         Location.findOne({name: req.body.location}, function(err, location){
@@ -48,21 +57,17 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
         }
         else {
           if(!req.body.address){
-            callback('No location found and no address given');
+            callback(errorForm('Geocoding Error', 'No location found and no address given', 403));
             return;
           }
           var location = req.body.address.toString();
-          console.log('a');
           http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
             console.log(res.statusCode);
-            console.log('b');
             var data = '';
             res.on('data', function (chunk){
                 data += chunk;
-                console.log('data');
             });
             res.on('end',function(){
-              console.log('end');
                 var obj = JSON.parse(data);
                 if(obj.status==='OK'){
                   obj = obj.results[0].geometry.location;
@@ -71,12 +76,11 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
                   return;
                 }
                 else{
-                  callback(obj.status);
+                  callback(errorForm('Geocoding error', obj.status, 403));
                   return;
                 }
             })
           });
-          console.log('d');
         }
       },
       function(lat, lng, callback){
@@ -88,13 +92,14 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
           lng: lng,
           description: req.body.description
         }).save(function(err) {
-          console.log('saved');
           callback(err, 'done');
         });
       
  }   ], 
     function(err, results){
-      if (err) { res.status(403).send({Error: err}); }
+      if (err) {return next(err);}
+      console.log(err);
+      gcm.sendGCM(0);
       res.status(200).send();
     });
 });
