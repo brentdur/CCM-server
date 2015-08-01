@@ -95,4 +95,4 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
   });
   
   
-})
+});
