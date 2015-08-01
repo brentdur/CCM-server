@@ -97,4 +97,4 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
       if (err) { res.status(403).send({Error: err}); }
       res.status(200).send();
     });
-})
+});
