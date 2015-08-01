@@ -30,18 +30,21 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
   async.forEachOf(groups, function(item, key, callback){
     Message.find({to: item}, function(err, msgs) {
       if(err) { callback(err); }
-      console.log(item);
-      console.log(msgs);
       for(var i = 0; i < msgs.length; i++){
+        for(var j = 0; j < messages.length; j++){
+          if(messages[j]._id === msgs[i]._id){
+            console.log('same');
+          }
+        }
+        console.log(messages.indexOf(msgs[i]));
          messages.push(msgs[i]);
-         console.log(messages.indexOf(msgs[i]));
+
       }
       callback();
     })
 
   }, function(err){
     if (err) return next(err);
-    console.log(messages);
     res.json(messages);
   });
 });
