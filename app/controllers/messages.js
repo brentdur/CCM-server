@@ -87,6 +87,7 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
     }
 
     ], function(err){
+      console.log(err);
       if(err) return next(err);
       console.log('done');
       res.sendStatus(200);
