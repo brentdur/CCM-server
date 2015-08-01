@@ -71,11 +71,13 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
                   return;
                 }
             })
-          }).on('error', function(error){
-            callback(error);
-            return
           });
+          
           request.end();
+          request.on('error', function(error){
+            callback(error);
+            return;
+          })
         }
       },
       function(lat, lng, callback){
