@@ -31,14 +31,15 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
     Message.find({to: item}, function(err, msgs) {
       if(err) { callback(err); }
       for(var i = 0; i < msgs.length; i++){
+        var ok = true;
         for(var j = 0; j < messages.length; j++){
-          if(messages[j]._id === msgs[i]._id){
-            console.log('same');
+          if(messages[j].id === msgs[i].id){
+            ok = false;
           }
         }
-        console.log(messages.indexOf(msgs[i]));
-         messages.push(msgs[i]);
-
+        if(ok){
+          messages.push(msgs[i]);
+        }
       }
       callback();
     })
