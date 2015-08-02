@@ -68,8 +68,8 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Success-Response:",
-          "content": "[\n{\n \"_id\": \"55bd34d9b70a934b24e952e6\",\n \"title\": \"first event\",\n  \"location\": \"Reedemer West Side\",\n  \"date\": \"2015-09-14T04:00:00.000Z\",\n  \"description\": \"This is the first event\",\n  \"lat\": 40.786122,\n  \"lng\": -73.975738,\n  \"__v\": 0,\n  \"version\": 0\n}]",
+          "title": "Success-Response",
+          "content": "[\n{\n \"_id\": \"55bd34d9b70a934b24e952e6\",\n \"title\": \"first event\",\n \"location\": \"Reedemer West Side\",\n \"date\": \"2015-09-14T04:00:00.000Z\",\n \"description\": \"This is the first event\",\n \"lat\": 40.786122,\n \"lng\": -73.975738,\n \"__v\": 0,\n \"version\": 0\n}]",
           "type": "json"
         }
       ]
@@ -101,7 +101,7 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Authorization Example: ",
+          "title": "Authorization Example",
           "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
           "type": "json"
         }
@@ -157,22 +157,21 @@ define({ "api": [
           {
             "group": "System Set",
             "type": "<p>Number</p> ",
-            "optional": false,
+            "optional": true,
             "field": "version",
-            "defaultValue": "0",
-            "description": "<p>Default value.</p> "
+            "description": "<p>=0 Default value.</p> "
           },
           {
             "group": "System Set",
             "type": "<p>Number</p> ",
-            "optional": false,
+            "optional": true,
             "field": "lat",
             "description": "<p>Set by exisiting location value or by geocoding address</p> "
           },
           {
             "group": "System Set",
             "type": "<p>Number</p> ",
-            "optional": false,
+            "optional": true,
             "field": "lng",
             "description": "<p>Set by exisiting location value or by geocoding address</p> "
           }
@@ -180,8 +179,8 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Sample-Request:",
-          "content": "{\n\"title\": \"newevent\"\n\"location\": \"New\"\n\"date\": \"6/14/2015\"\n \"description\": \"First Event\"\n \"address\": \"1003 New Street, New York, New York, 30902\"\n}",
+          "title": "Sample-Request",
+          "content": "{\n\"title\": \"newevent\"\n\"location\": \"New\"\n\"date\": \"6/14/2015\"\n\"description\": \"First Event\"\n\"address\": \"1003 New Street, New York, New York, 30902\"\n}",
           "type": "json"
         }
       ]
@@ -207,12 +206,12 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "No Location Found:",
+          "title": "No Location Found",
           "content": "{\n\"Error\" \"No location found and no address given\"\n}",
           "type": "json"
         },
         {
-          "title": "Validation Error:",
+          "title": "Validation Error",
           "content": "{\n  \"Error\": {\n    \"message\": \"Event validation failed\",\n    \"name\": \"ValidationError\",\n    \"errors\": {\n      \"title\": {\n        \"properties\": {\n          \"type\": \"required\",\n          \"message\": \"Path `{PATH}` is required.\",\n          \"path\": \"title\"\n        },\n        \"message\": \"Path `title` is required.\",\n        \"name\": \"ValidatorError\",\n        \"kind\": \"required\",\n        \"path\": \"title\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
@@ -245,7 +244,7 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Authorization Example: ",
+          "title": "Authorization Example",
           "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
           "type": "json"
         }
