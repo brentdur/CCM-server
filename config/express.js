@@ -44,6 +44,8 @@ module.exports = function(app, config) {
   controllers.forEach(function (controller) {
     require(controller)(app);
   });
+
+  app.use('/api/docs', express.static(config.root + '/docs'));
   
   if(app.get('env') === 'development'){
     app.use(function (err, req, res, next) {
