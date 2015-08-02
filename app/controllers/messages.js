@@ -1,6 +1,33 @@
 /*
   Messages Controller
  */
+/**
+ * @apiDefine msgGet
+ * @apiSuccess {String} _id Unique string for message
+ * @apiSuccess {String} from Name of sender
+ * @apiSuccess {Group} to Recipient group of the message
+ * @apiSuccess {String} simpleTo Text name of the group for display purposes
+ * @apiSuccess {String} subject Subject of the message, used like a title
+ * @apiSuccess {String} date Formated date that the message was sent
+ * @apiSuccess {String} message Actualy message text
+ * @apiSuccess {Number} version Version identifier of the message
+ * 
+ * @apiSuccessExample {json} Response Example
+ * [
+ *   {
+ *     "_id": "55be45b8b550fde113cec036",
+ *     "from": "Michael",
+ *     "to": "55a71acf6de35f6d159b07bc",
+ *     "simpleTo": "admin",
+ *     "subject": "Hello",
+ *     "date": "2015-09-09T04:00:00.000Z",
+ *     "message": "Hey guys, welcome to RUF",
+ *     "__v": 0,
+ *     "version": 0
+ *   },
+ *   {...}
+ * ]
+ */
 
 var express = require('express'),
   router = express.Router(),
@@ -15,7 +42,16 @@ module.exports = function (app) {
   app.use('/api/messages', router);
 }
 
-
+/**
+ * @api {GET} /api/messages Get all messages
+ * @apiGroup Messages
+ * @apiVersion 1.0.0
+ *
+ * @apiUse msgGet
+ *
+ * @apiPermission inGroup(admin)
+ * @apiUse authHeader
+ */
 //gets all messages
 router.get('/', auth.inGroup('admin'), function (req, res, next) {
   Message.find(function (err, messages) {
@@ -24,6 +60,18 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
     });
   });
 
+/**
+ * @api {GET} /api/messages/mine Get my messages
+ * @apiGroup Messages
+ * @apiDescription Gets messages addressed to the groups of the current user
+ * @apiVersion 1.0.0
+ *
+ * @apiUse msgGet
+ *
+ * @apiPermission isAuthenticated()
+ * @apiUse authHeader
+ * 
+ */
 //gets messages only addressed to the user-group of the current user
 router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
   var groups = req.user.groups;
@@ -52,6 +100,39 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
   });
 });
 
+/**
+ * @api {POST} /api/messages Creates a new message
+ * @apiGroup Messages
+ * @apiVersion 1.0.0
+ *
+ * @apiParam {String} from Name of sender, not necessarily the creator of the message
+ * @apiParam {String} to Simple name of group to send to, will be parsed into group id if groupid parameter is not sent
+ * @apiParam {String} [groupid] Explicit ID of group to send to
+ * @apiParam {String} [date] Date message was sent. Will be set automatically to current date if none specified
+ * @apiParam {String} subject Subject/Title of the message
+ * @apiParam {String} message Text of the message
+ *
+ * @apiParamExample {json} Request Example
+ * {
+ * "from": "Michael",
+ *  "to": "all",
+ *  "date": "6/14/2015",
+ *  "subject": "Hello",
+ *  "message": "Hey guys!"
+ * }
+ *
+ * @apiError (Error 404) {String} GroupNotFoundError The specified group was not found.
+ * @apiErrorExample {json} No Group Found
+ * {
+ *   "message": "No group found",
+ *   "status": 404,
+ *   "title": "Group not found"
+ * }
+ * 
+ * @apiUse  VerificationError
+ * @apiUse authHeader
+ * @apiPermission group canWrite(Msgs)
+ */
 //checks if logged-in user has write permission, then creates the message
 //either takes in the group id or group name, if the second is given it finds the id automatically
 router.post('/', auth.canWrite('Msgs'), function(req, res, next){

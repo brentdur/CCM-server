@@ -9,6 +9,17 @@
  *       }
  */
 
+/**
+ * @apiDefine  VerificationError
+ * @apiError (Error 500) {String} ValidationError Required fields were not set
+ * @apiErrorExample {json} ValidationError 
+ * {
+ *   "message": "Event validation failed",
+ *   "name": "ValidationError",
+ *   "errors": {...}
+ * }
+ */
+
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
@@ -33,11 +44,11 @@ var errorForm = function(title, message, status) {
 
 
 /**
- * @api {get} /api/events Get all events.
+ * @api {get} /api/events Get all events
  * @apiGroup Events
  * @apiVersion 1.0.0
  *
- * @apiSuccess {String} _id unique string for event
+ * @apiSuccess {String} _id Unique string for event
  * @apiSuccess {String} title The simple name for this event.
  * @apiSuccess {String} location The simple name of the venue.
  * @apiSuccess {String} date Date of this event in standard format.
@@ -46,23 +57,25 @@ var errorForm = function(title, message, status) {
  * @apiSuccess {Number} lng Longitude of venue. 
  * @apiSuccess {Number} version Version of event, starting at 0.
  *
- * @apiSuccessExample {json} Success-Response
+ * @apiSuccessExample {json} Response Example
  * [
- * {
- *  "_id": "55bd34d9b70a934b24e952e6",
- *  "title": "first event",
- *  "location": "Reedemer West Side",
- *  "date": "2015-09-14T04:00:00.000Z",
- *  "description": "This is the first event",
- *  "lat": 40.786122,
- *  "lng": -73.975738,
- *  "__v": 0,
- *  "version": 0
- * }]
+   * {
+   *  "_id": "55bd34d9b70a934b24e952e6",
+   *  "title": "first event",
+   *  "location": "Reedemer West Side",
+   *  "date": "2015-09-14T04:00:00.000Z",
+   *  "description": "This is the first event",
+   *  "lat": 40.786122,
+   *  "lng": -73.975738,
+   *  "__v": 0,
+   *  "version": 0
+   * },
+   * {...}
+ * ]
  *   
  * 
  *
- * @apiPermission authenticated
+ * @apiPermission isAuthenticated()
  * @apiUse authHeader
  *
  */
@@ -76,7 +89,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 
 
 /**
- * @api {POST} /api/events Create new event.
+ * @api {POST} /api/events Create new event
  *@apiGroup Events
  *@apiVersion 1.0.0
  *
@@ -85,25 +98,21 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
  * @apiParam {String} [address] If the location name is not an existing one, this field is required. Full address for geocoding
  * @apiParam {String} date In valid format.
  * @apiParam {String} description Full event description.
- *
- * @apiParam (System Set) {Number} [version]=0 Default value.
- * @apiParam (System Set) {Number} [lat] Set by exisiting location value or by geocoding address
- * @apiParam (System Set) {Number} [lng] Set by exisiting location value or by geocoding address
- *
- * @apiParamExample {json} Sample-Request
+
+ * @apiParamExample {json} Request Example
  * {
- * "title": "newevent"
- * "location": "New"
- * "date": "6/14/2015"
- * "description": "First Event"
- * "address": "1003 New Street, New York, New York, 30902"
+   * "title": "newevent",
+   * "location": "New",
+   * "date": "6/14/2015",
+   * "description": "First Event",
+   * "address": "1003 New Street, New York, New York, 30902"
  * }
  *
  * @apiError (Error 403) {String} LocationError Location field was not an existing event and address field was not set
  *
  * @apiErrorExample {json} No Location Found
  * {
- * "Error" "No location found and no address given"
+ *   "Error" "No location found and no address given"
  * }
  *
  * @apiError (Error 403) {String} ValidationError Required fields were not set or cast to date failed
@@ -129,7 +138,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
  * }
  *
  * 
- * @apiPermission group can write events
+ * @apiPermission group canWrite(Events)
  * @apiUse authHeader
  * 
  */

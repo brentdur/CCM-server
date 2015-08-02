@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var GroupSchema = new Schema({
-  name: String,
+  name: {type: String, required:true},
   members: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   writeTalks: {type:Boolean, default: false},
   writeMsgs: {type:Boolean, default: false},
