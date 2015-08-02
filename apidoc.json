@@ -6,7 +6,6 @@
 	  "url" : "http://ccm.brentondurkee.com",
 	  "sampleUrl": "http://ccm.brentondurkee.com",
 	  "order": [
-	  	"Error 500",
 	  	"Events",
 	  	"Messages",
 	  	"Locations",

@@ -5,10 +5,17 @@ define({
   "title": "CCM Server Documentation",
   "url": "http://ccm.brentondurkee.com",
   "sampleUrl": "http://ccm.brentondurkee.com",
+  "order": [
+    "Error 500",
+    "Events",
+    "Messages",
+    "Locations",
+    "Groups"
+  ],
   "apidoc": "0.2.0",
   "generator": {
     "name": "apidoc",
-    "time": "2015-08-02T16:50:58.506Z",
+    "time": "2015-08-02T16:55:29.669Z",
     "url": "http://apidocjs.com",
     "version": "0.13.1"
   }
