@@ -1,5 +1,12 @@
-/*
-  Event Controller
+/**
+ *   Event Controller
+ *
+ * @apiDefine authHeader
+ * @apiHeader {String} Authorization Authorization Key Header needed for almost all calls.
+ * @apiHeaderExample Authorization Example: 
+ *       {
+ *         "Authorization": "Bearer {your key goes here}"
+ *       }
  */
 
 var express = require('express'),
@@ -25,6 +32,40 @@ var errorForm = function(title, message, status) {
 }
 
 
+/**
+ * @api {get} /api/events Get all events.
+ * @apiGroup Events
+ * @apiVersion 1.0.0
+ *
+ * @apiSuccess {String} _id unique string for event
+ * @apiSuccess {String} title The simple name for this event.
+ * @apiSuccess {String} location The simple name of the venue.
+ * @apiSuccess {String} date Date of this event in standard format.
+ * @apiSuccess {String} description Full description of this event.
+ * @apiSuccess {Number} lat Latitude of venue.
+ * @apiSuccess {Number} lng Longitude of venue. 
+ * @apiSuccess {Number} version Version of event, starting at 0.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * [
+ * {
+ *  "_id": "55bd34d9b70a934b24e952e6",
+ *  "title": "first event",
+ *   "location": "Reedemer West Side",
+ *   "date": "2015-09-14T04:00:00.000Z",
+ *   "description": "This is the first event",
+ *   "lat": 40.786122,
+ *   "lng": -73.975738,
+ *   "__v": 0,
+ *   "version": 0
+ * }]
+ *   
+ * 
+ *
+ * @apiPermission authenticated
+ * @apiUse authHeader
+ *
+ */
 //returns list of events
 router.get('/', auth.isAuthenticated(), function (req, res, next) {
   Event.find(function (err, events) {
@@ -33,6 +74,65 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
     });
   });
 
+
+/**
+ * @api {POST} /api/events Create new event.
+ *@apiGroup Events
+ *@apiVersion 1.0.0
+ *
+ * @apiParam {String} title The title for the event
+ * @apiParam {String} location The name of the existing location or the simple name for a new location
+ * @apiParam {String} [address] If the location name is not an existing one, this field is required. Full address for geocoding
+ * @apiParam {String} date In valid format.
+ * @apiParam {String} description Full event description.
+ *
+ * @apiParam (System Set) {Number} version=0 Default value.
+ * @apiParam (System Set) {Number} lat Set by exisiting location value or by geocoding address
+ * @apiParam (System Set) {Number} lng Set by exisiting location value or by geocoding address
+ *
+ * @apiParamExample {json} Sample-Request:
+ * {
+ * "title": "newevent"
+ * "location": "New"
+ * "date": "6/14/2015"
+ *  "description": "First Event"
+ *  "address": "1003 New Street, New York, New York, 30902"
+ * }
+ *
+ * @apiError (Error 403) {String} LocationError Location field was not an existing event and address field was not set
+ *
+ * @apiErrorExample {json} No Location Found:
+ * {
+ * "Error" "No location found and no address given"
+ * }
+ *
+ * @apiError (Error 403) {String} ValidationError Required fields were not set or cast to date failed
+ * @apiErrorExample {json} Validation Error:
+ *{
+ *   "Error": {
+ *     "message": "Event validation failed",
+ *     "name": "ValidationError",
+ *     "errors": {
+ *       "title": {
+ *         "properties": {
+ *           "type": "required",
+ *           "message": "Path `{PATH}` is required.",
+ *           "path": "title"
+ *         },
+ *         "message": "Path `title` is required.",
+ *         "name": "ValidatorError",
+ *         "kind": "required",
+ *         "path": "title"
+ *       }
+ *     }
+ *   }
+ * }
+ *
+ * 
+ * @apiPermission group can write events
+ * @apiUse authHeader
+ * 
+ */
 //creates new event, if the location name exists in the database as a Location then the lat and lng are pulled from there,
 //else they are geocoded from the address field
 router.post('/', auth.canWrite('Events'), function(req, res, next){
