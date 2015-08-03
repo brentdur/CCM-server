@@ -46,6 +46,7 @@ module.exports = function(app, config) {
   });
 
   app.use('/api/docs', express.static(config.root + '/docs'));
+  app.use('/download', express.static(config.root + '/public/app-release.apk'));
 
   app.use(function (err, req, res, next){
     res.status(err.status || 500);
