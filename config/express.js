@@ -48,7 +48,7 @@ module.exports = function(app, config) {
   app.use('/api/docs', express.static(config.root + '/docs'));
 
   app.get('/download', function(req, res){
-    res.sendFile(config.root + '/public/app-release.apk');
+    res.download(config.root + '/public/app-release.apk');
   });
 
   app.use(function (err, req, res, next){
