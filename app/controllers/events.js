@@ -46,7 +46,7 @@ var errorForm = function(title, message, status) {
 /**
  * @api {get} /api/events Get all events
  * @apiGroup Events
- * @apiVersion 1.0.0
+ * @apiVersion 1.0.5
  *
  * @apiSuccess {String} _id Unique string for event
  * @apiSuccess {String} title The simple name for this event.
@@ -54,7 +54,8 @@ var errorForm = function(title, message, status) {
  * @apiSuccess {String} date Date of this event in standard format.
  * @apiSuccess {String} description Full description of this event.
  * @apiSuccess {Number} lat Latitude of venue.
- * @apiSuccess {Number} lng Longitude of venue. 
+ * @apiSuccess {Number} lng Longitude of venue.
+ * @apiSuccess {Signup} [relatedSignup] Signup related to this event
  * @apiSuccess {Number} version Version of event, starting at 0.
  *
  * @apiSuccessExample {json} Response Example
@@ -199,7 +200,8 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
           date: req.body.date,
           lat: lat,
           lng: lng,
-          description: req.body.description
+          description: req.body.description,
+          creator: req.body.creator
         }).save(function(err) {
           callback(err, 'done');
         });

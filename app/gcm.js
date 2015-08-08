@@ -25,7 +25,8 @@ var func = {
       }
     })
 
-    syncTerm = ['events', 'messages', 'talks', 'groups', 'locations'];
+    syncTerm = ['events', 'messages', 'talks', 'groups', 'locations', 'topics', 
+    'signups'];
 
     var query = {
       "registration_ids": ids,

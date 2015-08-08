@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width">
   <title>{{title }}</title>
   <link rel="stylesheet" href="/css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="js/call.js"></script>
   {{#if ENV_DEVELOPMENT}}
     <script src="http://localhost:35729/livereload.js"></script>
   {{/if}}
 </head>
 <body>
-
+<button id="call">Call</button>
+<p class="return"><p>
 
   {{{body}}}
 

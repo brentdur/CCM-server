@@ -26,6 +26,7 @@ module.exports = function (app) {
  * @apiSuccess {Boolean} writeEvents Specifies whether this group has write permission for events
  * @apiSuccess {Boolean} writeMsgs Specifies whether this group has write permission for messages
  * @apiSuccess {Boolean} writeTalks Specifies whether this group has write permission for talks
+ * @apiSuccess {Boolean} writeSignups Specifies whether this group has write permission for signups
  * @apiSuccess {Users[]} members Populated list of all members
  *
  * @apiSuccessExample {json} Response Example
@@ -38,6 +39,7 @@ module.exports = function (app) {
  *   "writeEvents": true,
  *   "writeMsgs": true,
  *   "writeTalks": true,
+ *   "writeSignups": true,
  *   "members": [
  *     {
  *       "_id": "55aaad047b521bba68335409",
@@ -78,6 +80,11 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
  * @apiGroup Groups
  * @apiVersion 1.0.0
  * @apiParam name The name of the new group
+ * @apiParam {Boolean} [writeTalks=false] whether this group can make new talks
+ * @apiParam {Boolean} [writeEvents=false] whether this group can make new events
+ * @apiParam {Boolean} [writeMsgs=false] whether this group can make new messages
+ * @apiParam {Boolean} [writeSignups=false] whether this group can make new signups
+ * 
  *
  * @apiParamExample {json} Request Example
  * {

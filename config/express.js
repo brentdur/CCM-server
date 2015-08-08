@@ -47,8 +47,10 @@ module.exports = function(app, config) {
 
   app.use('/api/docs', express.static(config.root + '/docs'));
 
-  app.get('/download', function(req, res){
-    res.download(config.root + '/public/app-release.apk');
+  app.get('/download', function(req, res, next){
+    res.download(config.root + '/public/app-release.apk', 'ccm.apk', function(err){
+      if(err) return next(err);
+    });
   });
 
   app.use(function (err, req, res, next){

@@ -13,6 +13,8 @@ var Msg = require('../app/models/message');
 var User = require('../app/models/user');
 var Group = require('../app/models/group');
 var Location = require('../app/models/location');
+var Topic = require('../app/models/topic');
+var Signup = require('../app/models/signup');
 
 // User.find({}).remove(function(){
 //      User.create(
@@ -24,6 +26,11 @@ var Location = require('../app/models/location');
 //         {
 //             name: 'user',
 //             email: 'user@brentondurkee.com',
+//             password: '123'
+//         },
+//         {
+//             name: 'minister',
+//             email: 'minister@brentondurkee.com',
 //             password: '123'
 //         },
 //         function(){
@@ -52,6 +59,18 @@ var Location = require('../app/models/location');
 //                     });
 //                 });
 //             });
+//             User.findOne({name: 'minister'}, function(err, user){
+//                 Group.findOne({name: 'ministers'}, function(err, group){
+//                     if(err) { return next(err); }
+//                     user.addGroup(group._id, function(err, number){
+//                         if(err) {return next(err);}
+//                         group.addUser(user._id, function(err, number){
+//                             if(err) {return next(err);}
+//                             console.log('Minister User Group Set');
+//                         });
+//                     });
+//                 });
+//             });
 //         });
 //  });
 
@@ -61,18 +80,23 @@ var Location = require('../app/models/location');
 //             name: 'admin',
 //             writeTalks: true,
 //             writeMsgs: true,
-//             writeEvents: true
+//             writeEvents: true,
+//             writeSignups: true
 //         },
 //         {
-//             name: 'users'
+//             name: 'users',
+//             writeMsgs: true
+//         },
+//         {
+//             name: 'ministers'
 //         },
 //         function(){
 //             console.log('Finished starting groups');
 //         });
 //  });
-//  
-//  
-// 
+ 
+ 
+
 
 Location.find({}).remove(function(){
     Location.create(
@@ -227,48 +251,52 @@ Talk.find({}).remove(function(){
         });
 });
 var group;
-Group.findOne({name: 'admin'}, function(err, groupe){
+Group.findOne({name: 'ministers'}, function(err, groupe){
     group = groupe._id;
+});
+var user;
+User.findOne({name: 'user'}, function(err, usere){
+    user = usere._id;
 });
 
 Msg.find({}).remove(function(){
     Msg.create(
         {
-            from: 'Michael',
+            from: user,
             to: group,
-            simpleTo: 'admin',
+            simpleTo: 'minister',
             subject: 'Hello',
             date: 'September 9, 2015',
             message: 'Hey guys, welcome to RUF'
         }, 
         {
-            from: 'Michael',
+            from: user,
             to: group,
-            simpleTo: 'admin',
+            simpleTo: 'minister',
             subject: 'MT retreat',
             date: 'September 8, 2015',
             message: 'It\'s coming up'
         }, 
         {
-            from: 'Michael',
+            from: user,
             to: group,
-            simpleTo: 'admin',
+            simpleTo: 'minister',
             subject: 'I miss you',
             date: 'September 7, 2015',
             message: 'Hey you'
         }, 
         {
-            from: 'Michael',
+            from: user,
             to: group,
-            simpleTo: 'admin',
+            simpleTo: 'minister',
             subject: 'WLG cancelled',
             date: 'September 6, 2015',
             message: 'It\'s cancelled, get over it'
         }, 
         {
-            from: 'Michael',
+            from: user,
             to: group,
-            simpleTo: 'admin',
+            simpleTo: 'minister',
             subject: '41411',
             date: 'September 5, 2015',
             message: 'Boom'
@@ -277,3 +305,51 @@ Msg.find({}).remove(function(){
             console.log('Finished populating messages');
         });
 });
+
+Topic.find({}).remove(function(){
+    Topic.create(
+        {
+            name: 'Question',
+            isAnon: true
+        },  
+        {
+            name: 'More information',
+            isAnon: false
+        },
+        {
+            name: 'Security Pass',
+            isAnon: false
+        },
+        function(){
+            console.log('Finished populating topics');
+        });
+});
+
+Signup.find({}).remove(function(){
+    Signup.create(
+        {
+            name: 'Small Group',
+            dateInfo: 'Every Wednesday at 7:00pm',
+            location: 'The house',
+            address: '75 Third Avenue, 10003',
+            description: 'Our weekly small group event!'
+        },  
+        {
+            name: 'Pot Luck',
+            dateInfo: 'Sunday, 09/23/15',
+            location: 'The other place',
+            address: 'W83 Ministry Center, 150 W. 83rd St., New York, New York',
+            description: 'Signup to bring something'
+        }, 
+        {
+            name: 'Retreat',
+            dateInfo: 'A weekened in September',
+            location: 'That far away place',
+            address: '3015 Lake Forest Drive, 30909',
+            description: 'Meet in the smelly train station'
+        }, 
+        function(){
+            console.log('Finished populating signups');
+        });
+});
+

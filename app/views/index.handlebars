@@ -13,7 +13,6 @@ Designed to be an easy access to all the information to avoid making multiple ap
   		<p><b>Description:</b> {{description}} </p>
       <p><b>Latatude:</b> {{lat}}</p>
       <p><b>Longitude:</b> {{lng}}</p>
-  		<p><b>Time to (sec):</b> {{to}}</p>
   	</ul></li>
   	{{/each}}
   	</ol>
@@ -52,6 +51,20 @@ Designed to be an easy access to all the information to avoid making multiple ap
   	{{/each}}
   	</ol>
  </p>
+ <p>Signups: 
+    <ol>
+    {{#each signups}}
+    <li><ul>
+      <p><b>Name:</b> {{name}} </p>
+      <p><b>Date Info:</b> {{dateInfo}} </p>
+      <p><b>Member Count:</b> {{memberCount}}</p>
+      <p><b>Location:</b> {{location}} </p>
+      <p><b>address:</b> {{address}} </p>
+      <p><b>Description:</b> {{description}} </p>
+    </ul></li>
+    {{/each}}
+    </ol>
+ </p>
  <p>Locations: 
     <ol>
     {{#each locs}}
@@ -60,6 +73,16 @@ Designed to be an easy access to all the information to avoid making multiple ap
       <p><b>Address:</b> {{address}} </p>
       <p><b>Lat:</b> {{lat}} </p>
       <p><b>Lng:</b> {{lng}} </p>
+    </ul></li>
+    {{/each}}
+    </ol>
+ </p>
+ <p>Topics: 
+    <ol>
+    {{#each topics}}
+    <li><ul>
+      <p><b>Name:</b> {{name}} </p>
+      <p><b>Anonymous?:</b> {{isAnon}} </p>
     </ul></li>
     {{/each}}
     </ol>
@@ -81,7 +104,7 @@ Designed to be an easy access to all the information to avoid making multiple ap
     {{#each groups}}
     <li><ul>
       <p><b>Name:</b> {{name}} </p>
-      <p><b>Address:</b> {{members}} </p>
+      <p><b>Members:</b> {{members}} </p>
       <p><b>WriteTalks:</b> {{writeTalks}} </p>
       <p><b>WriteMsgs:</b> {{writeMsgs}} </p>
       <p><b>WriteEvents:</b> {{writeEvents}} </p>

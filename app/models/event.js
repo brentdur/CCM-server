@@ -11,6 +11,7 @@ var EventSchema = new Schema({
   lat: {type: Number, required: true},
   lng: {type: Number, required: true},
   version: {type:Number, default: 0},
+  relatedSignup: {type: mongoose.Schema.Types.ObjectId, ref: 'Signup'},
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 })
 

@@ -11,6 +11,8 @@ var express = require('express'),
   Location = mongoose.model('Location'),
   User = mongoose.model('User'),
   Group = mongoose.model('Group'),
+  Topic = mongoose.model('Topic'),
+  Signup = mongoose.model('Signup'),
   async = require('async');
   var gcm = require('../gcm');
 
@@ -50,6 +52,16 @@ router.get('/', function (req, res, next) {
         Group.find(function(err, groups){
           callback(err, groups);
         });
+      },
+      function(callback){
+        Topic.find(function(err, topics){
+          callback(err, topics);
+        });
+      },
+      function(callback){
+        Signup.find(function(err, signups){
+          callback(err, signups);
+        });
       }
     ], function(err, results){
       if (err) return next(err);
@@ -60,7 +72,9 @@ router.get('/', function (req, res, next) {
           talks: results[2],
           locs: results[3],
           users: results[4],
-          groups: results[5]
+          groups: results[5],
+          topics: results[6],
+          signups: results[7]
           });
 
   });
