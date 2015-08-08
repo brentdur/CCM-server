@@ -17,7 +17,7 @@ module.exports = function (app) {
 /**
  * @api {GET} /api/locations Get all locations
  * @apiGroup Locations
- * @apiVersion 1.0.0
+ * @apiVersion 0.1.0
  *
  *@apiSuccess {String} _id Unique string for location
  *@apiSuccess {String} name Simple name of location
@@ -54,7 +54,7 @@ router.get('/', auth.isAuthenticated(), function(req, res, next){
 /**
  * @api {POST} /api/locations Create a new location
  * @apiGroup Locations
- * @apiVersion 1.0.0
+ * @apiVersion 0.1.0
  *
  * @apiParam {String} name Name of location
  * @apiParam {Number} lat Latitude of location. Required as location doesn't current support geocoding

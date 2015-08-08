@@ -46,7 +46,7 @@ module.exports = function (app) {
 /**
  * @api {GET} /api/messages Get all messages
  * @apiGroup Messages
- * @apiVersion 1.0.5
+ * @apiVersion 0.2.0
  *
  * @apiUse msgGet
  *
@@ -65,7 +65,7 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
  * @api {GET} /api/messages/mine Get my messages
  * @apiGroup Messages
  * @apiDescription Gets messages addressed to the groups of the current user
- * @apiVersion 1.0.5
+ * @apiVersion 0.2.0
  *
  * @apiUse msgGet
  *
@@ -104,7 +104,7 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
 /**
  * @api {POST} /api/messages Creates a new message for the 'ministers' group
  * @apiGroup Messages
- * @apiVersion 1.0.5
+ * @apiVersion 0.2.0
  *
  * @apiParam {String} subject Subject/Title of the message
  * @apiParam {String} message Text of the message

@@ -18,7 +18,7 @@ module.exports = function (app) {
 /**
  * @api {GET} /api/groups Get all groups
  * @apiGroup Groups
- * @apiVersion 1.0.0
+ * @apiVersion 0.1.0
  *
  * @apiSuccess {String} _id Unique string for group
  * @apiSuccess {String} name Name of the event
@@ -78,7 +78,7 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
 /**
  * @api {POST} /api/groups Create new group
  * @apiGroup Groups
- * @apiVersion 1.0.0
+ * @apiVersion 0.1.0
  * @apiParam name The name of the new group
  * @apiParam {Boolean} [writeTalks=false] whether this group can make new talks
  * @apiParam {Boolean} [writeEvents=false] whether this group can make new events

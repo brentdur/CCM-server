@@ -28,7 +28,7 @@ var errorForm = function(title, message, status) {
 /**
  * @api {get} /api/signups Get all signups
  * @apiGroup Signups
- * @apiVersion 1.0.0
+ * @apiVersion 0.1.0
  *
  * @apiSuccess {String} _id Unique string for signup
  * @apiSuccess {String} name The simple name for this signup .
@@ -77,7 +77,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 /**
  * @api {POST} /api/signups Create new signup
  *@apiGroup Signups
- *@apiVersion 1.0.0
+ *@apiVersion 0.1.0
  *
  * @apiParam {String} name The title for the event
  * @apiParam {String} dateInfo String explanation of date/times
@@ -183,7 +183,7 @@ router.post('/', auth.canWrite('Signups'), function(req, res, next){
 /**
  * @api {PUT} /api/signups/addme Add user to signup
  *@apiGroup Signups
- *@apiVersion 1.0.0
+ *@apiVersion 0.1.0
  *
  * @apiParam {Signup} signup The signup to register the authorized user to
  * 

@@ -4,7 +4,7 @@ module.exports = function (app) {
 /**
  * @api {get} /api/events Get all events
  * @apiGroup Events
- * @apiVersion 1.0.0
+ * @apiVersion 0.1.0
  *
  * @apiSuccess {String} _id Unique string for event
  * @apiSuccess {String} title The simple name for this event.

@@ -4,7 +4,7 @@ define({ "api": [
     "url": "/api/events",
     "title": "Get all events",
     "group": "Events",
-    "version": "1.0.5",
+    "version": "0.2.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -120,7 +120,7 @@ define({ "api": [
     "url": "/api/events",
     "title": "Get all events",
     "group": "Events",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -229,7 +229,7 @@ define({ "api": [
     "url": "/api/events",
     "title": "Create new event",
     "group": "Events",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -349,7 +349,7 @@ define({ "api": [
     "url": "/api/groups",
     "title": "Get all groups",
     "group": "Groups",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -458,7 +458,7 @@ define({ "api": [
     "url": "/api/groups",
     "title": "Create new group",
     "group": "Groups",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -569,7 +569,7 @@ define({ "api": [
     "url": "/api/locations",
     "title": "Get all locations",
     "group": "Locations",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -664,7 +664,7 @@ define({ "api": [
     "url": "/api/locations",
     "title": "Create a new location",
     "group": "Locations",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -765,7 +765,7 @@ define({ "api": [
     "url": "/api/messages",
     "title": "Get all messages",
     "group": "Messages",
-    "version": "1.0.5",
+    "version": "0.2.0",
     "permission": [
       {
         "name": "inGroup(admin)"
@@ -882,7 +882,7 @@ define({ "api": [
     "title": "Get my messages",
     "group": "Messages",
     "description": "<p>Gets messages addressed to the groups of the current user</p> ",
-    "version": "1.0.5",
+    "version": "0.2.0",
     "permission": [
       {
         "name": "isAuthenticated()"
@@ -998,7 +998,7 @@ define({ "api": [
     "url": "/api/messages",
     "title": "Creates a new message for the 'ministers' group",
     "group": "Messages",
-    "version": "1.0.5",
+    "version": "0.2.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1106,7 +1106,7 @@ define({ "api": [
     "url": "/api/signups",
     "title": "Get all signups",
     "group": "Signups",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -1236,7 +1236,7 @@ define({ "api": [
     "url": "/api/signups",
     "title": "Create new signup",
     "group": "Signups",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1363,7 +1363,7 @@ define({ "api": [
     "url": "/api/signups/addme",
     "title": "Add user to signup",
     "group": "Signups",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1443,7 +1443,7 @@ define({ "api": [
     "url": "/api/topics",
     "title": "Get all Topics",
     "group": "Topics",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -1524,7 +1524,7 @@ define({ "api": [
     "url": "/api/topics",
     "title": "Create a new topic",
     "group": "Topics",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "parameter": {
       "fields": {
         "Parameter": [

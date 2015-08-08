@@ -46,7 +46,7 @@ var errorForm = function(title, message, status) {
 /**
  * @api {get} /api/events Get all events
  * @apiGroup Events
- * @apiVersion 1.0.5
+ * @apiVersion 0.2.0
  *
  * @apiSuccess {String} _id Unique string for event
  * @apiSuccess {String} title The simple name for this event.
@@ -92,7 +92,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 /**
  * @api {POST} /api/events Create new event
  *@apiGroup Events
- *@apiVersion 1.0.0
+ *@apiVersion 0.1.0
  *
  * @apiParam {String} title The title for the event
  * @apiParam {String} location The name of the existing location or the simple name for a new location
