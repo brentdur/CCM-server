@@ -23,6 +23,7 @@ SignupSchema.method.addVersion = function(cb){
 SignupSchema.methods.addMember = function(id, cb){
   this.members.push(id);
   this.memberCount = this.memberCount + 1;
+  this.version = this.version + 1;
   this.save(cb);
 }
 
