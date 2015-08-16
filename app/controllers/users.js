@@ -14,6 +14,7 @@ var Token = mongoose.model('Token');
 var passport = require('passport');
 var jwt = require('jsonwebtoken');
 var mail = require('../auth/email');
+var async = require('async');
 
 
 var router = express.Router();
@@ -75,18 +76,43 @@ router.get('/me', auth.isAuthenticated(), function(req, res, next){
   });
 });
 
-router.put('/group', auth.isAuthenticated(), function(req, res, next){
-	Group.findOne({name: req.body.group}, function(err, group){
-		if(err) { return next(err); }
-		if(!group) { return res.status(404).send(); }
-		req.user.addGroup(group._id, function(err, number){
-			if(err) {return next(err);}
-			group.addUser(req.user._id, function(err, number){
-				if(err) {return next(err);}
-				res.json(number);
-			})
-		})
-	})
+router.put('/group', auth.inGroup('admin'), function(req, res, next){
+	async.waterfall([
+      function(callback){
+	    Group.findOne({name: req.body.group}, function(err, group){
+			if(err) { callback(err);}
+			if(!group) { return res.status(404).send(); }
+			console.log('1');
+			callback(null, group);
+		});
+      },
+      function(group, callback){
+	    User.findById(req.body.user, function(err, user){
+	    	if(err) {callback(err);}
+	    	if(!user) {return res.status(404).send();}
+	    	console.log('2');
+	    	callback(null, user, group);
+      	});
+      },
+      function(user, group, callback){
+      	console.log('3');
+      	console.log(group);
+      	console.log(user);
+      	user.addGroup(group._id, function(err, number){
+      		if(err) {return next(err);}
+      		console.log('4');
+      		group.addUser(user._id, function(err, num ){
+      			if(err) callback(err);
+      			console.log('5');
+      			callback(null);
+      		});
+	    });
+      }
+    ], 
+    function(err, results){
+      if (err) { return next(err); }
+      res.status(200).send();
+    });
 });
 
 router.put('/confirm', function(req, res, next){
