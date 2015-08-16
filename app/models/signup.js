@@ -27,7 +27,5 @@ SignupSchema.methods.addMember = function(id, cb){
   this.save(cb);
 }
 
-
-
 module.exports = mongoose.model('Signup', SignupSchema);
 

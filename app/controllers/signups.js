@@ -67,8 +67,21 @@ var errorForm = function(title, message, status) {
  */
 //returns list of signups
 router.get('/', auth.isAuthenticated(), function (req, res, next) {
-  Signup.find(function (err, signups) {
+  Signup.find().lean().exec(function (err, signups) {
     if (err) return next(err);
+    for (var i = 0; i < signups.length; i++){
+      console.log(signups[i]);
+      signups[i].isMemberOf = false;
+      for (var j = 0; j< signups[i].members.length; j++){
+        console.log(signups[i].members[j]);
+        console.log(req.user._id);
+        if(signups[i].members[j].toString() === req.user._id.toString()){
+          signups[i].isMemberOf = true;
+          console.log(signups[i]);
+          break;
+        }
+      }
+    }
     res.json(signups);
     });
   });
