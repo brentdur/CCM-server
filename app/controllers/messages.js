@@ -7,6 +7,7 @@
  * @apiSuccess {User} from User that sent the message
  * @apiSuccess {Group} to Recipient group of the message, will always be ministers
  * @apiSuccess {String} simpleTo Text name of the group for display purposes, will always be ministers
+ * @apiSuccess {String} simpleFrom Text name of the sender of the message
  * @apiSuccess {String} subject Subject of the message, used like a title
  * @apiSuccess {Topic} topic topic of the message
  * @apiSuccess {String} date Formated date that the message was sent
@@ -19,6 +20,7 @@
  *     "_id": "55c5527f8efd394f3634c762",
  *     "to": "55c54d8c374fcd3b332085d6",
  *     "simpleTo": "minister",
+ *     "simpleFrom": "theuser",
  *     "subject": "Hello",
  *     "topic": "55c5527f8efd394f3634c76a",
  *     "from": "55c54d8c374fcd3b332085d1",
@@ -46,7 +48,7 @@ module.exports = function (app) {
 /**
  * @api {GET} /api/messages Get all messages
  * @apiGroup Messages
- * @apiVersion 0.2.0
+ * @apiVersion 0.3.0
  *
  * @apiUse msgGet
  *
@@ -64,8 +66,8 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
 /**
  * @api {GET} /api/messages/mine Get my messages
  * @apiGroup Messages
- * @apiDescription Gets messages addressed to the groups of the current user
- * @apiVersion 0.2.0
+ * @apiDescription Gets messages addressed to the groups of the current user, will hide the from field if topic is anonymous
+ * @apiVersion 0.3.0
  *
  * @apiUse msgGet
  *
@@ -79,7 +81,7 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
   var messages = [];
 
   async.forEachOf(groups, function(item, key, callback){
-    Message.find({to: item}, function(err, msgs) {
+    Message.find().lean().populate('topic').exec({to: item}, function(err, msgs) {
       if(err) { callback(err); }
       for(var i = 0; i < msgs.length; i++){
         var ok = true;
@@ -97,6 +99,12 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
 
   }, function(err){
     if (err) return next(err);
+    for (var i = 0; i < messages.length; i++){
+      if(messages[i].topic.isAnon){
+        messages[i].from = '';
+        messages[i].simpleFrom = '';
+      }
+    }
     res.json(messages);
   });
 });
@@ -104,7 +112,7 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
 /**
  * @api {POST} /api/messages Creates a new message for the 'ministers' group
  * @apiGroup Messages
- * @apiVersion 0.2.0
+ * @apiVersion 0.3.0
  *
  * @apiParam {String} subject Subject/Title of the message
  * @apiParam {String} message Text of the message
@@ -133,6 +141,7 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
 //'to' group is always set to ministers
 router.post('/', auth.canWrite('Msgs'), function(req, res, next){
   req.body.from = req.user._id;
+  req.body.simpleFrom = req.user.name;
   console.log(req.body.to);
   async.waterfall([
     function(callback){
@@ -164,4 +173,28 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
   });
   
   
+});
+
+/**
+ * @api {DELETE} /api/messages Delete message
+ * @apiGroup  Messages
+ * @apiVersion 0.3.0
+ *
+ * @apiParam {String} message id of the message to be deleted
+ * @apiParamExample {json} Request Example
+ * {
+ *   "message": "55d0da7484e998d52ae289d6"
+ * }
+ *
+ * @apiPermission inGroup(ministers)
+ * @apiUse authHeader
+ */
+
+router.delete('/', auth.inGroup('ministers'), function(req, res,next){
+  var message = req.body.message;
+  Message.findById(message).remove(function(err, data){
+    if(err) return next(err);
+    console.log(data.result);
+    res.status(200).send();
+  });
 });

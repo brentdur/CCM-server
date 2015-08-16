@@ -38,6 +38,7 @@ var errorForm = function(title, message, status) {
  * @apiSuccess {String} description Full description of this event.
  * @apiSuccess {Number} version Version of event, starting at 0.
  * @apiSuccess {Number} memberCount number of total members
+ * @apiSuccess {Boolean} isMemberOf whether the user is a member of this event
  * @apiSuccess {[User]} members Array of all people signuped for this
  * @apiSuccess {Event} [relatedEvent] currently not in use
  * @apiSuccess {User} creator the user id of the user that created the signup
@@ -54,7 +55,8 @@ var errorForm = function(title, message, status) {
  *     "__v": 0,
  *     "version": 0,
  *     "memberCount": 0,
- *     "members": []
+ *     "members": [],
+ *     "isMemberOf": false
  *   },
  *   {...}
  * ]

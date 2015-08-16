@@ -761,11 +761,71 @@
     }
   },
   {
+    "type": "DELETE",
+    "url": "/api/messages",
+    "title": "Delete message",
+    "group": "Messages",
+    "version": "0.3.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "message",
+            "description": "<p>id of the message to be deleted</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n  \"message\": \"55d0da7484e998d52ae289d6\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(ministers)"
+      }
+    ],
+    "filename": "app/controllers/messages.js",
+    "groupTitle": "Messages",
+    "name": "DeleteApiMessages",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/messages"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
     "type": "GET",
     "url": "/api/messages",
     "title": "Get all messages",
     "group": "Messages",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "permission": [
       {
         "name": "inGroup(admin)"
@@ -814,6 +874,13 @@
             "group": "Success 200",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "simpleFrom",
+            "description": "<p>Text name of the sender of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "subject",
             "description": "<p>Subject of the message, used like a title</p> "
           },
@@ -850,7 +917,7 @@
       "examples": [
         {
           "title": "Response Example",
-          "content": "[\n{\n    \"_id\": \"55c5527f8efd394f3634c762\",\n    \"to\": \"55c54d8c374fcd3b332085d6\",\n    \"simpleTo\": \"minister\",\n    \"subject\": \"Hello\",\n    \"topic\": \"55c5527f8efd394f3634c76a\",\n    \"from\": \"55c54d8c374fcd3b332085d1\",\n    \"date\": \"2015-09-09T04:00:00.000Z\",\n    \"message\": \"Hey guys, welcome to RUF\",\n    \"version\": 0\n  },\n  {...},\n]",
+          "content": "[\n{\n    \"_id\": \"55c5527f8efd394f3634c762\",\n    \"to\": \"55c54d8c374fcd3b332085d6\",\n    \"simpleTo\": \"minister\",\n    \"simpleFrom\": \"theuser\",\n    \"subject\": \"Hello\",\n    \"topic\": \"55c5527f8efd394f3634c76a\",\n    \"from\": \"55c54d8c374fcd3b332085d1\",\n    \"date\": \"2015-09-09T04:00:00.000Z\",\n    \"message\": \"Hey guys, welcome to RUF\",\n    \"version\": 0\n  },\n  {...},\n]",
           "type": "json"
         }
       ]
@@ -881,8 +948,8 @@
     "url": "/api/messages/mine",
     "title": "Get my messages",
     "group": "Messages",
-    "description": "<p>Gets messages addressed to the groups of the current user</p> ",
-    "version": "0.2.0",
+    "description": "<p>Gets messages addressed to the groups of the current user, will hide the from field if topic is anonymous</p> ",
+    "version": "0.3.0",
     "permission": [
       {
         "name": "isAuthenticated()"
@@ -931,6 +998,13 @@
             "group": "Success 200",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "simpleFrom",
+            "description": "<p>Text name of the sender of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "subject",
             "description": "<p>Subject of the message, used like a title</p> "
           },
@@ -967,7 +1041,7 @@
       "examples": [
         {
           "title": "Response Example",
-          "content": "[\n{\n    \"_id\": \"55c5527f8efd394f3634c762\",\n    \"to\": \"55c54d8c374fcd3b332085d6\",\n    \"simpleTo\": \"minister\",\n    \"subject\": \"Hello\",\n    \"topic\": \"55c5527f8efd394f3634c76a\",\n    \"from\": \"55c54d8c374fcd3b332085d1\",\n    \"date\": \"2015-09-09T04:00:00.000Z\",\n    \"message\": \"Hey guys, welcome to RUF\",\n    \"version\": 0\n  },\n  {...},\n]",
+          "content": "[\n{\n    \"_id\": \"55c5527f8efd394f3634c762\",\n    \"to\": \"55c54d8c374fcd3b332085d6\",\n    \"simpleTo\": \"minister\",\n    \"simpleFrom\": \"theuser\",\n    \"subject\": \"Hello\",\n    \"topic\": \"55c5527f8efd394f3634c76a\",\n    \"from\": \"55c54d8c374fcd3b332085d1\",\n    \"date\": \"2015-09-09T04:00:00.000Z\",\n    \"message\": \"Hey guys, welcome to RUF\",\n    \"version\": 0\n  },\n  {...},\n]",
           "type": "json"
         }
       ]
@@ -998,7 +1072,7 @@
     "url": "/api/messages",
     "title": "Creates a new message for the 'ministers' group",
     "group": "Messages",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1168,6 +1242,13 @@
           },
           {
             "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "isMemberOf",
+            "description": "<p>whether the user is a member of this event</p> "
+          },
+          {
+            "group": "Success 200",
             "type": "<p>[User]</p> ",
             "optional": false,
             "field": "members",
@@ -1192,7 +1273,7 @@
       "examples": [
         {
           "title": "Response Example",
-          "content": "[\n  {\n    \"_id\": \"55c554107d7078ab36912c7d\",\n    \"name\": \"Small Group\",\n    \"dateInfo\": \"Every Wednesday at 7:00pm\",\n    \"location\": \"The house\",\n    \"address\": \"75 Third Avenue, 10003\",\n    \"description\": \"Our weekly small group event!\",\n    \"__v\": 0,\n    \"version\": 0,\n    \"memberCount\": 0,\n    \"members\": []\n  },\n  {...}\n]",
+          "content": "[\n  {\n    \"_id\": \"55c554107d7078ab36912c7d\",\n    \"name\": \"Small Group\",\n    \"dateInfo\": \"Every Wednesday at 7:00pm\",\n    \"location\": \"The house\",\n    \"address\": \"75 Third Avenue, 10003\",\n    \"description\": \"Our weekly small group event!\",\n    \"__v\": 0,\n    \"version\": 0,\n    \"memberCount\": 0,\n    \"members\": [],\n    \"isMemberOf\": false\n  },\n  {...}\n]",
           "type": "json"
         }
       ]

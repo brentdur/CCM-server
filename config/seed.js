@@ -291,6 +291,7 @@ async.series([
             {
                 from: user,
                 to: group,
+                simpleFrom: 'user',
                 simpleTo: 'minister',
                 subject: 'Hello',
                 date: 'September 9, 2015',
@@ -299,6 +300,7 @@ async.series([
             {
                 from: user,
                 to: group,
+                simpleFrom: 'user',
                 simpleTo: 'minister',
                 subject: 'MT retreat',
                 date: 'September 8, 2015',
@@ -307,6 +309,7 @@ async.series([
             {
                 from: user,
                 to: group,
+                simpleFrom: 'user',
                 simpleTo: 'minister',
                 subject: 'I miss you',
                 date: 'September 7, 2015',
@@ -315,6 +318,7 @@ async.series([
             {
                 from: user,
                 to: group,
+                simpleFrom: 'user',
                 simpleTo: 'minister',
                 subject: 'WLG cancelled',
                 date: 'September 6, 2015',
@@ -323,6 +327,7 @@ async.series([
             {
                 from: user,
                 to: group,
+                simpleFrom: 'user',
                 simpleTo: 'minister',
                 subject: '41411',
                 date: 'September 5, 2015',
