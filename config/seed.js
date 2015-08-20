@@ -275,71 +275,6 @@ async.series([
         });
     },
     function(callback){
-        async.waterfall([
-            function(callback) {
-                Group.findOne({name: 'ministers'}, function(err, groupe){
-                    callback(null, groupe._id);
-                });
-            },
-            function(group, callback) {
-                User.findOne({name: 'user'}, function(err, usere){
-                    callback(null, usere._id, group);
-                });
-            }
-        ], function (err, user, group) {
-            Msg.create(
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: 'Hello',
-                date: 'September 9, 2015',
-                message: 'Hey guys, welcome to RUF'
-            }, 
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: 'MT retreat',
-                date: 'September 8, 2015',
-                message: 'It\'s coming up'
-            }, 
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: 'I miss you',
-                date: 'September 7, 2015',
-                message: 'Hey you'
-            }, 
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: 'WLG cancelled',
-                date: 'September 6, 2015',
-                message: 'It\'s cancelled, get over it'
-            }, 
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: '41411',
-                date: 'September 5, 2015',
-                message: 'Boom'
-            }, 
-            function(){
-                console.log('Finished populating messages');
-                callback(null);
-            });
-        });
-    },
-    function(callback){
         Topic.create(
         {
             name: 'Question',
@@ -356,6 +291,85 @@ async.series([
         function(){
             console.log('Finished populating topics');
             callback(null);
+        });
+    },
+    function(callback){
+        async.waterfall([
+            function(callback) {
+                Group.findOne({name: 'ministers'}, function(err, groupe){
+                    callback(null, groupe._id);
+                });
+            },
+            function(group, callback) {
+                User.findOne({name: 'user'}, function(err, usere){
+                    callback(null, usere._id, group);
+                });
+            },
+            function(user, group, callback){
+              var topics = []
+              Topic.find({}, function(err, topic){
+                for (var i = 0; i < topic.length; i++){
+                  topics.append(topic._id);
+                }
+                callback(null, usere._id, group, topics)
+              });
+            }
+        ], function (err, user, group, topics) {
+            Msg.create(
+            {
+                from: user,
+                to: group,
+                topic: topics[0],
+                simpleFrom: 'user',
+                simpleTo: 'minister',
+                subject: 'Hello',
+                date: 'September 9, 2015',
+                message: 'Hey guys, welcome to RUF'
+            }, 
+            {
+                from: user,
+                to: group,
+                topic: topics[0],
+                simpleFrom: 'user',
+                simpleTo: 'minister',
+                subject: 'MT retreat',
+                date: 'September 8, 2015',
+                message: 'It\'s coming up'
+            }, 
+            {
+                from: user,
+                to: group,
+                topic: topics[1],
+                simpleFrom: 'user',
+                simpleTo: 'minister',
+                subject: 'I miss you',
+                date: 'September 7, 2015',
+                message: 'Hey you'
+            }, 
+            {
+                from: user,
+                to: group,
+                topic: topics[1],
+                simpleFrom: 'user',
+                simpleTo: 'minister',
+                subject: 'WLG cancelled',
+                date: 'September 6, 2015',
+                message: 'It\'s cancelled, get over it'
+            }, 
+            {
+                from: user,
+                to: group,
+                topic: topics[2],
+                simpleFrom: 'user',
+                simpleTo: 'minister',
+                subject: '41411',
+                date: 'September 5, 2015',
+                message: 'Boom'
+            }, 
+            function(){
+                console.log('Finished populating messages');
+                callback(null);
+            });
         });
     },
     function(callback){
