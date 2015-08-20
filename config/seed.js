@@ -311,6 +311,7 @@ async.series([
                 for (var i = 0; i < topic.length; i++){
                   topics.push(topic._id);
                 }
+                console.log(topics);
                 callback(null, user, group, topics)
               });
             }
