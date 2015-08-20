@@ -309,7 +309,7 @@ async.series([
               var topics = []
               Topic.find({}, function(err, topic){
                 for (var i = 0; i < topic.length; i++){
-                  topics.append(topic._id);
+                  topics.push(topic._id);
                 }
                 callback(null, usere._id, group, topics)
               });
