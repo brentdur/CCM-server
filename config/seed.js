@@ -311,7 +311,7 @@ async.series([
                 for (var i = 0; i < topic.length; i++){
                   topics.push(topic._id);
                 }
-                callback(null, usere._id, group, topics)
+                callback(null, user, group, topics)
               });
             }
         ], function (err, user, group, topics) {
