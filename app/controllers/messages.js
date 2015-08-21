@@ -191,8 +191,9 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
  */
 
 router.delete('/', auth.inGroup('ministers'), function(req, res,next){
-  console.log(req.body.message);
-  var msg = req.body.message;
+  console.log(req.body);
+  console.log(req.query);
+  var msg = req.query.message;
   console.log(msg);
   Message.findById(message).remove(function(err, data){
     if(err) return next(err);
