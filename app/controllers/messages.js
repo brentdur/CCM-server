@@ -86,7 +86,7 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
       for(var i = 0; i < msgs.length; i++){
         var ok = true;
         for(var j = 0; j < messages.length; j++){
-          if(messages[j].id === msgs[i].id){
+          if(messages[j]._id === msgs[i]._id){
             ok = false;
           }
         }
