@@ -181,22 +181,16 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
  * @apiVersion 0.3.0
  *
  * @apiParam {String} message id of the message to be deleted
- * @apiParamExample {json} Request Example
- * {
- *   "message": "55d0da7484e998d52ae289d6"
- * }
+ * @apiParamExample {query} Request Example
+ * http://ccm.brentondurkee.com/api/messages?message="h5kjjf9jkjfklqj3j;qkljfklfnkla"
  *
  * @apiPermission inGroup(ministers)
  * @apiUse authHeader
  */
 
 router.delete('/', auth.inGroup('ministers'), function(req, res,next){
-  console.log(req.body);
-  console.log(req.query);
-  console.log(req.params);
-  var msg = req.query.message.toString();
-  console.log(msg);
-  Message.findById(message).remove(function(err, data){
+  var msg = req.query.message;
+  Message.findById(msg).remove(function(err, data){
     if(err) return next(err);
     console.log(data.result);
     res.status(200).send();
