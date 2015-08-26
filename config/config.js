@@ -72,6 +72,38 @@ var config = {
     }
   },
 
+  ccmtest:{
+    root: rootPath,
+    app: {
+      name: 'ccm'
+    },
+    key: key,
+    port: 9015,
+    seed: true,
+    env: 'development',
+    session: 'session',
+    domain: 'ccmtest.brentondurkee.com',
+    userRoles: ['guest', 'user', 'admin'],
+    db: 'mongodb://localhost/ccm-test',
+    facebook: {
+      clientID:     process.env.FACEBOOK_ID || 'id',
+      clientSecret: process.env.FACEBOOK_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/facebook/callback'
+    },
+
+    twitter: {
+      clientID:     process.env.TWITTER_ID || 'id',
+      clientSecret: process.env.TWITTER_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/twitter/callback'
+    },
+
+    google: {
+      clientID:     process.env.GOOGLE_ID || 'id',
+      clientSecret: process.env.GOOGLE_SECRET || 'secret',
+      callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+    }
+  },
+
   production: {
     root: rootPath,
     app: {
