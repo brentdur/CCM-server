@@ -11,6 +11,7 @@ var auth = require('./auth/auth.service');
 var http = require('https');
 var async = require('async');
 var User = mongoose.model('User');
+var config = require('../config/config')
 
 var func = {
 
@@ -49,7 +50,7 @@ var func = {
       port: 443,
       method: 'POST',
       headers: {
-        'Authorization': 'key=AIzaSyD9OrxkDhvWpiuKDajoXp4hlHGgu-4B4TQ',
+        'Authorization': 'key=' + config.key.gcm,
         'Content-Type': 'application/json'
       }
     };

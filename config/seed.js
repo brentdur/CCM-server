@@ -274,71 +274,71 @@ async.series([
             callback(null);
         });
     },
-    function(callback){
-        async.waterfall([
-            function(callback) {
-                Group.findOne({name: 'ministers'}, function(err, groupe){
-                    callback(null, groupe._id);
-                });
-            },
-            function(group, callback) {
-                User.findOne({name: 'user'}, function(err, usere){
-                    callback(null, usere._id, group);
-                });
-            }
-        ], function (err, user, group) {
-            Msg.create(
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: 'Hello',
-                date: 'September 9, 2015',
-                message: 'Hey guys, welcome to RUF'
-            }, 
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: 'MT retreat',
-                date: 'September 8, 2015',
-                message: 'It\'s coming up'
-            }, 
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: 'I miss you',
-                date: 'September 7, 2015',
-                message: 'Hey you'
-            }, 
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: 'WLG cancelled',
-                date: 'September 6, 2015',
-                message: 'It\'s cancelled, get over it'
-            }, 
-            {
-                from: user,
-                to: group,
-                simpleFrom: 'user',
-                simpleTo: 'minister',
-                subject: '41411',
-                date: 'September 5, 2015',
-                message: 'Boom'
-            }, 
-            function(){
-                console.log('Finished populating messages');
-                callback(null);
-            });
-        });
-    },
+    // function(callback){
+    //     async.waterfall([
+    //         function(callback) {
+    //             Group.findOne({name: 'ministers'}, function(err, groupe){
+    //                 callback(null, groupe._id);
+    //             });
+    //         },
+    //         function(group, callback) {
+    //             User.findOne({name: 'user'}, function(err, usere){
+    //                 callback(null, usere._id, group);
+    //             });
+    //         }
+    //     ], function (err, user, group) {
+    //         Msg.create(
+    //         {
+    //             from: user,
+    //             to: group,
+    //             simpleFrom: 'user',
+    //             simpleTo: 'minister',
+    //             subject: 'Hello',
+    //             date: 'September 9, 2015',
+    //             message: 'Hey guys, welcome to RUF'
+    //         }, 
+    //         {
+    //             from: user,
+    //             to: group,
+    //             simpleFrom: 'user',
+    //             simpleTo: 'minister',
+    //             subject: 'MT retreat',
+    //             date: 'September 8, 2015',
+    //             message: 'It\'s coming up'
+    //         }, 
+    //         {
+    //             from: user,
+    //             to: group,
+    //             simpleFrom: 'user',
+    //             simpleTo: 'minister',
+    //             subject: 'I miss you',
+    //             date: 'September 7, 2015',
+    //             message: 'Hey you'
+    //         }, 
+    //         {
+    //             from: user,
+    //             to: group,
+    //             simpleFrom: 'user',
+    //             simpleTo: 'minister',
+    //             subject: 'WLG cancelled',
+    //             date: 'September 6, 2015',
+    //             message: 'It\'s cancelled, get over it'
+    //         }, 
+    //         {
+    //             from: user,
+    //             to: group,
+    //             simpleFrom: 'user',
+    //             simpleTo: 'minister',
+    //             subject: '41411',
+    //             date: 'September 5, 2015',
+    //             message: 'Boom'
+    //         }, 
+    //         function(){
+    //             console.log('Finished populating messages');
+    //             callback(null);
+    //         });
+    //     });
+    // },
     function(callback){
         Topic.create(
         {

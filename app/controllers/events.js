@@ -29,6 +29,7 @@ var auth = require('../auth/auth.service');
 var http = require('https');
 var async = require('async');
 var gcm = require('../gcm');
+var config = require('../../config/config');
 
 module.exports = function (app) {
   app.use('/api/events', router);
@@ -147,7 +148,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 //else they are geocoded from the address field
 router.post('/', auth.canWrite('Events'), function(req, res, next){
   //TODO: move key to keys file
-  var key = 'AIzaSyD9OrxkDhvWpiuKDajoXp4hlHGgu-4B4TQ';
+  var key = config.key.geocode;
   req.body.creator = req.user._id;
   async.waterfall([
       function(callback){

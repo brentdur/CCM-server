@@ -2,6 +2,8 @@
   Main Configuration file
  */
 
+var key = require('./key');
+
 var path = require('path'),
     rootPath = path.normalize(__dirname + '/..'),
     env = process.env.NODE_ENV || 'development';
@@ -12,6 +14,7 @@ var config = {
     app: {
       name: 'ccm'
     },
+    key: key,
     port: 9000,
     seed: true,
     env: 'development',
@@ -76,11 +79,12 @@ var config = {
     },
     port: 9010,
     env: 'production',
-    seed: true,
+    seed: false,
     session: 'session',
     domain: 'http://ccm.brentondurkee.com/',
     userRoles: ['guest', 'user', 'admin'],
     db: 'mongodb://localhost/ccm',
+    key: key,
     facebook: {
       clientID:     process.env.FACEBOOK_ID || 'id',
       clientSecret: process.env.FACEBOOK_SECRET || 'secret',
