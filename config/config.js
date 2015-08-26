@@ -80,7 +80,7 @@ var config = {
     key: key,
     port: 9015,
     seed: true,
-    env: 'development',
+    env: 'test deployment',
     session: 'session',
     domain: 'ccmtest.brentondurkee.com',
     userRoles: ['guest', 'user', 'admin'],
