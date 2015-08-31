@@ -87,3 +87,9 @@ router.get('/', function (req, res, next) {
             });
   }
 });
+
+router.get('/privacy', function (req, res, next) {
+  res.render('partials/privacy', {
+          title: 'Privacy Policy'
+          });
+});
