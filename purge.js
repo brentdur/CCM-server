@@ -1,5 +1,6 @@
 conn = new Mongo();
-db = conn.getDB('ccm-development');
+// db = conn.getDB('ccm-development');
+db = conn.getDB('ccm');
 var cursor = db.events.find({expired:false});
 
 var bulk = db.events.initializeUnorderedBulkOp();
