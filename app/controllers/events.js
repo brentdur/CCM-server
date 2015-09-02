@@ -83,7 +83,7 @@ var errorForm = function(title, message, status) {
  */
 //returns list of events
 router.get('/', auth.isAuthenticated(), function (req, res, next) {
-  Event.find({expired:false}, function (err, events) {
+  Event.find({$or:[{expired:false}, {expired: {$exists:false}}]}, function (err, events) {
     if (err) return next(err);
     res.json(events);
     });
