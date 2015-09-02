@@ -1,7 +1,7 @@
 conn = new Mongo();
 // db = conn.getDB('ccm-development');
 db = conn.getDB('ccm');
-var cursor = db.events.find({expired:false});
+var cursor = db.events.find({$or:[{expired:false}, {expired: {$exists:false}}]});
 
 var bulk = db.events.initializeUnorderedBulkOp();
 
