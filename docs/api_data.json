@@ -781,8 +781,8 @@
       "examples": [
         {
           "title": "Request Example",
-          "content": "{\n  \"message\": \"55d0da7484e998d52ae289d6\"\n}",
-          "type": "json"
+          "content": "http://ccm.brentondurkee.com/api/messages?message=\"h5kjjf9jkjfklqj3j;qkljfklfnkla\"",
+          "type": "query"
         }
       ]
     },
@@ -1521,6 +1521,290 @@
   },
   {
     "type": "GET",
+    "url": "/api/talks",
+    "title": "Get all talks",
+    "group": "Talks",
+    "version": "0.1.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>The unique id of the talk object</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "author",
+            "description": "<p>The name of the talk author</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>The subject of the talk</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Date</p> ",
+            "optional": false,
+            "field": "date",
+            "description": "<p>The date the talk was given</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "reference",
+            "description": "<p>The specific reference of the passage used</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "creator",
+            "description": "<p>The id of the user who created the talk</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "fullVerse",
+            "description": "<p>The verse in its entirety, pulled from esvapi.org</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Integer</p> ",
+            "optional": false,
+            "field": "version",
+            "description": "<p>The version number of the specific talk</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String[]</p> ",
+            "optional": false,
+            "field": "outline",
+            "description": "<p>The outline points</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": " [\n  {\n    \"_id\": \"55e5c6c0e3eb4ba034d19e57\",\n    \"author\": \"eric\",\n    \"subject\": \"example\",\n    \"date\": \"2015-06-14T00:00:00.000Z\",\n    \"reference\": \"john 3:16\",\n    \"creator\": \"55de4c4d53d79af8061d5e61\",\n    \"fullVerse\": \"[16]\\\"For God so loved the world, that he gave his only Son, that \\nwhoever believes in him should not perish but have eternal life.\",\n    \"__v\": 0,\n    \"version\": 0,\n    \"outline\": [\n      \"point a\",\n      \"pointb\"\n    ]\n  }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "isAuthenticated"
+      }
+    ],
+    "filename": "app/controllers/talks.js",
+    "groupTitle": "Talks",
+    "name": "GetApiTalks",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/talks"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "POST",
+    "url": "/api/talks",
+    "title": "Create new talk",
+    "group": "Talks",
+    "version": "0.1.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "author",
+            "description": "<p>The author of the talk</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>The subject of the talk</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "date",
+            "description": "<p>The date/time that the talk was given in standard format</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "reference",
+            "description": "<p>The reference for the talk context. Will be used to load the full verse</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String[]</p> ",
+            "optional": true,
+            "field": "outline",
+            "description": "<p>The outline points</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n\"author\": \"Eric\"\n\"subject\": \"sorrow\"\n\"date\": \"6/14/2015\"\n\"reference\": \"John 1: 1-16\"\n\"outline\": \"note a\"\n\"outline\": \"note b\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 403": [
+          {
+            "group": "Error 403",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Required fields were not set or cast to date failed</p> "
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "group canWrite(Talks)"
+      }
+    ],
+    "filename": "app/controllers/talks.js",
+    "groupTitle": "Talks",
+    "name": "PostApiTalks",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/talks"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "PUT",
+    "url": "/api/talks/note",
+    "title": "Adds a new outline point to the specified talk",
+    "group": "Talks",
+    "version": "0.1.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "talk",
+            "description": "<p>The id of the talk that is being modified</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "note",
+            "description": "<p>The text of the outline point being added</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n\"talk\": \"55a471d03b3ab5ea1294c3ed\"\n\"note\": \"new note\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/talks.js",
+    "groupTitle": "Talks",
+    "name": "PutApiTalksNote",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/talks/note"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "GET",
     "url": "/api/topics",
     "title": "Get all Topics",
     "group": "Topics",
@@ -1667,6 +1951,468 @@
         }
       ]
     },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "GET",
+    "url": "/api/users",
+    "title": "Get all users",
+    "group": "Users",
+    "version": "0.1.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique identifier for the object</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "provider",
+            "description": "<p>The authentication provider, usually local</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The name of the user</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The user's email</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "hashedPassword",
+            "description": "<p>The encrypted version of the user's password</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "gcm",
+            "description": "<p>The gcm token for notification access</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "salt",
+            "description": "<p>The encryption salt for the user</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String[]</p> ",
+            "optional": false,
+            "field": "groups",
+            "description": "<p>An array of group ids that the user is a member of</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "opt",
+            "description": "<p>[Unused] Whether the user has opted in for email delivery or not</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "confirmed",
+            "description": "<p>[Unused] Whether the user has confirmed their email address</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "role",
+            "description": "<p>[Unusued] The user's specified role. Was deprecated in favor of a group-based system.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[\n  {\n    \"_id\": \"55e4b8ae1959b17a0777a816\",\n    \"provider\": \"local\",\n    \"name\": \"test\",\n    \"email\": \"test@brentondurkee.com\",\n    \"hashedPassword\": \"7/YjGYRO8BZAqmztaLmjww==\",\n    \"gcm\": \"lkdjafkljdf\",\n    \"salt\": \"s/u\",\n    \"__v\": 4,\n    \"groups\": [\n      \"55de4d373596ddbf6c25e932\"\n    ],\n    \"opt\": true,\n    \"confirmed\": false,\n    \"role\": \"user\"\n  },\n  {...} \n  ]",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/users.js",
+    "groupTitle": "Users",
+    "name": "GetApiUsers",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/users"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "GET",
+    "url": "/api/users/me",
+    "title": "Get information about the current user",
+    "group": "Users",
+    "version": "0.1.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique identifier for the object</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "provider",
+            "description": "<p>The authentication provider, usually local</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The name of the user</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The user's email</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "gcm",
+            "description": "<p>The gcm token for notification access</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Group[]</p> ",
+            "optional": false,
+            "field": "groups",
+            "description": "<p>An array of populated groups that the user is a member of</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "opt",
+            "description": "<p>[Unused] Whether the user has opted in for email delivery or not</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "confirmed",
+            "description": "<p>[Unused] Whether the user has confirmed their email address</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "role",
+            "description": "<p>[Unusued] The user's specified role. Was deprecated in favor of a group-based system.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[\n  {\n    \"_id\": \"55e4b8ae1959b17a0777a816\",\n    \"provider\": \"local\",\n    \"name\": \"test\",\n    \"email\": \"test@brentondurkee.com\",\n    \"gcm\": \"lkdjafkljdf\",\n    \"__v\": 4,\n    \"groups\": [\n      {...}\n    ],\n    \"opt\": true,\n    \"confirmed\": false,\n    \"role\": \"user\"\n  },\n  {...} \n  ]",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "isAuthenticated"
+      }
+    ],
+    "filename": "app/controllers/users.js",
+    "groupTitle": "Users",
+    "name": "GetApiUsersMe",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/users/me"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "POST",
+    "url": "/api/users",
+    "title": "Create a new user",
+    "group": "Users",
+    "version": "0.1.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The new users full name</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The new user's email</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "password",
+            "description": "<p>The new user's login password</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n\"name\": \"brenton\",\n\"email\": \"brentdur@gmail.com\",\n\"password\": \"123\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 403": [
+          {
+            "group": "Error 403",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Required fields were not set or cast to date failed</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Validation Error",
+          "content": "{\n  \"Error\": {\n    \"message\": \"Event validation failed\",\n    \"name\": \"ValidationError\",\n    \"errors\": {\n      \"name\": {\n        \"properties\": {\n          \"type\": \"required\",\n          \"message\": \"Path `{PATH}` is required.\",\n          \"path\": \"name\"\n        },\n        \"message\": \"Path `name` is required.\",\n        \"name\": \"ValidatorError\",\n        \"kind\": \"required\",\n        \"path\": \"name\"\n      }\n    }\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/controllers/users.js",
+    "groupTitle": "Users",
+    "name": "PostApiUsers",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/users"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/api/users/gcm",
+    "title": "Adds a gcm token to the user",
+    "group": "Users",
+    "version": "0.1.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "gcm",
+            "description": "<p>The gcm token to add</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n\t\"gcm\": \"d39wkskf93fkdkjf9e\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "isAuthenticated"
+      }
+    ],
+    "filename": "app/controllers/users.js",
+    "groupTitle": "Users",
+    "name": "PostApiUsersGcm",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/users/gcm"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "PUT",
+    "url": "/api/users/group",
+    "title": "Adds a user to a group",
+    "group": "Users",
+    "version": "0.1.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "group",
+            "description": "<p>The name of the group to add the user to</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "user",
+            "description": "<p>The id of the user to add to the group</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n\t\"group\":\"admin\",\n\t\"user\":\"55e4b8ae1959b17a0777a816\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 404": [
+          {
+            "group": "Error 404",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "GroupNotFoundError",
+            "description": "<p>The specified group was not found.</p> "
+          },
+          {
+            "group": "Error 404",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "UserNotFoundError",
+            "description": "<p>The specified user was not found.</p> "
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/users.js",
+    "groupTitle": "Users",
+    "name": "PutApiUsersGroup",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/users/group"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [

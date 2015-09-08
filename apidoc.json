@@ -9,8 +9,10 @@
 	  	"Events",
 	  	"Signups",
 	  	"Messages",
+	  	"Talks",
 	  	"Topics",
 	  	"Locations",
-	  	"Groups"
+	  	"Groups",
+	  	"Users"
 	  ]
 }

@@ -29,6 +29,46 @@ var validationError = function(res, err) {
 };
 
 //new user
+/**
+ *@api {POST} /api/users Create a new user
+ *@apiGroup Users
+ *@apiVersion 0.1.0
+ *
+ * @apiParam {String} name The new users full name
+ * @apiParam {String} email The new user's email
+ * @apiParam {String} password The new user's login password
+ *
+ * @apiParamExample {json} Request Example
+ * {
+	 * "name": "brenton",
+	 * "email": "brentdur@gmail.com",
+	 * "password": "123"
+ * }
+ * 
+ * @apiError (Error 403) {String} ValidationError Required fields were not set or cast to date failed
+ * @apiErrorExample {json} Validation Error
+ *{
+ *   "Error": {
+ *     "message": "Event validation failed",
+ *     "name": "ValidationError",
+ *     "errors": {
+ *       "name": {
+ *         "properties": {
+ *           "type": "required",
+ *           "message": "Path `{PATH}` is required.",
+ *           "path": "name"
+ *         },
+ *         "message": "Path `name` is required.",
+ *         "name": "ValidatorError",
+ *         "kind": "required",
+ *         "path": "name"
+ *       }
+ *     }
+ *   }
+ * }
+ *
+ * 
+ */
 router.post('/', function(req, res, next){
 	var newUser = new User(req.body);
 	newUser.provider = 'local';
@@ -43,7 +83,48 @@ router.post('/', function(req, res, next){
 });
 
 // dev use only
-router.get('/', function(req, res, next){
+/**
+ * @api {GET} /api/users Get all users
+ * @apiGroup Users
+ * @apiVersion 0.1.0
+ *
+ * @apiSuccess {String} _id Unique identifier for the object
+ * @apiSuccess {String} provider The authentication provider, usually local
+ * @apiSuccess {String} name The name of the user
+ * @apiSuccess {String} email The user's email
+ * @apiSuccess {String} hashedPassword The encrypted version of the user's password
+ * @apiSuccess {String} gcm The gcm token for notification access
+ * @apiSuccess {String} salt The encryption salt for the user
+ * @apiSuccess {String[]} groups An array of group ids that the user is a member of
+ * @apiSuccess {Boolean} opt [Unused] Whether the user has opted in for email delivery or not
+ * @apiSuccess {Boolean} confirmed [Unused] Whether the user has confirmed their email address
+ * @apiSuccess {String} role [Unusued] The user's specified role. Was deprecated in favor of a group-based system.
+ *
+ * @apiSuccessExample {json} Response Example
+ * [
+  {
+    "_id": "55e4b8ae1959b17a0777a816",
+    "provider": "local",
+    "name": "test",
+    "email": "test@brentondurkee.com",
+    "hashedPassword": "7/YjGYRO8BZAqmztaLmjww==",
+    "gcm": "lkdjafkljdf",
+    "salt": "s/u",
+    "__v": 4,
+    "groups": [
+      "55de4d373596ddbf6c25e932"
+    ],
+    "opt": true,
+    "confirmed": false,
+    "role": "user"
+  },
+  {...} 
+  ]
+ *
+ * @apiPermission inGroup(admin)
+ * @apiUse authHeader
+ */
+router.get('/', auth.inGroup('admin'), function(req, res, next){
 	User.find({}, function(err, users){
 		if(err){ return next(err); }
 		res.json(users);
@@ -51,6 +132,21 @@ router.get('/', function(req, res, next){
 });
 
 //adds the gcm key to the user, to allow gcm-sync messages to be sent
+/**
+ * @api {POST} /api/users/gcm Adds a gcm token to the user
+ * @apiGroup Users
+ * @apiVersion 0.1.0
+ *
+ * @apiParam {String} gcm The gcm token to add
+ *
+ * @apiParamExample {json} Request Example
+ * {
+ * 	"gcm": "d39wkskf93fkdkjf9e"
+ * }
+ *
+ * @apiPermission isAuthenticated
+ * @apiUse authHeader
+ */
 router.post('/gcm', auth.isAuthenticated(), function(req, res, next){
 	User.findById(req.user._id, function(err, user) {
 		if(err){ return next(err); }
@@ -63,6 +159,43 @@ router.post('/gcm', auth.isAuthenticated(), function(req, res, next){
 });
 
 //get me
+/**
+ * @api {GET} /api/users/me Get information about the current user
+ * @apiGroup Users
+ * @apiVersion 0.1.0
+ *
+ * @apiSuccess {String} _id Unique identifier for the object
+ * @apiSuccess {String} provider The authentication provider, usually local
+ * @apiSuccess {String} name The name of the user
+ * @apiSuccess {String} email The user's email
+ * @apiSuccess {String} gcm The gcm token for notification access
+ * @apiSuccess {Group[]} groups An array of populated groups that the user is a member of 
+ * @apiSuccess {Boolean} opt [Unused] Whether the user has opted in for email delivery or not
+ * @apiSuccess {Boolean} confirmed [Unused] Whether the user has confirmed their email address
+ * @apiSuccess {String} role [Unusued] The user's specified role. Was deprecated in favor of a group-based system.
+ *
+ * @apiSuccessExample {json} Response Example
+ * [
+  {
+    "_id": "55e4b8ae1959b17a0777a816",
+    "provider": "local",
+    "name": "test",
+    "email": "test@brentondurkee.com",
+    "gcm": "lkdjafkljdf",
+    "__v": 4,
+    "groups": [
+      {...}
+    ],
+    "opt": true,
+    "confirmed": false,
+    "role": "user"
+  },
+  {...} 
+  ]
+ *
+ * @apiPermission isAuthenticated
+ * @apiUse authHeader
+ */
 router.get('/me', auth.isAuthenticated(), function(req, res, next){
 	var userId = req.user._id;
   User.findOne({
@@ -76,6 +209,27 @@ router.get('/me', auth.isAuthenticated(), function(req, res, next){
   });
 });
 
+
+/**
+ * @api {PUT} /api/users/group Adds a user to a group
+ * @apiGroup Users
+ * @apiVersion 0.1.0
+ *
+ * @apiParam {String} group The name of the group to add the user to
+ * @apiParam {String} user The id of the user to add to the group
+ *
+ * @apiParamExample {json} Request Example
+ * {
+ * 	"group":"admin",
+ * 	"user":"55e4b8ae1959b17a0777a816"
+ * }
+ *
+ * @apiError (Error 404) {String} GroupNotFoundError The specified group was not found.
+ * @apiError (Error 404) {String} UserNotFoundError The specified user was not found.
+ * 
+ * @apiUse authHeader
+ * @apiPermission inGroup(admin)
+ */
 router.put('/group', auth.inGroup('admin'), function(req, res, next){
 	async.waterfall([
       function(callback){
@@ -115,23 +269,23 @@ router.put('/group', auth.inGroup('admin'), function(req, res, next){
     });
 });
 
-router.put('/confirm', function(req, res, next){
-	var token = req.body.token;
+// router.put('/confirm', function(req, res, next){
+// 	var token = req.body.token;
 
-	Token.findOne({ uuid: token }).exec(function(err, token){
-		if(err) return next(err);
-		if(!token) return res.status(404).send('Invalid token');
-		if(token.type != 'confirm') return res.status(404).send('Invalid token');
-		User.findOneAndUpdate({ _id: token.userId}, { confirmed: true }, function(err, user){
-			if(err){ return next(err); }
-			token.expire(function(err){
-				if(err){ return next(err); }
-				//send email
-				res.json(user);
-			});
-		});
-	});
-});
+// 	Token.findOne({ uuid: token }).exec(function(err, token){
+// 		if(err) return next(err);
+// 		if(!token) return res.status(404).send('Invalid token');
+// 		if(token.type != 'confirm') return res.status(404).send('Invalid token');
+// 		User.findOneAndUpdate({ _id: token.userId}, { confirmed: true }, function(err, user){
+// 			if(err){ return next(err); }
+// 			token.expire(function(err){
+// 				if(err){ return next(err); }
+// 				//send email
+// 				res.json(user);
+// 			});
+// 		});
+// 	});
+// });
 
 // router.put('/reset', function(req, res, next){
 // 	var token = req.body.token;
