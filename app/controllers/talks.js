@@ -19,7 +19,7 @@ module.exports = function (app) {
 /**
  * @api {GET} /api/talks Get all talks
  * @apiGroup Talks
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  * @apiSuccess {String} _id The unique id of the talk object
  * @apiSuccess {String} author The name of the talk author
@@ -63,7 +63,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 /**
  * @api {POST} /api/talks Create new talk
  * @apiGroup Talks
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  * @apiParam {String} author The author of the talk
  * @apiParam {String} subject The subject of the talk
@@ -120,7 +120,7 @@ router.post('/', auth.canWrite('Talks'), function(req, res, next){
 /**
  * @api {PUT} /api/talks/note Adds a new outline point to the specified talk
  * @apiGroup Talks
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  * @apiParam {String} talk The id of the talk that is being modified
  * @apiParam {String} note The text of the outline point being added
@@ -148,5 +148,26 @@ router.put('/note', auth.inGroup("admin"), function(req, res, next){
         res.json(number);
       });
     });
+  });
+});
+
+/**
+ * @api {DELETE} /api/talks/delete Delete talk
+ * @apiGroup Talks
+ * @apiVersion 1.1.0
+ *
+ * @apiParam {String} item id of the talk item to be deleted
+ * @apiParamExample {json} Request Example
+ * {
+ *   "item":"555kljdfkk4l2eer"
+ * }
+ *
+ * @apiPermission inGroup(admin)
+ * @apiUse authHeader
+ */
+router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
+  Talk.findOneAndRemove({'id':req.item}, function(err){
+    if(err) return next(err);
+    res.status(200).send();
   });
 });

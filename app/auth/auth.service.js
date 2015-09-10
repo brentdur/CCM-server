@@ -15,6 +15,7 @@ var User = mongoose.model('User');
 var Group = mongoose.model('Group');
 var validateJwt = expressJwt({ secret: config.session });
 
+
 /**
  * Attaches the user object to the request if authenticated
  * Otherwise returns 403
@@ -39,6 +40,18 @@ function isAuthenticated() {
         next();
       });
     });
+}
+
+function logged(){
+  return compose()
+  .use(function(req,res,next){
+    if(req.user){
+      next();
+    }
+    else {
+      res.sendStatus(403);
+    }
+  });
 }
 
 /**
@@ -134,6 +147,7 @@ function setTokenCookie(req, res) {
 }
 
 exports.isAuthenticated = isAuthenticated;
+exports.logged = logged;
 exports.hasRole = hasRole;
 exports.inGroup = inGroup;
 exports.canWrite = canWrite;

@@ -14,8 +14,10 @@ var express = require('express'),
   Topic = mongoose.model('Topic'),
   Signup = mongoose.model('Signup'),
   async = require('async');
+  var auth = require('../auth/auth.service');
   var gcm = require('../gcm');
   var config = require('../../config/config');
+  var passport = require('passport');
 
 module.exports = function (app) {
   app.use('/', router);
@@ -23,7 +25,77 @@ module.exports = function (app) {
 
 //gets all the different information and assigns the arrays to variables delivered to the webpage
 router.get('/', function (req, res, next) {
-  if(config.env !== 'production'){
+  // if(config.env !== 'production'){
+  //   async.series([
+  //       function(callback){
+  //         Event.find(function (err, events) {
+  //           callback(err, events);
+  //        });
+  //       },
+  //       function(callback){
+  //         Message.find(function (err, messages){
+  //           callback(err, messages);
+  //         });
+  //       },
+  //       function(callback){
+  //         Talk.find(function (err, talks){
+  //           callback(err, talks);
+  //         });
+  //       },
+  //       function(callback){
+  //         Location.find(function(err, locations){
+  //           callback(err, locations);
+  //         });
+  //       },
+  //       function(callback){
+  //         User.find(function(err, users){
+  //           callback(err, users);
+  //         });
+  //       },
+  //       function(callback){
+  //         Group.find(function(err, groups){
+  //           callback(err, groups);
+  //         });
+  //       },
+  //       function(callback){
+  //         Topic.find(function(err, topics){
+  //           callback(err, topics);
+  //         });
+  //       },
+  //       function(callback){
+  //         Signup.find(function(err, signups){
+  //           callback(err, signups);
+  //         });
+  //       }
+  //     ], function(err, results){
+  //       if (err) return next(err);
+  //       res.render('partials/datadump', {
+  //           title: 'CCM Server',
+  //           events: results[0],
+  //           msgs: results[1],
+  //           talks: results[2],
+  //           locs: results[3],
+  //           users: results[4],
+  //           groups: results[5],
+  //           topics: results[6],
+  //           signups: results[7]
+  //           });
+
+  //   });
+  // }
+  // else {
+    res.render('partials/welcome', {
+            title: 'CCM'
+            });
+  // }
+});
+
+router.get('/admin', function(req, res, next){
+  var token = req.cookies.token;
+  req.query.access_token = token;
+  console.log(req.query);
+  next();
+}, auth.inGroup('admin'), function(req, res, next) {
     async.series([
         function(callback){
           Event.find(function (err, events) {
@@ -67,7 +139,7 @@ router.get('/', function (req, res, next) {
         }
       ], function(err, results){
         if (err) return next(err);
-        res.render('index', {
+        res.render('partials/datadump', {
             title: 'CCM Server',
             events: results[0],
             msgs: results[1],
@@ -80,12 +152,17 @@ router.get('/', function (req, res, next) {
             });
 
     });
-  }
-  else {
-    res.render('partials/welcome', {
-            title: 'CCM'
-            });
-  }
+});
+
+router.get('/admin/edit', function(req, res, next) {
+  var token = req.cookies.token;
+  req.query.access_token = token;
+  console.log(req.query);
+  next();
+}, auth.inGroup('admin'), function(req, res, next) {
+    res.render('partials/edit', {
+      item: req.item
+    });
 });
 
 router.get('/privacy', function (req, res, next) {

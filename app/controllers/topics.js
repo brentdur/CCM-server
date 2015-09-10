@@ -17,7 +17,7 @@ module.exports = function (app) {
 /**
  * @api {GET} /api/topics Get all Topics
  * @apiGroup Topics
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  *@apiSuccess {String} _id Unique string for topic
  *@apiSuccess {String} name Simple name of topic
@@ -50,7 +50,7 @@ router.get('/', auth.isAuthenticated(), function(req, res, next){
 /**
  * @api {POST} /api/topics Create a new topic
  * @apiGroup Topics
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  * @apiParam {String} name Name of topic
  * @apiParam {Boolean} [isAnon=false] Whether the sender of a message of this topic type is anonoymous or not

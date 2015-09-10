@@ -47,7 +47,7 @@ var errorForm = function(title, message, status) {
 /**
  * @api {get} /api/events Get all events
  * @apiGroup Events
- * @apiVersion 0.2.0
+ * @apiVersion 1.0.0
  *
  * @apiSuccess {String} _id Unique string for event
  * @apiSuccess {String} title The simple name for this event.
@@ -93,7 +93,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 /**
  * @api {POST} /api/events Create new event
  *@apiGroup Events
- *@apiVersion 0.1.0
+ *@apiVersion 1.0.0
  *
  * @apiParam {String} title The title for the event
  * @apiParam {String} location The name of the existing location or the simple name for a new location
@@ -214,4 +214,25 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
       gcm.sendGCM(0);
       res.status(200).send();
     });
+});
+
+/**
+ * @api {DELETE} /api/events/delete Delete event
+ * @apiGroup Events
+ * @apiVersion 1.1.0
+ *
+ * @apiParam {String} item id of the event item to be deleted
+ * @apiParamExample {json} Request Example
+ * {
+ *   "item":"555kljdfkk4l2eer"
+ * }
+ *
+ * @apiPermission inGroup(admin)
+ * @apiUse authHeader
+ */
+router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
+  Event.findOneAndRemove({'id':req.item}, function(err){
+    if(err) return next(err);
+    res.status(200).send();
+  });
 });

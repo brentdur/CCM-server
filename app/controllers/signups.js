@@ -29,7 +29,7 @@ var errorForm = function(title, message, status) {
 /**
  * @api {get} /api/signups Get all signups
  * @apiGroup Signups
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  * @apiSuccess {String} _id Unique string for signup
  * @apiSuccess {String} name The simple name for this signup .
@@ -93,7 +93,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 /**
  * @api {POST} /api/signups Create new signup
  *@apiGroup Signups
- *@apiVersion 0.1.0
+ *@apiVersion 1.0.0
  *
  * @apiParam {String} name The title for the event
  * @apiParam {String} dateInfo String explanation of date/times
@@ -199,7 +199,7 @@ router.post('/', auth.canWrite('Signups'), function(req, res, next){
 /**
  * @api {PUT} /api/signups/addme Add user to signup
  *@apiGroup Signups
- *@apiVersion 0.1.0
+ *@apiVersion 1.0.0
  *
  * @apiParam {Signup} signup The signup to register the authorized user to
  * 
@@ -227,5 +227,26 @@ router.put('/addme', auth.isAuthenticated(), function(req, res, next){
       if (err) return next(err);
       res.status(200).send();
     });
+  });
+});
+
+/**
+ * @api {DELETE} /api/signups/delete Delete signup
+ * @apiGroup Signups
+ * @apiVersion 1.1.0
+ *
+ * @apiParam {String} item id of the event item to be deleted
+ * @apiParamExample {json} Request Example
+ * {
+ *   "item":"555kljdfkk4l2eer"
+ * }
+ *
+ * @apiPermission inGroup(admin)
+ * @apiUse authHeader
+ */
+router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
+  Signup.findOneAndRemove({'id':req.item}, function(err){
+    if(err) return next(err);
+    res.status(200).send();
   });
 });
