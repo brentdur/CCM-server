@@ -48,7 +48,7 @@ module.exports = function (app) {
 /**
  * @api {GET} /api/messages Get all messages
  * @apiGroup Messages
- * @apiVersion 0.3.0
+ * @apiVersion 1.0.0
  *
  * @apiUse msgGet
  *
@@ -67,7 +67,7 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
  * @api {GET} /api/messages/mine Get my messages
  * @apiGroup Messages
  * @apiDescription Gets messages addressed to the groups of the current user, will hide the from field if topic is anonymous
- * @apiVersion 0.3.0
+ * @apiVersion 1.0.0
  *
  * @apiUse msgGet
  *
@@ -112,7 +112,7 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
 /**
  * @api {POST} /api/messages Creates a new message for the 'ministers' group
  * @apiGroup Messages
- * @apiVersion 0.3.0
+ * @apiVersion 1.0.0
  *
  * @apiParam {String} subject Subject/Title of the message
  * @apiParam {String} message Text of the message
@@ -178,7 +178,7 @@ router.post('/', auth.canWrite('Msgs'), function(req, res, next){
 /**
  * @api {DELETE} /api/messages Delete message
  * @apiGroup  Messages
- * @apiVersion 0.3.0
+ * @apiVersion 1.0.0
  *
  * @apiParam {String} message id of the message to be deleted
  * @apiParamExample {query} Request Example
@@ -193,6 +193,27 @@ router.delete('/', auth.inGroup('ministers'), function(req, res,next){
   Message.findById(msg).remove(function(err, data){
     if(err) return next(err);
     console.log(data.result);
+    res.status(200).send();
+  });
+});
+
+/**
+ * @api {DELETE} /api/messages/delete Delete message for admin
+ * @apiGroup Messages
+ * @apiVersion 1.1.0
+ *
+ * @apiParam {String} item id of the message item to be deleted
+ * @apiParamExample {json} Request Example
+ * {
+ *   "item":"555kljdfkk4l2eer"
+ * }
+ *
+ * @apiPermission inGroup(admin)
+ * @apiUse authHeader
+ */
+router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
+  Message.findOneAndRemove({'id':req.item}, function(err){
+    if(err) return next(err);
     res.status(200).send();
   });
 });

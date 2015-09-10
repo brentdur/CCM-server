@@ -1,10 +1,70 @@
 define({ "api": [
   {
+    "type": "DELETE",
+    "url": "/api/events/delete",
+    "title": "Delete event",
+    "group": "Events",
+    "version": "1.1.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "item",
+            "description": "<p>id of the event item to be deleted</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n  \"item\":\"555kljdfkk4l2eer\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/events.js",
+    "groupTitle": "Events",
+    "name": "DeleteApiEventsDelete",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/events/delete"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
     "type": "get",
     "url": "/api/events",
     "title": "Get all events",
     "group": "Events",
-    "version": "0.2.0",
+    "version": "1.0.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -116,120 +176,11 @@ define({ "api": [
     }
   },
   {
-    "type": "get",
-    "url": "/api/events",
-    "title": "Get all events",
-    "group": "Events",
-    "version": "0.1.0",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "_id",
-            "description": "<p>Unique string for event</p> "
-          },
-          {
-            "group": "Success 200",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "title",
-            "description": "<p>The simple name for this event.</p> "
-          },
-          {
-            "group": "Success 200",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "location",
-            "description": "<p>The simple name of the venue.</p> "
-          },
-          {
-            "group": "Success 200",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "date",
-            "description": "<p>Date of this event in standard format.</p> "
-          },
-          {
-            "group": "Success 200",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "description",
-            "description": "<p>Full description of this event.</p> "
-          },
-          {
-            "group": "Success 200",
-            "type": "<p>Number</p> ",
-            "optional": false,
-            "field": "lat",
-            "description": "<p>Latitude of venue.</p> "
-          },
-          {
-            "group": "Success 200",
-            "type": "<p>Number</p> ",
-            "optional": false,
-            "field": "lng",
-            "description": "<p>Longitude of venue.</p> "
-          },
-          {
-            "group": "Success 200",
-            "type": "<p>Number</p> ",
-            "optional": false,
-            "field": "version",
-            "description": "<p>Version of event, starting at 0.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Response Example",
-          "content": "[\n{\n \"_id\": \"55bd34d9b70a934b24e952e6\",\n \"title\": \"first event\",\n \"location\": \"Reedemer West Side\",\n \"date\": \"2015-09-14T04:00:00.000Z\",\n \"description\": \"This is the first event\",\n \"lat\": 40.786122,\n \"lng\": -73.975738,\n \"__v\": 0,\n \"version\": 0\n},\n{...}\n]",
-          "type": "json"
-        }
-      ]
-    },
-    "permission": [
-      {
-        "name": "isAuthenticated()"
-      }
-    ],
-    "filename": "app/controllers/_apidoc.js",
-    "groupTitle": "Events",
-    "name": "GetApiEvents",
-    "sampleRequest": [
-      {
-        "url": "http://ccm.brentondurkee.com/api/events"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Authorization Example",
-          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
-          "type": "json"
-        }
-      ]
-    }
-  },
-  {
     "type": "POST",
     "url": "/api/events",
     "title": "Create new event",
     "group": "Events",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -349,7 +300,7 @@ define({ "api": [
     "url": "/api/groups",
     "title": "Get all groups",
     "group": "Groups",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -458,7 +409,7 @@ define({ "api": [
     "url": "/api/groups",
     "title": "Create new group",
     "group": "Groups",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -569,7 +520,7 @@ define({ "api": [
     "url": "/api/locations",
     "title": "Get all locations",
     "group": "Locations",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -664,7 +615,7 @@ define({ "api": [
     "url": "/api/locations",
     "title": "Create a new location",
     "group": "Locations",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -765,7 +716,7 @@ define({ "api": [
     "url": "/api/messages",
     "title": "Delete message",
     "group": "Messages",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -821,11 +772,71 @@ define({ "api": [
     }
   },
   {
+    "type": "DELETE",
+    "url": "/api/messages/delete",
+    "title": "Delete message for admin",
+    "group": "Messages",
+    "version": "1.1.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "item",
+            "description": "<p>id of the message item to be deleted</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n  \"item\":\"555kljdfkk4l2eer\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/messages.js",
+    "groupTitle": "Messages",
+    "name": "DeleteApiMessagesDelete",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/messages/delete"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
     "type": "GET",
     "url": "/api/messages",
     "title": "Get all messages",
     "group": "Messages",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "inGroup(admin)"
@@ -949,7 +960,7 @@ define({ "api": [
     "title": "Get my messages",
     "group": "Messages",
     "description": "<p>Gets messages addressed to the groups of the current user, will hide the from field if topic is anonymous</p> ",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "isAuthenticated()"
@@ -1072,7 +1083,7 @@ define({ "api": [
     "url": "/api/messages",
     "title": "Creates a new message for the 'ministers' group",
     "group": "Messages",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1176,11 +1187,71 @@ define({ "api": [
     }
   },
   {
+    "type": "DELETE",
+    "url": "/api/signups/delete",
+    "title": "Delete signup",
+    "group": "Signups",
+    "version": "1.1.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "item",
+            "description": "<p>id of the event item to be deleted</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n  \"item\":\"555kljdfkk4l2eer\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/signups.js",
+    "groupTitle": "Signups",
+    "name": "DeleteApiSignupsDelete",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/signups/delete"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
     "type": "get",
     "url": "/api/signups",
     "title": "Get all signups",
     "group": "Signups",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -1317,7 +1388,7 @@ define({ "api": [
     "url": "/api/signups",
     "title": "Create new signup",
     "group": "Signups",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1444,7 +1515,7 @@ define({ "api": [
     "url": "/api/signups/addme",
     "title": "Add user to signup",
     "group": "Signups",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1520,11 +1591,71 @@ define({ "api": [
     }
   },
   {
+    "type": "DELETE",
+    "url": "/api/talks/delete",
+    "title": "Delete talk",
+    "group": "Talks",
+    "version": "1.1.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "item",
+            "description": "<p>id of the talk item to be deleted</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n  \"item\":\"555kljdfkk4l2eer\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/talks.js",
+    "groupTitle": "Talks",
+    "name": "DeleteApiTalksDelete",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/talks/delete"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
     "type": "GET",
     "url": "/api/talks",
     "title": "Get all talks",
     "group": "Talks",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -1640,7 +1771,7 @@ define({ "api": [
     "url": "/api/talks",
     "title": "Create new talk",
     "group": "Talks",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1741,7 +1872,7 @@ define({ "api": [
     "url": "/api/talks/note",
     "title": "Adds a new outline point to the specified talk",
     "group": "Talks",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1808,7 +1939,7 @@ define({ "api": [
     "url": "/api/topics",
     "title": "Get all Topics",
     "group": "Topics",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -1889,7 +2020,7 @@ define({ "api": [
     "url": "/api/topics",
     "title": "Create a new topic",
     "group": "Topics",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1977,7 +2108,7 @@ define({ "api": [
     "url": "/api/users",
     "title": "Get all users",
     "group": "Users",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -2107,7 +2238,7 @@ define({ "api": [
     "url": "/api/users/me",
     "title": "Get information about the current user",
     "group": "Users",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "success": {
       "fields": {
         "Success 200": [
@@ -2223,7 +2354,7 @@ define({ "api": [
     "url": "/api/users",
     "title": "Create a new user",
     "group": "Users",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2292,7 +2423,7 @@ define({ "api": [
     "url": "/api/users/gcm",
     "title": "Adds a gcm token to the user",
     "group": "Users",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2352,7 +2483,7 @@ define({ "api": [
     "url": "/api/users/group",
     "title": "Adds a user to a group",
     "group": "Users",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [

@@ -13,6 +13,9 @@ var compress = require('compression');
 var passport = require('passport');
 var methodOverride = require('method-override');
 var exphbs  = require('express-handlebars');
+var session = require('express-session');
+var mongoose = require('mongoose')
+var mongoStore = require('connect-mongo')(session);
 
 module.exports = function(app, config) {
   app.engine('handlebars', exphbs({
@@ -33,11 +36,18 @@ module.exports = function(app, config) {
   app.use(bodyParser.urlencoded({
     extended: true
   }));
-  app.use(cookieParser());
+  app.use(cookieParser(config.session));
   app.use(compress());
   app.use(express.static(config.root + '/public'));
+  app.use(session({
+    secret: config.session,
+    resave: true,
+    saveUninitialized: true,
+    store: new mongoStore({ mongooseConnection: mongoose.connection })
+  }));
   app.use(methodOverride());
   app.use(passport.initialize());
+  app.use(passport.session());
 
 
   var controllers = glob.sync(config.root + '/app/controllers/*.js');
@@ -46,6 +56,7 @@ module.exports = function(app, config) {
   });
 
   app.use('/api/docs', express.static(config.root + '/docs'));
+  app.use('/auth', require(config.root + '/app/auth'));
 
   app.use(function (err, req, res, next){
     res.status(err.status || 500);

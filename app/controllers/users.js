@@ -32,7 +32,7 @@ var validationError = function(res, err) {
 /**
  *@api {POST} /api/users Create a new user
  *@apiGroup Users
- *@apiVersion 0.1.0
+ *@apiVersion 1.0.0
  *
  * @apiParam {String} name The new users full name
  * @apiParam {String} email The new user's email
@@ -86,7 +86,7 @@ router.post('/', function(req, res, next){
 /**
  * @api {GET} /api/users Get all users
  * @apiGroup Users
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  * @apiSuccess {String} _id Unique identifier for the object
  * @apiSuccess {String} provider The authentication provider, usually local
@@ -135,7 +135,7 @@ router.get('/', auth.inGroup('admin'), function(req, res, next){
 /**
  * @api {POST} /api/users/gcm Adds a gcm token to the user
  * @apiGroup Users
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  * @apiParam {String} gcm The gcm token to add
  *
@@ -162,7 +162,7 @@ router.post('/gcm', auth.isAuthenticated(), function(req, res, next){
 /**
  * @api {GET} /api/users/me Get information about the current user
  * @apiGroup Users
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  * @apiSuccess {String} _id Unique identifier for the object
  * @apiSuccess {String} provider The authentication provider, usually local
@@ -213,7 +213,7 @@ router.get('/me', auth.isAuthenticated(), function(req, res, next){
 /**
  * @api {PUT} /api/users/group Adds a user to a group
  * @apiGroup Users
- * @apiVersion 0.1.0
+ * @apiVersion 1.0.0
  *
  * @apiParam {String} group The name of the group to add the user to
  * @apiParam {String} user The id of the user to add to the group

@@ -20,4 +20,8 @@ router.post('/', function(req, res, next) {
   })(req, res, next)
 });
 
+router.post('/login',passport.authenticate('local', {failureRedirect:'/'}), function(req, res, next) {
+  res.redirect('/admin');
+});
+
 module.exports = router;
