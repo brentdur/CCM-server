@@ -31,17 +31,18 @@ var func = {
 
     var query = {
       "registration_ids": ids,
-        "notification": {
-            "title": "hello",
-            "text": "hello",
-            "icon": "icon",
-            "click_action": "OPEN_CCM"
-        },
+        // "notification": {
+        //     "title": "hello",
+        //     "text": "hello",
+        //     "icon": "icon",
+        //     "click_action": "OPEN_CCM"
+        // },
         "data": {
-            "sync":syncTerm
+            "sync":syncTerm[type]
         }
     };
     query = JSON.stringify(query);
+
     console.log(ids);
 
     var options = {
@@ -55,7 +56,7 @@ var func = {
       }
     };
 
-    console.log('sending');
+    console.log('sending gcm');
     var req = http.request(options, function(res){
       console.log('STATUS: ' + res.statusCode);
       console.log('HEADERS: ' + JSON.stringify(res.headers));

@@ -233,6 +233,7 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
 router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
   Event.findOneAndRemove({'id':req.item}, function(err){
     if(err) return next(err);
+    gcm.sendGCM(0);
     res.status(200).send();
   });
 });

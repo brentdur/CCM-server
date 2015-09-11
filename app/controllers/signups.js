@@ -225,6 +225,7 @@ router.put('/addme', auth.isAuthenticated(), function(req, res, next){
     if(!signup) return next(errorForm('Signup Error', 'No signup found', 403));
     signup.addMember(req.user._id, function(err, number){
       if (err) return next(err);
+      gcm.sendGCM(6);
       res.status(200).send();
     });
   });
@@ -247,6 +248,7 @@ router.put('/addme', auth.isAuthenticated(), function(req, res, next){
 router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
   Signup.findOneAndRemove({'id':req.item}, function(err){
     if(err) return next(err);
+    gcm.sendGCM(6);
     res.status(200).send();
   });
 });
