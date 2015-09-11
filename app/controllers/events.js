@@ -89,6 +89,12 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
     });
   });
 
+// router.get('/gcm', auth.isAuthenticated(), function (req, res, next) {
+//   gcm.sendGCM(7);
+//   console.log('req');
+//   res.status(200).send();
+//   });
+
 
 /**
  * @api {POST} /api/events Create new event
