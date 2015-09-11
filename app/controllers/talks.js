@@ -144,7 +144,7 @@ router.put('/note', auth.inGroup("admin"), function(req, res, next){
       if (err) { return next(err); }
       talk.incVersion(function(err){
         if(err) { return next(err); }
-        sendGCM(2);
+        gcm.sendGCM(2);
         res.json(number);
       });
     });

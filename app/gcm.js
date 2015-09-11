@@ -40,6 +40,7 @@ var func = {
     function(ids, callback){
       var query = {
         "registration_ids": ids,
+        "content_available": true,
           // "notification": {
           //     "title": "hello",
           //     "text": "hello",
@@ -52,7 +53,6 @@ var func = {
       };
       query = JSON.stringify(query);
 
-      console.log(ids);
       console.log(query);
 
       var options = {
@@ -69,7 +69,7 @@ var func = {
       console.log('sending gcm');
       var req = http.request(options, function(res){
         console.log('STATUS: ' + res.statusCode);
-        console.log('HEADERS: ' + JSON.stringify(res.headers));
+        // console.log('HEADERS: ' + JSON.stringify(res.headers));
         res.setEncoding('utf8');
         res.on('data', function (chunk) {
           console.log('BODY: ' + chunk);
@@ -77,7 +77,6 @@ var func = {
       });
       req.on('error', function(e) {
         console.log('problem with request: ' + e.message);
-        console.log('on');
       });
 
       // write data to request body
