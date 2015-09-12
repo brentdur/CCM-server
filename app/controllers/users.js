@@ -78,7 +78,42 @@ router.post('/', function(req, res, next){
 	    if(err) return validationError(res, err);
 	   	mail.welcome(user.name, user.email);
 	    var token = jwt.sign({_id: user._id}, config.session, { expiresInMinutes: 60*5 });
-	    res.json({token: token});
+
+      async.waterfall([
+        function(callback){
+          Group.findOne({name: 'users'}, function(err, group){
+            if(err) { 
+              callback(err);
+              return;
+            }
+            if(!group) {
+              callback("no group");
+              return;
+            };
+            callback(null, group);
+          });
+        },
+        function(group, callback){
+          console.log(group);
+          console.log(user);
+          user.addGroup(group._id, function(err, number){
+            if(err) {return next(err);}
+            group.addUser(user._id, function(err, num ){
+              if(err) callback(err);
+              console.log('5');
+              callback(null);
+            });
+        });
+        }
+      ], 
+      function(err, results){
+        if (err) { 
+          if(err !== 'no group'){
+            return next(err); 
+          }
+        }
+        res.json({token: token});
+      });
 	  });
 });
 
@@ -236,7 +271,6 @@ router.put('/group', auth.inGroup('admin'), function(req, res, next){
 	    Group.findOne({name: req.body.group}, function(err, group){
 			if(err) { callback(err);}
 			if(!group) { return res.status(404).send(); }
-			console.log('1');
 			callback(null, group);
 		});
       },
@@ -244,14 +278,16 @@ router.put('/group', auth.inGroup('admin'), function(req, res, next){
 	    User.findById(req.body.user, function(err, user){
 	    	if(err) {callback(err);}
 	    	if(!user) {return res.status(404).send();}
-	    	console.log('2');
 	    	callback(null, user, group);
       	});
       },
       function(user, group, callback){
-      	console.log('3');
-      	console.log(group);
-      	console.log(user);
+        for (var i = 0; i < user.groups.length; i++){
+          if(user.groups[i].toString() === group._id.toString()){
+            callback('Already in Group');
+            return;
+          }
+        }
       	user.addGroup(group._id, function(err, number){
       		if(err) {return next(err);}
       		console.log('4');
