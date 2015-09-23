@@ -18,7 +18,7 @@ module.exports = function (app) {
 /**
  * @api {GET} /api/groups Get all groups
  * @apiGroup Groups
- * @apiVersion 1.0.0
+ * @apiVersion 1.2.0
  *
  * @apiSuccess {String} _id Unique string for group
  * @apiSuccess {String} name Name of the event
@@ -27,6 +27,7 @@ module.exports = function (app) {
  * @apiSuccess {Boolean} writeMsgs Specifies whether this group has write permission for messages
  * @apiSuccess {Boolean} writeTalks Specifies whether this group has write permission for talks
  * @apiSuccess {Boolean} writeSignups Specifies whether this group has write permission for signups
+ * @apiSuccess {Boolean} writeConversations Specifies whether this group has write permission for conversations
  * @apiSuccess {Users[]} members Populated list of all members
  *
  * @apiSuccessExample {json} Response Example
@@ -40,6 +41,7 @@ module.exports = function (app) {
  *   "writeMsgs": true,
  *   "writeTalks": true,
  *   "writeSignups": true,
+ *   "writeConversations": true,
  *   "members": [
  *     {
  *       "_id": "55aaad047b521bba68335409",
@@ -78,12 +80,13 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
 /**
  * @api {POST} /api/groups Create new group
  * @apiGroup Groups
- * @apiVersion 1.0.0
+ * @apiVersion 1.2.0
  * @apiParam name The name of the new group
  * @apiParam {Boolean} [writeTalks=false] whether this group can make new talks
  * @apiParam {Boolean} [writeEvents=false] whether this group can make new events
  * @apiParam {Boolean} [writeMsgs=false] whether this group can make new messages
  * @apiParam {Boolean} [writeSignups=false] whether this group can make new signups
+ * @apiParam {Boolean} [writeConversations=false] whether this group can make new conversations
  * 
  *
  * @apiParamExample {json} Request Example

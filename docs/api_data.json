@@ -1,5 +1,586 @@
 [
   {
+    "type": "get",
+    "url": "/api/conversations",
+    "title": "Get all conversations",
+    "group": "Conversations",
+    "version": "1.2.0",
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/conversations.js",
+    "groupTitle": "Conversations",
+    "name": "GetApiConversations",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/conversations"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "alive",
+            "description": "<p>Whether the conversation is still happening or has been deleted</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Object</p> ",
+            "optional": false,
+            "field": "minister",
+            "description": "<p>The minister group participating in the conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "minister.alive",
+            "description": "<p>Whether the minister still considers the conversation to be alive</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "minister.readLast",
+            "description": "<p>Whether the minister has read the last message sent by another party</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "minister.isAnon",
+            "description": "<p>Whether the minister is anonymous in this conversation (will be false for the most part)</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "minister.senderId",
+            "description": "<p>The string identifier of the sender</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Object</p> ",
+            "optional": false,
+            "field": "participant",
+            "description": "<p>The participating (initiating) user of this conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "participant.alive",
+            "description": "<p>Whether the user still considers the conversation to be alive</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "participant.readLast",
+            "description": "<p>Whether the user has read the last message sent by another party</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "participant.isAnon",
+            "description": "<p>Whether the user is anonymous in this conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "participant.senderId",
+            "description": "<p>The string identifier of the sender</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>User</p> ",
+            "optional": false,
+            "field": "participant.user",
+            "description": "<p>The user id associated with this participant</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Topic</p> ",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>The topic associated with this conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "singleton",
+            "description": "<p>Whether this conversation is a single message or a whole conversation (one way vs two way, designed to enable older -&gt; newer communication)</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Message[]</p> ",
+            "optional": false,
+            "field": "messages",
+            "description": "<p>The messages connected with this conversation</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[{\n\t\"_id\": \"55c5527f8efd394f3634c762\",\n\t\"alive\": true,\n\t\"minister\": {\n\t\t\"alive\": true,\n\t\t\"readLast\": false,\n\t\t\"isAnon\": false,\n\t\t\"senderId\": \"92920192\"\n\t \t},\n\t\"participant\": {\n\t\t\"alive\": false,\n\t\t\"readLast\": true,\n\t\t\"isAnon\": true,\n\t\t\"senderId\": \"adfa313g32g231\"\n\t\t\"user\":\"55c5527f8efd394f3634c762\"\n\t\t},\n\t\"topic\":\"55c5527f8efd394f3634c762\",\n\tsingleton: false,\n\tmessages:[...]\n},\n{...}.\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/conversations/mine",
+    "title": "Get all conversations for a user that are still alive",
+    "group": "Conversations",
+    "version": "1.2.0",
+    "permission": [
+      {
+        "name": "isAuthenticated()"
+      }
+    ],
+    "filename": "app/controllers/conversations.js",
+    "groupTitle": "Conversations",
+    "name": "GetApiConversationsMine",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/conversations/mine"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "alive",
+            "description": "<p>Whether the conversation is still happening or has been deleted</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Object</p> ",
+            "optional": false,
+            "field": "minister",
+            "description": "<p>The minister group participating in the conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "minister.alive",
+            "description": "<p>Whether the minister still considers the conversation to be alive</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "minister.readLast",
+            "description": "<p>Whether the minister has read the last message sent by another party</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "minister.isAnon",
+            "description": "<p>Whether the minister is anonymous in this conversation (will be false for the most part)</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "minister.senderId",
+            "description": "<p>The string identifier of the sender</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Object</p> ",
+            "optional": false,
+            "field": "participant",
+            "description": "<p>The participating (initiating) user of this conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "participant.alive",
+            "description": "<p>Whether the user still considers the conversation to be alive</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "participant.readLast",
+            "description": "<p>Whether the user has read the last message sent by another party</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "participant.isAnon",
+            "description": "<p>Whether the user is anonymous in this conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "participant.senderId",
+            "description": "<p>The string identifier of the sender</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>User</p> ",
+            "optional": false,
+            "field": "participant.user",
+            "description": "<p>The user id associated with this participant</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Topic</p> ",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>The topic associated with this conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "singleton",
+            "description": "<p>Whether this conversation is a single message or a whole conversation (one way vs two way, designed to enable older -&gt; newer communication)</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Message[]</p> ",
+            "optional": false,
+            "field": "messages",
+            "description": "<p>The messages connected with this conversation</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[{\n\t\"_id\": \"55c5527f8efd394f3634c762\",\n\t\"alive\": true,\n\t\"minister\": {\n\t\t\"alive\": true,\n\t\t\"readLast\": false,\n\t\t\"isAnon\": false,\n\t\t\"senderId\": \"92920192\"\n\t \t},\n\t\"participant\": {\n\t\t\"alive\": false,\n\t\t\"readLast\": true,\n\t\t\"isAnon\": true,\n\t\t\"senderId\": \"adfa313g32g231\"\n\t\t\"user\":\"55c5527f8efd394f3634c762\"\n\t\t},\n\t\"topic\":\"55c5527f8efd394f3634c762\",\n\tsingleton: false,\n\tmessages:[...]\n},\n{...}.\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/conversations/minister",
+    "title": "Get all conversations that are still alive",
+    "group": "Conversations",
+    "version": "1.2.0",
+    "permission": [
+      {
+        "name": "inGroup(ministers)"
+      }
+    ],
+    "filename": "app/controllers/conversations.js",
+    "groupTitle": "Conversations",
+    "name": "GetApiConversationsMinister",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/conversations/minister"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "alive",
+            "description": "<p>Whether the conversation is still happening or has been deleted</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Object</p> ",
+            "optional": false,
+            "field": "minister",
+            "description": "<p>The minister group participating in the conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "minister.alive",
+            "description": "<p>Whether the minister still considers the conversation to be alive</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "minister.readLast",
+            "description": "<p>Whether the minister has read the last message sent by another party</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "minister.isAnon",
+            "description": "<p>Whether the minister is anonymous in this conversation (will be false for the most part)</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "minister.senderId",
+            "description": "<p>The string identifier of the sender</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Object</p> ",
+            "optional": false,
+            "field": "participant",
+            "description": "<p>The participating (initiating) user of this conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "participant.alive",
+            "description": "<p>Whether the user still considers the conversation to be alive</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "participant.readLast",
+            "description": "<p>Whether the user has read the last message sent by another party</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "participant.isAnon",
+            "description": "<p>Whether the user is anonymous in this conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "participant.senderId",
+            "description": "<p>The string identifier of the sender</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>User</p> ",
+            "optional": false,
+            "field": "participant.user",
+            "description": "<p>The user id associated with this participant</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Topic</p> ",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>The topic associated with this conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "singleton",
+            "description": "<p>Whether this conversation is a single message or a whole conversation (one way vs two way, designed to enable older -&gt; newer communication)</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Message[]</p> ",
+            "optional": false,
+            "field": "messages",
+            "description": "<p>The messages connected with this conversation</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[{\n\t\"_id\": \"55c5527f8efd394f3634c762\",\n\t\"alive\": true,\n\t\"minister\": {\n\t\t\"alive\": true,\n\t\t\"readLast\": false,\n\t\t\"isAnon\": false,\n\t\t\"senderId\": \"92920192\"\n\t \t},\n\t\"participant\": {\n\t\t\"alive\": false,\n\t\t\"readLast\": true,\n\t\t\"isAnon\": true,\n\t\t\"senderId\": \"adfa313g32g231\"\n\t\t\"user\":\"55c5527f8efd394f3634c762\"\n\t\t},\n\t\"topic\":\"55c5527f8efd394f3634c762\",\n\tsingleton: false,\n\tmessages:[...]\n},\n{...}.\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "url": "/api/conversations",
+    "title": "Creates a new conversation",
+    "group": "Conversations",
+    "version": "1.2.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>Topic</p> ",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>The id of the topic for the conversation</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>The subject of the conversation</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "message",
+            "description": "<p>The original message text of the conversation</p> "
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "group canWrite(Conversations)"
+      }
+    ],
+    "filename": "app/controllers/conversations.js",
+    "groupTitle": "Conversations",
+    "name": "PostApiConversations",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/conversations"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "put",
+    "url": "/api/conversations/send",
+    "title": "Adds a new message to an existing conversation",
+    "group": "Conversations",
+    "version": "1.2.0",
+    "permission": [
+      {
+        "name": "isAuthenticated()"
+      }
+    ],
+    "filename": "app/controllers/conversations.js",
+    "groupTitle": "Conversations",
+    "name": "PutApiConversationsSend",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/conversations/send"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
     "type": "DELETE",
     "url": "/api/events/delete",
     "title": "Delete event",
@@ -300,6 +881,122 @@
     "url": "/api/groups",
     "title": "Get all groups",
     "group": "Groups",
+    "version": "1.2.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique string for group</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Name of the event</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Number</p> ",
+            "optional": false,
+            "field": "version",
+            "description": "<p>Version number for group</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "writeEvents",
+            "description": "<p>Specifies whether this group has write permission for events</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "writeMsgs",
+            "description": "<p>Specifies whether this group has write permission for messages</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "writeTalks",
+            "description": "<p>Specifies whether this group has write permission for talks</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "writeSignups",
+            "description": "<p>Specifies whether this group has write permission for signups</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "writeConversations",
+            "description": "<p>Specifies whether this group has write permission for conversations</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Users[]</p> ",
+            "optional": false,
+            "field": "members",
+            "description": "<p>Populated list of all members</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[\n{\n  \"_id\": \"55aaad047b521bba68335407\",\n  \"name\": \"admin\",\n  \"__v\": 2,\n  \"version\": 0,\n  \"writeEvents\": true,\n  \"writeMsgs\": true,\n  \"writeTalks\": true,\n  \"writeSignups\": true,\n  \"writeConversations\": true,\n  \"members\": [\n    {\n      \"_id\": \"55aaad047b521bba68335409\",\n      \"name\": \"admin\",\n      \"email\": \"admin@brentondurkee.com\",\n      \"__v\": 2,\n      \"gcm\": \"e2nP4VMFNQw:APA91bG73-p2xQkYLZSJx29eYlgFP2GQ2eclj6Z9vKIWreerpa3xoyYDmGiJ8x7yUIRu1q2Z-t-2FSsY_rMFQKo-jnP099R4hOqxUlfVGKIJa-kb90kFppL3kbAnJ1VfpvMKacpXEqpT\",\n      \"groups\": [\n        \"55aaad047b521bba68335407\"\n      ],\n      \"opt\": true,\n      \"confirmed\": false,\n      \"role\": \"user\"\n    },\n    {\n      ...\n    }\n  ]\n},\n{...}\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/groups.js",
+    "groupTitle": "Groups",
+    "name": "GetApiGroups",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/groups"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "GET",
+    "url": "/api/groups",
+    "title": "Get all groups",
+    "group": "Groups",
     "version": "1.0.0",
     "success": {
       "fields": {
@@ -375,7 +1072,7 @@
         "name": "inGroup(admin)"
       }
     ],
-    "filename": "app/controllers/groups.js",
+    "filename": "app/controllers/_apidoc.js",
     "groupTitle": "Groups",
     "name": "GetApiGroups",
     "sampleRequest": [
@@ -399,6 +1096,125 @@
         {
           "title": "Authorization Example",
           "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "POST",
+    "url": "/api/groups",
+    "title": "Create new group",
+    "group": "Groups",
+    "version": "1.2.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The name of the new group</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Boolean</p> ",
+            "optional": true,
+            "field": "writeTalks",
+            "defaultValue": "false",
+            "description": "<p>whether this group can make new talks</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Boolean</p> ",
+            "optional": true,
+            "field": "writeEvents",
+            "defaultValue": "false",
+            "description": "<p>whether this group can make new events</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Boolean</p> ",
+            "optional": true,
+            "field": "writeMsgs",
+            "defaultValue": "false",
+            "description": "<p>whether this group can make new messages</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Boolean</p> ",
+            "optional": true,
+            "field": "writeSignups",
+            "defaultValue": "false",
+            "description": "<p>whether this group can make new signups</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Boolean</p> ",
+            "optional": true,
+            "field": "writeConversations",
+            "defaultValue": "false",
+            "description": "<p>whether this group can make new conversations</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n  \"name\": \"admins\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/groups.js",
+    "groupTitle": "Groups",
+    "name": "PostApiGroups",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/groups"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Required fields were not set</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "ValidationError ",
+          "content": "{\n  \"message\": \"Event validation failed\",\n  \"name\": \"ValidationError\",\n  \"errors\": {...}\n}",
           "type": "json"
         }
       ]
@@ -466,7 +1282,7 @@
         "name": "inGroup(admin)"
       }
     ],
-    "filename": "app/controllers/groups.js",
+    "filename": "app/controllers/_apidoc.js",
     "groupTitle": "Groups",
     "name": "PostApiGroups",
     "sampleRequest": [
@@ -836,7 +1652,7 @@
     "url": "/api/messages",
     "title": "Get all messages",
     "group": "Messages",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "permission": [
       {
         "name": "inGroup(admin)"
@@ -922,6 +1738,157 @@
             "optional": false,
             "field": "version",
             "description": "<p>Version identifier of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Conversation</p> ",
+            "optional": false,
+            "field": "conversation",
+            "description": "<p>Conversation that this message is connected to</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "senderId",
+            "description": "<p>The sender of this message, identified by unique id</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[\n{\n    \"_id\": \"55c5527f8efd394f3634c762\",\n    \"to\": \"55c54d8c374fcd3b332085d6\",\n    \"simpleTo\": \"minister\",\n    \"simpleFrom\": \"theuser\",\n    \"subject\": \"Hello\",\n    \"topic\": \"55c5527f8efd394f3634c76a\",\n    \"from\": \"55c54d8c374fcd3b332085d1\",\n    \"date\": \"2015-09-09T04:00:00.000Z\",\n    \"message\": \"Hey guys, welcome to RUF\",\n    \"version\": 0\n  },\n  {...},\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "GET",
+    "url": "/api/messages",
+    "title": "Get all messages",
+    "group": "Messages",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/_apidoc.js",
+    "groupTitle": "Messages",
+    "name": "GetApiMessages",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/messages"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique string for message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>User</p> ",
+            "optional": false,
+            "field": "from",
+            "description": "<p>User that sent the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Group</p> ",
+            "optional": false,
+            "field": "to",
+            "description": "<p>Recipient group of the message, will always be ministers</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "simpleTo",
+            "description": "<p>Text name of the group for display purposes, will always be ministers</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "simpleFrom",
+            "description": "<p>Text name of the sender of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>Subject of the message, used like a title</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Topic</p> ",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>topic of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "date",
+            "description": "<p>Formated date that the message was sent</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Actualy message text</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Number</p> ",
+            "optional": false,
+            "field": "version",
+            "description": "<p>Version identifier of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Conversation</p> ",
+            "optional": false,
+            "field": "conversation",
+            "description": "<p>Conversation that this message is connected to</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "senderId",
+            "description": "<p>The sender of this message, identified by unique id</p> "
           }
         ]
       },
@@ -960,7 +1927,7 @@
     "title": "Get my messages",
     "group": "Messages",
     "description": "<p>Gets messages addressed to the groups of the current user, will hide the from field if topic is anonymous</p> ",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "permission": [
       {
         "name": "isAuthenticated()"
@@ -1046,6 +2013,158 @@
             "optional": false,
             "field": "version",
             "description": "<p>Version identifier of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Conversation</p> ",
+            "optional": false,
+            "field": "conversation",
+            "description": "<p>Conversation that this message is connected to</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "senderId",
+            "description": "<p>The sender of this message, identified by unique id</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[\n{\n    \"_id\": \"55c5527f8efd394f3634c762\",\n    \"to\": \"55c54d8c374fcd3b332085d6\",\n    \"simpleTo\": \"minister\",\n    \"simpleFrom\": \"theuser\",\n    \"subject\": \"Hello\",\n    \"topic\": \"55c5527f8efd394f3634c76a\",\n    \"from\": \"55c54d8c374fcd3b332085d1\",\n    \"date\": \"2015-09-09T04:00:00.000Z\",\n    \"message\": \"Hey guys, welcome to RUF\",\n    \"version\": 0\n  },\n  {...},\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "GET",
+    "url": "/api/messages/mine",
+    "title": "Get my messages",
+    "group": "Messages",
+    "description": "<p>Gets messages addressed to the groups of the current user, will hide the from field if topic is anonymous</p> ",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "isAuthenticated()"
+      }
+    ],
+    "filename": "app/controllers/_apidoc.js",
+    "groupTitle": "Messages",
+    "name": "GetApiMessagesMine",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/messages/mine"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique string for message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>User</p> ",
+            "optional": false,
+            "field": "from",
+            "description": "<p>User that sent the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Group</p> ",
+            "optional": false,
+            "field": "to",
+            "description": "<p>Recipient group of the message, will always be ministers</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "simpleTo",
+            "description": "<p>Text name of the group for display purposes, will always be ministers</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "simpleFrom",
+            "description": "<p>Text name of the sender of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>Subject of the message, used like a title</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Topic</p> ",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>topic of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "date",
+            "description": "<p>Formated date that the message was sent</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Actualy message text</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Number</p> ",
+            "optional": false,
+            "field": "version",
+            "description": "<p>Version identifier of the message</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Conversation</p> ",
+            "optional": false,
+            "field": "conversation",
+            "description": "<p>Conversation that this message is connected to</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "senderId",
+            "description": "<p>The sender of this message, identified by unique id</p> "
           }
         ]
       },

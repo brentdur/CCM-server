@@ -55,11 +55,13 @@ async.series([
     //             writeTalks: true,
     //             writeMsgs: true,
     //             writeEvents: true,
-    //             writeSignups: true
+    //             writeSignups: true,
+    //             writeConversations: true
     //         },
     //         {
     //             name: 'users',
-    //             writeMsgs: true
+    //             writeMsgs: true,
+    //             writeConversations: true
     //         },
     //         {
     //             name: 'ministers'

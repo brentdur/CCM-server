@@ -1,6 +1,6 @@
 {
   "name": "ccm server",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "CCM Server for events based client apps",
   "title": "CCM Server Documentation",
   "url": "http://ccm.brentondurkee.com",
@@ -8,8 +8,9 @@
   "order": [
     "Events",
     "Signups",
-    "Messages",
+    "Conversations",
     "Talks",
+    "Messages",
     "Topics",
     "Locations",
     "Groups",
@@ -18,7 +19,7 @@
   "apidoc": "0.2.0",
   "generator": {
     "name": "apidoc",
-    "time": "2015-09-10T22:05:41.380Z",
+    "time": "2015-09-23T05:41:49.317Z",
     "url": "http://apidocjs.com",
     "version": "0.13.1"
   }

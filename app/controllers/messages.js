@@ -2,7 +2,7 @@
   Messages Controller
  */
 /**
- * @apiDefine msgGet
+ * @apiDefine msgGet12
  * @apiSuccess {String} _id Unique string for message
  * @apiSuccess {User} from User that sent the message
  * @apiSuccess {Group} to Recipient group of the message, will always be ministers
@@ -13,6 +13,8 @@
  * @apiSuccess {String} date Formated date that the message was sent
  * @apiSuccess {String} message Actualy message text
  * @apiSuccess {Number} version Version identifier of the message
+ * @apiSuccess {Conversation} conversation Conversation that this message is connected to 
+ * @apiSuccess {String} senderId The sender of this message, identified by unique id
  * 
  * @apiSuccessExample {json} Response Example
  * [
@@ -48,9 +50,9 @@ module.exports = function (app) {
 /**
  * @api {GET} /api/messages Get all messages
  * @apiGroup Messages
- * @apiVersion 1.0.0
+ * @apiVersion 1.2.0
  *
- * @apiUse msgGet
+ * @apiUse msgGet12
  *
  * @apiPermission inGroup(admin)
  * @apiUse authHeader
@@ -67,9 +69,9 @@ router.get('/', auth.inGroup('admin'), function (req, res, next) {
  * @api {GET} /api/messages/mine Get my messages
  * @apiGroup Messages
  * @apiDescription Gets messages addressed to the groups of the current user, will hide the from field if topic is anonymous
- * @apiVersion 1.0.0
+ * @apiVersion 1.2.0
  *
- * @apiUse msgGet
+ * @apiUse msgGet12
  *
  * @apiPermission isAuthenticated()
  * @apiUse authHeader
