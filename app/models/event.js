@@ -1,4 +1,3 @@
-// Example model
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;

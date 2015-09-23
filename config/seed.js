@@ -15,6 +15,7 @@ var Group = require('../app/models/group');
 var Location = require('../app/models/location');
 var Topic = require('../app/models/topic');
 var Signup = require('../app/models/signup');
+var Conversation = require('../app/models/conversation');
 var async = require('async');
 
 var justPurge = null;
@@ -40,6 +41,9 @@ async.series([
     },
     function(callback){
         Topic.find({}).remove(function(){callback(null)});
+    },
+    function(callback){
+        Conversation.find({}).remove(function(){callback(null)});
     },
     function(callback){
         Signup.find({}).remove(function(){callback(justPurge)});
