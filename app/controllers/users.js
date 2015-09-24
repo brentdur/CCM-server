@@ -121,7 +121,7 @@ router.post('/', function(req, res, next){
 /**
  * @api {GET} /api/users Get all users
  * @apiGroup Users
- * @apiVersion 1.0.0
+ * @apiVersion 1.2.0
  *
  * @apiSuccess {String} _id Unique identifier for the object
  * @apiSuccess {String} provider The authentication provider, usually local
@@ -131,6 +131,7 @@ router.post('/', function(req, res, next){
  * @apiSuccess {String} gcm The gcm token for notification access
  * @apiSuccess {String} salt The encryption salt for the user
  * @apiSuccess {String[]} groups An array of group ids that the user is a member of
+ * @apiSuccess {Conversation[]} convos An array of conversations that the user has participated in
  * @apiSuccess {Boolean} opt [Unused] Whether the user has opted in for email delivery or not
  * @apiSuccess {Boolean} confirmed [Unused] Whether the user has confirmed their email address
  * @apiSuccess {String} role [Unusued] The user's specified role. Was deprecated in favor of a group-based system.
@@ -197,7 +198,7 @@ router.post('/gcm', auth.isAuthenticated(), function(req, res, next){
 /**
  * @api {GET} /api/users/me Get information about the current user
  * @apiGroup Users
- * @apiVersion 1.0.0
+ * @apiVersion 1.2.0
  *
  * @apiSuccess {String} _id Unique identifier for the object
  * @apiSuccess {String} provider The authentication provider, usually local
@@ -205,6 +206,7 @@ router.post('/gcm', auth.isAuthenticated(), function(req, res, next){
  * @apiSuccess {String} email The user's email
  * @apiSuccess {String} gcm The gcm token for notification access
  * @apiSuccess {Group[]} groups An array of populated groups that the user is a member of 
+ * @apiSuccess {Conversation[]} convos An array of conversations that the user has participated in
  * @apiSuccess {Boolean} opt [Unused] Whether the user has opted in for email delivery or not
  * @apiSuccess {Boolean} confirmed [Unused] Whether the user has confirmed their email address
  * @apiSuccess {String} role [Unusued] The user's specified role. Was deprecated in favor of a group-based system.

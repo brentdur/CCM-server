@@ -18,6 +18,7 @@ var UserSchema = new Schema({
   opt: {type: Boolean, default: true},
   gcm: String,
   groups: [{type: mongoose.Schema.Types.ObjectId, ref: 'Group'}],
+  convos: [{type: mongoose.Schema.Types.ObjectId, ref: 'Conversation'}],
   facebookProfile: {},
   twitterProfile: {},
   googleProfile: {},
@@ -166,6 +167,11 @@ UserSchema.methods = {
 
   addGroup: function(id, cb){
     this.groups.push(id);
+    this.save(cb);
+  },
+
+  addConvo: function(id, cb){
+    this.convos.push(id);
     this.save(cb);
   }
 };

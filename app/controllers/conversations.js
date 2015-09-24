@@ -9,12 +9,13 @@
  * @apiSuccess {Boolean} minister.readLast Whether the minister has read the last message sent by another party
  * @apiSuccess {Boolean} minister.isAnon Whether the minister is anonymous in this conversation (will be false for the most part)
  * @apiSuccess {String} minister.senderId The string identifier of the sender
- * @apiSuccess {Object} participant The participating (initiating) user of this conversation
+ * @apiSuccess {Object[]} participant The participating (initiating) user of this conversation, or users involved in a broadcast
  * @apiSuccess {Boolean} participant.alive Whether the user still considers the conversation to be alive
  * @apiSuccess {Boolean} participant.readLast Whether the user has read the last message sent by another party
  * @apiSuccess {Boolean} participant.isAnon Whether the user is anonymous in this conversation
  * @apiSuccess {String} participant.senderId The string identifier of the sender
  * @apiSuccess {User} participant.user The user id associated with this participant
+ * @apiSuccess {Boolean} broadcast Whether this conversation is a broadcast to all users, sets seem default things differently
  * @apiSuccess {Topic} topic The topic associated with this conversation
  * @apiSuccess {Boolean} singleton Whether this conversation is a single message or a whole conversation (one way vs two way, designed to enable older -> newer communication)
  * @apiSuccess {Message[]} messages The messages connected with this conversation
@@ -51,6 +52,7 @@ var express = require('express'),
 	Conversation = mongoose.model('Conversation'),
 	Message = mongoose.model('Message'),
 	Topic = mongoose.model('Topic'),
+	User = mongoose.model('User'),
 	// http = require('https'),
 	async = require('async'),
 	uuid = require('node-uuid'),
@@ -108,9 +110,14 @@ router.get('/minister', auth.inGroup('ministers'), function(req, res, next){
  * @apiUse authHeader
  */
 router.get('/mine', auth.isAuthenticated(), function(req, res, next){
-	Conversation.find({alive: true, "participant.alive": true, "participant.user": req.user._id}, function(err, conversations){
-		if(err) return next(err);
-		res.json(conversations);
+	var convos = [];
+	User.findById(req.user._id).populate('convos').exec(function (err, user) {
+		for (var i = 0; i < user.convos.length; i++){
+			if (user.convos[i].alive && user.convos[i].participant.alive) {
+				convos.push(user.convos[i]);
+			}
+		}
+		res.json(convos);
 	});
 });
 
@@ -129,8 +136,9 @@ router.get('/mine', auth.isAuthenticated(), function(req, res, next){
  */
 router.post('/', auth.canWrite('Conversations'), function(req, res,next){
 	var conversation = new Conversation();
-	conversation.participant.user = req.user;
-	conversation.participant.senderId = uuid.v4();
+	var participant = {};
+	participant.user = req.user;
+	participant.senderId = uuid.v4();
 	conversation.minister.senderId = uuid.v4();
 	conversation.topic = req.body.topic;
 	conversation.subject = req.body.subject;
@@ -152,7 +160,7 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
 			message: req.body.message,
 			topic: req.body.topic,
 			conversation: conversation,
-			senderId: conversation.participant.senderId,
+			senderId: participant.senderId,
 			date: Date()
 			}).save(function(err, message){
 				callback(err, message, topic);
@@ -160,10 +168,16 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
 			});
 		},
 		function(message, topic, callback){
-			console.log(message._id);
 			conversation.messages.push(message._id);
-			conversation.participant.isAnon = topic.isAnon;
-			conversation.save(function(err){
+			participant.isAnon = topic.isAnon;
+			conversation.participant = participant;
+			conversation.save(function(err, convo){
+				callback(err, convo);
+				return;
+			});
+		},
+		function(convo, callback){
+			participant.user.addConvo(convo._id, function(err){
 				callback(err);
 				return;
 			});
@@ -180,8 +194,59 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
  * @apiGroup Conversations
  * @apiVersion 1.2.0
  *
+ * @apiParam {String} message The message to add
+ * @apiParam {Conversation} conversation The conversation id to add the message to
+ *
  * @apiPermission isAuthenticated()
  * @apiUse authHeader
  */
-//will make the conversation alive again for all parties
-//will set readLast to false for all parties except the sender
+router.put('/send', auth.isAuthenticated(), function(req, res, next){
+	async.waterfall([
+		function(callback){
+			Conversation.findById(req.body.conversation, function(err, convo){
+				callback(err, convo);
+			});
+		},
+		function(convo, callback){
+			if (!convo.alive){
+				callback("Conversation is dead");
+				return;
+			}
+			convo.minister.alive = true;
+			convo.participant.alive = true;
+			if (convo.participant.user === req.user){
+				convo.minister.readLast = false;
+				convo.participant.readLast = true;
+				callback(null, convo, convo.participant.senderId);
+			}
+			else {
+				convo.minister.readLast = true;
+				convo.participant.readLast = false;
+				callback(null, convo, convo.minister.senderId);
+			}
+		},
+		function(convo, senderId, callback){
+			var newMessage = new Message({
+			subject: convo.subject,
+			message: req.body.message,
+			topic: convo.topic,
+			conversation: convo,
+			senderId: senderId,
+			date: Date()
+			}).save(function(err, message){
+				callback(err, convo, message);
+				return;
+			});
+		},
+		function(convo, message, callback){
+			convo.addMessage(message._id, function(err){
+				callback(err);
+			});
+		}
+	],
+	function(err, results){
+		if(err) return next(err);
+		res.status(200).send();
+	});
+	
+});

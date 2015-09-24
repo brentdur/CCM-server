@@ -65,10 +65,10 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "<p>Object</p> ",
+            "type": "<p>Object[]</p> ",
             "optional": false,
             "field": "participant",
-            "description": "<p>The participating (initiating) user of this conversation</p> "
+            "description": "<p>The participating (initiating) user of this conversation, or users involved in a broadcast</p> "
           },
           {
             "group": "Success 200",
@@ -104,6 +104,13 @@ define({ "api": [
             "optional": false,
             "field": "participant.user",
             "description": "<p>The user id associated with this participant</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "broadcast",
+            "description": "<p>Whether this conversation is a broadcast to all users, sets seem default things differently</p> "
           },
           {
             "group": "Success 200",
@@ -223,10 +230,10 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "<p>Object</p> ",
+            "type": "<p>Object[]</p> ",
             "optional": false,
             "field": "participant",
-            "description": "<p>The participating (initiating) user of this conversation</p> "
+            "description": "<p>The participating (initiating) user of this conversation, or users involved in a broadcast</p> "
           },
           {
             "group": "Success 200",
@@ -262,6 +269,13 @@ define({ "api": [
             "optional": false,
             "field": "participant.user",
             "description": "<p>The user id associated with this participant</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "broadcast",
+            "description": "<p>Whether this conversation is a broadcast to all users, sets seem default things differently</p> "
           },
           {
             "group": "Success 200",
@@ -381,10 +395,10 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "<p>Object</p> ",
+            "type": "<p>Object[]</p> ",
             "optional": false,
             "field": "participant",
-            "description": "<p>The participating (initiating) user of this conversation</p> "
+            "description": "<p>The participating (initiating) user of this conversation, or users involved in a broadcast</p> "
           },
           {
             "group": "Success 200",
@@ -420,6 +434,13 @@ define({ "api": [
             "optional": false,
             "field": "participant.user",
             "description": "<p>The user id associated with this participant</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "broadcast",
+            "description": "<p>Whether this conversation is a broadcast to all users, sets seem default things differently</p> "
           },
           {
             "group": "Success 200",
@@ -546,6 +567,26 @@ define({ "api": [
     "title": "Adds a new message to an existing conversation",
     "group": "Conversations",
     "version": "1.2.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "message",
+            "description": "<p>The message to add</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Conversation</p> ",
+            "optional": false,
+            "field": "conversation",
+            "description": "<p>The conversation id to add the message to</p> "
+          }
+        ]
+      }
+    },
     "permission": [
       {
         "name": "isAuthenticated()"
@@ -3227,6 +3268,143 @@ define({ "api": [
     "url": "/api/users",
     "title": "Get all users",
     "group": "Users",
+    "version": "1.2.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique identifier for the object</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "provider",
+            "description": "<p>The authentication provider, usually local</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The name of the user</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The user's email</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "hashedPassword",
+            "description": "<p>The encrypted version of the user's password</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "gcm",
+            "description": "<p>The gcm token for notification access</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "salt",
+            "description": "<p>The encryption salt for the user</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String[]</p> ",
+            "optional": false,
+            "field": "groups",
+            "description": "<p>An array of group ids that the user is a member of</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Conversation[]</p> ",
+            "optional": false,
+            "field": "convos",
+            "description": "<p>An array of conversations that the user has participated in</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "opt",
+            "description": "<p>[Unused] Whether the user has opted in for email delivery or not</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "confirmed",
+            "description": "<p>[Unused] Whether the user has confirmed their email address</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "role",
+            "description": "<p>[Unusued] The user's specified role. Was deprecated in favor of a group-based system.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[\n  {\n    \"_id\": \"55e4b8ae1959b17a0777a816\",\n    \"provider\": \"local\",\n    \"name\": \"test\",\n    \"email\": \"test@brentondurkee.com\",\n    \"hashedPassword\": \"7/YjGYRO8BZAqmztaLmjww==\",\n    \"gcm\": \"lkdjafkljdf\",\n    \"salt\": \"s/u\",\n    \"__v\": 4,\n    \"groups\": [\n      \"55de4d373596ddbf6c25e932\"\n    ],\n    \"opt\": true,\n    \"confirmed\": false,\n    \"role\": \"user\"\n  },\n  {...} \n  ]",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/users.js",
+    "groupTitle": "Users",
+    "name": "GetApiUsers",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/users"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "GET",
+    "url": "/api/users",
+    "title": "Get all users",
+    "group": "Users",
     "version": "1.0.0",
     "success": {
       "fields": {
@@ -3323,12 +3501,135 @@ define({ "api": [
         "name": "inGroup(admin)"
       }
     ],
-    "filename": "app/controllers/users.js",
+    "filename": "app/controllers/_apidoc.js",
     "groupTitle": "Users",
     "name": "GetApiUsers",
     "sampleRequest": [
       {
         "url": "http://ccm.brentondurkee.com/api/users"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "GET",
+    "url": "/api/users/me",
+    "title": "Get information about the current user",
+    "group": "Users",
+    "version": "1.2.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique identifier for the object</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "provider",
+            "description": "<p>The authentication provider, usually local</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The name of the user</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The user's email</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "gcm",
+            "description": "<p>The gcm token for notification access</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Group[]</p> ",
+            "optional": false,
+            "field": "groups",
+            "description": "<p>An array of populated groups that the user is a member of</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Conversation[]</p> ",
+            "optional": false,
+            "field": "convos",
+            "description": "<p>An array of conversations that the user has participated in</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "opt",
+            "description": "<p>[Unused] Whether the user has opted in for email delivery or not</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "confirmed",
+            "description": "<p>[Unused] Whether the user has confirmed their email address</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "role",
+            "description": "<p>[Unusued] The user's specified role. Was deprecated in favor of a group-based system.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[\n  {\n    \"_id\": \"55e4b8ae1959b17a0777a816\",\n    \"provider\": \"local\",\n    \"name\": \"test\",\n    \"email\": \"test@brentondurkee.com\",\n    \"gcm\": \"lkdjafkljdf\",\n    \"__v\": 4,\n    \"groups\": [\n      {...}\n    ],\n    \"opt\": true,\n    \"confirmed\": false,\n    \"role\": \"user\"\n  },\n  {...} \n  ]",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "isAuthenticated"
+      }
+    ],
+    "filename": "app/controllers/users.js",
+    "groupTitle": "Users",
+    "name": "GetApiUsersMe",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/users/me"
       }
     ],
     "header": {
@@ -3439,7 +3740,7 @@ define({ "api": [
         "name": "isAuthenticated"
       }
     ],
-    "filename": "app/controllers/users.js",
+    "filename": "app/controllers/_apidoc.js",
     "groupTitle": "Users",
     "name": "GetApiUsersMe",
     "sampleRequest": [

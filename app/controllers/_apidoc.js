@@ -126,3 +126,82 @@ module.exports = function (app) {
  * @apiPermission inGroup(admin)
  * @apiUse authHeader
  */
+
+/**
+ * @api {GET} /api/users Get all users
+ * @apiGroup Users
+ * @apiVersion 1.0.0
+ *
+ * @apiSuccess {String} _id Unique identifier for the object
+ * @apiSuccess {String} provider The authentication provider, usually local
+ * @apiSuccess {String} name The name of the user
+ * @apiSuccess {String} email The user's email
+ * @apiSuccess {String} hashedPassword The encrypted version of the user's password
+ * @apiSuccess {String} gcm The gcm token for notification access
+ * @apiSuccess {String} salt The encryption salt for the user
+ * @apiSuccess {String[]} groups An array of group ids that the user is a member of
+ * @apiSuccess {Boolean} opt [Unused] Whether the user has opted in for email delivery or not
+ * @apiSuccess {Boolean} confirmed [Unused] Whether the user has confirmed their email address
+ * @apiSuccess {String} role [Unusued] The user's specified role. Was deprecated in favor of a group-based system.
+ *
+ * @apiSuccessExample {json} Response Example
+ * [
+  {
+    "_id": "55e4b8ae1959b17a0777a816",
+    "provider": "local",
+    "name": "test",
+    "email": "test@brentondurkee.com",
+    "hashedPassword": "7/YjGYRO8BZAqmztaLmjww==",
+    "gcm": "lkdjafkljdf",
+    "salt": "s/u",
+    "__v": 4,
+    "groups": [
+      "55de4d373596ddbf6c25e932"
+    ],
+    "opt": true,
+    "confirmed": false,
+    "role": "user"
+  },
+  {...} 
+  ]
+ *
+ * @apiPermission inGroup(admin)
+ * @apiUse authHeader
+ */
+/**
+ * @api {GET} /api/users/me Get information about the current user
+ * @apiGroup Users
+ * @apiVersion 1.0.0
+ *
+ * @apiSuccess {String} _id Unique identifier for the object
+ * @apiSuccess {String} provider The authentication provider, usually local
+ * @apiSuccess {String} name The name of the user
+ * @apiSuccess {String} email The user's email
+ * @apiSuccess {String} gcm The gcm token for notification access
+ * @apiSuccess {Group[]} groups An array of populated groups that the user is a member of 
+ * @apiSuccess {Boolean} opt [Unused] Whether the user has opted in for email delivery or not
+ * @apiSuccess {Boolean} confirmed [Unused] Whether the user has confirmed their email address
+ * @apiSuccess {String} role [Unusued] The user's specified role. Was deprecated in favor of a group-based system.
+ *
+ * @apiSuccessExample {json} Response Example
+ * [
+  {
+    "_id": "55e4b8ae1959b17a0777a816",
+    "provider": "local",
+    "name": "test",
+    "email": "test@brentondurkee.com",
+    "gcm": "lkdjafkljdf",
+    "__v": 4,
+    "groups": [
+      {...}
+    ],
+    "opt": true,
+    "confirmed": false,
+    "role": "user"
+  },
+  {...} 
+  ]
+ *
+ * @apiPermission isAuthenticated
+ * @apiUse authHeader
+ */

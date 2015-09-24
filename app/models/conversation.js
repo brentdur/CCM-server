@@ -23,4 +23,11 @@ var ConversationSchema = new Schema ({
   messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}]
 });
 
+ConversationSchema.methods = {
+  addMessage: function(id, cb){
+    this.messages.push(id);
+    this.save(cb);
+  }
+};
+
 module.exports = mongoose.model('Conversation', ConversationSchema);
