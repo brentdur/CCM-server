@@ -213,7 +213,7 @@ router.delete('/', auth.inGroup('ministers'), function(req, res,next){
  * @apiUse authHeader
  */
 router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
-  Message.findOneAndRemove({'id':req.item}, function(err){
+  Message.findOneAndRemove({'_id':req.body.item}, function(err){
     if(err) return next(err);
     gcm.sendGCM(1);
     res.status(200).send();

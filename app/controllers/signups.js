@@ -246,7 +246,7 @@ router.put('/addme', auth.isAuthenticated(), function(req, res, next){
  * @apiUse authHeader
  */
 router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
-  Signup.findOneAndRemove({'id':req.item}, function(err){
+  Signup.findOneAndRemove({'_id':req.body.item}, function(err){
     if(err) return next(err);
     gcm.sendGCM(6);
     res.status(200).send();

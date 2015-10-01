@@ -49,14 +49,11 @@ $(document).ready(function(){
   });
 
 	$("button").on("click", function(){
-		console.log('clicked');
 		var type = $(this).attr("type");
 		var item_id = $(this).attr("item_id");
 		if(!token){
 			token = document.cookie;
-			console.log(token);
 			token = token.slice(token.indexOf('token=') + 6);
-			console.log(token);
 			if(token.indexOf(';') > -1){
 				token = token.slice(0, token.indexOf(';'));
 			}
@@ -70,6 +67,8 @@ $(document).ready(function(){
 		}
 		else {
 			console.log(head);
+			console.log(type);
+			console.log(item_id);
 			if (confirm('are you sure')){
 				console.log('true');
 				$.ajax({

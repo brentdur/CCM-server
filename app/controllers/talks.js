@@ -166,7 +166,7 @@ router.put('/note', auth.inGroup("admin"), function(req, res, next){
  * @apiUse authHeader
  */
 router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
-  Talk.findOneAndRemove({'id':req.item}, function(err){
+  Talk.findOneAndRemove({'_id':req.body.item}, function(err){
     if(err) return next(err);
     gcm.sendGCM(2);
     res.status(200).send();
