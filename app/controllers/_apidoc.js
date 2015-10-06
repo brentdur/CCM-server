@@ -205,3 +205,31 @@ module.exports = function (app) {
  * @apiPermission isAuthenticated
  * @apiUse authHeader
  */
+/**
+ * @api {POST} /api/messages Creates a new message for the 'ministers' group
+ * @apiGroup Messages
+ * @apiVersion 1.0.0
+ *
+ * @apiParam {String} subject Subject/Title of the message
+ * @apiParam {String} message Text of the message
+ * @apiParam {Topic} topic id of the topic
+ *
+ * @apiParamExample {json} Request Example
+ * {
+ *  "subject": "Question!!!",
+ *  "message": "Me have question",
+ *  "topic": "55c55101cc899eb235a309fd"
+ * }
+ *
+ * @apiError (Error 404) {String} GroupNotFoundError The specified group was not found.
+ * @apiErrorExample {json} No Group Found
+ * {
+ *   "message": "No group found",
+ *   "status": 404,
+ *   "title": "Group not found"
+ * }
+ * 
+ * @apiUse  VerificationError
+ * @apiUse authHeader
+ * @apiPermission group canWrite(Msgs)
+ */

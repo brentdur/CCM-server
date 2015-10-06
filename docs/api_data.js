@@ -46,7 +46,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "<p>Boolean</p> ",
             "optional": false,
-            "field": "minister.readLast",
+            "field": "minister.responded",
             "description": "<p>Whether the minister has read the last message sent by another party</p> "
           },
           {
@@ -81,7 +81,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "<p>Boolean</p> ",
             "optional": false,
-            "field": "participant.readLast",
+            "field": "participant.responded",
             "description": "<p>Whether the user has read the last message sent by another party</p> "
           },
           {
@@ -138,7 +138,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Response Example",
-          "content": "[{\n\t\"_id\": \"55c5527f8efd394f3634c762\",\n\t\"alive\": true,\n\t\"minister\": {\n\t\t\"alive\": true,\n\t\t\"readLast\": false,\n\t\t\"isAnon\": false,\n\t\t\"senderId\": \"92920192\"\n\t \t},\n\t\"participant\": {\n\t\t\"alive\": false,\n\t\t\"readLast\": true,\n\t\t\"isAnon\": true,\n\t\t\"senderId\": \"adfa313g32g231\"\n\t\t\"user\":\"55c5527f8efd394f3634c762\"\n\t\t},\n\t\"topic\":\"55c5527f8efd394f3634c762\",\n\tsingleton: false,\n\tmessages:[...]\n},\n{...}.\n]",
+          "content": "[{\n\t\"_id\": \"55c5527f8efd394f3634c762\",\n\t\"alive\": true,\n\t\"minister\": {\n\t\t\"alive\": true,\n\t\t\"responded\": false,\n\t\t\"isAnon\": false,\n\t\t\"senderId\": \"92920192\"\n\t \t},\n\t\"participant\": {\n\t\t\"alive\": false,\n\t\t\"responded\": true,\n\t\t\"isAnon\": true,\n\t\t\"senderId\": \"adfa313g32g231\"\n\t\t\"user\":\"55c5527f8efd394f3634c762\"\n\t\t},\n\t\"topic\":\"55c5527f8efd394f3634c762\",\n\tsingleton: false,\n\tmessages:[...]\n},\n{...}.\n]",
           "type": "json"
         }
       ]
@@ -211,7 +211,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "<p>Boolean</p> ",
             "optional": false,
-            "field": "minister.readLast",
+            "field": "minister.responded",
             "description": "<p>Whether the minister has read the last message sent by another party</p> "
           },
           {
@@ -246,7 +246,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "<p>Boolean</p> ",
             "optional": false,
-            "field": "participant.readLast",
+            "field": "participant.responded",
             "description": "<p>Whether the user has read the last message sent by another party</p> "
           },
           {
@@ -303,7 +303,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Response Example",
-          "content": "[{\n\t\"_id\": \"55c5527f8efd394f3634c762\",\n\t\"alive\": true,\n\t\"minister\": {\n\t\t\"alive\": true,\n\t\t\"readLast\": false,\n\t\t\"isAnon\": false,\n\t\t\"senderId\": \"92920192\"\n\t \t},\n\t\"participant\": {\n\t\t\"alive\": false,\n\t\t\"readLast\": true,\n\t\t\"isAnon\": true,\n\t\t\"senderId\": \"adfa313g32g231\"\n\t\t\"user\":\"55c5527f8efd394f3634c762\"\n\t\t},\n\t\"topic\":\"55c5527f8efd394f3634c762\",\n\tsingleton: false,\n\tmessages:[...]\n},\n{...}.\n]",
+          "content": "[{\n\t\"_id\": \"55c5527f8efd394f3634c762\",\n\t\"alive\": true,\n\t\"minister\": {\n\t\t\"alive\": true,\n\t\t\"responded\": false,\n\t\t\"isAnon\": false,\n\t\t\"senderId\": \"92920192\"\n\t \t},\n\t\"participant\": {\n\t\t\"alive\": false,\n\t\t\"responded\": true,\n\t\t\"isAnon\": true,\n\t\t\"senderId\": \"adfa313g32g231\"\n\t\t\"user\":\"55c5527f8efd394f3634c762\"\n\t\t},\n\t\"topic\":\"55c5527f8efd394f3634c762\",\n\tsingleton: false,\n\tmessages:[...]\n},\n{...}.\n]",
           "type": "json"
         }
       ]
@@ -376,7 +376,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "<p>Boolean</p> ",
             "optional": false,
-            "field": "minister.readLast",
+            "field": "minister.responded",
             "description": "<p>Whether the minister has read the last message sent by another party</p> "
           },
           {
@@ -411,7 +411,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "<p>Boolean</p> ",
             "optional": false,
-            "field": "participant.readLast",
+            "field": "participant.responded",
             "description": "<p>Whether the user has read the last message sent by another party</p> "
           },
           {
@@ -468,7 +468,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Response Example",
-          "content": "[{\n\t\"_id\": \"55c5527f8efd394f3634c762\",\n\t\"alive\": true,\n\t\"minister\": {\n\t\t\"alive\": true,\n\t\t\"readLast\": false,\n\t\t\"isAnon\": false,\n\t\t\"senderId\": \"92920192\"\n\t \t},\n\t\"participant\": {\n\t\t\"alive\": false,\n\t\t\"readLast\": true,\n\t\t\"isAnon\": true,\n\t\t\"senderId\": \"adfa313g32g231\"\n\t\t\"user\":\"55c5527f8efd394f3634c762\"\n\t\t},\n\t\"topic\":\"55c5527f8efd394f3634c762\",\n\tsingleton: false,\n\tmessages:[...]\n},\n{...}.\n]",
+          "content": "[{\n\t\"_id\": \"55c5527f8efd394f3634c762\",\n\t\"alive\": true,\n\t\"minister\": {\n\t\t\"alive\": true,\n\t\t\"responded\": false,\n\t\t\"isAnon\": false,\n\t\t\"senderId\": \"92920192\"\n\t \t},\n\t\"participant\": {\n\t\t\"alive\": false,\n\t\t\"responded\": true,\n\t\t\"isAnon\": true,\n\t\t\"senderId\": \"adfa313g32g231\"\n\t\t\"user\":\"55c5527f8efd394f3634c762\"\n\t\t},\n\t\"topic\":\"55c5527f8efd394f3634c762\",\n\tsingleton: false,\n\tmessages:[...]\n},\n{...}.\n]",
           "type": "json"
         }
       ]
@@ -538,6 +538,59 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://ccm.brentondurkee.com/api/conversations"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "put",
+    "url": "/api/conversations/kill",
+    "title": "Marks a conversation as dead for a person and determines its state",
+    "group": "Conversations",
+    "version": "1.2.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>Conversation</p> ",
+            "optional": false,
+            "field": "conversation",
+            "description": "<p>The conversation id that the user is killing</p> "
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "isAuthenticated()"
+      }
+    ],
+    "filename": "app/controllers/conversations.js",
+    "groupTitle": "Conversations",
+    "name": "PutApiConversationsKill",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/conversations/kill"
       }
     ],
     "header": {
@@ -2241,6 +2294,100 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/api/messages",
+    "title": "Creates a new singleton-convo, deprecated",
+    "group": "Messages",
+    "version": "1.2.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>Subject/Title of the convo</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Text of the convo</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Topic</p> ",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>id of the topic</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n \"subject\": \"Question!!!\",\n \"message\": \"Me have question\",\n \"topic\": \"55c55101cc899eb235a309fd\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "group canWrite(Msgs)"
+      }
+    ],
+    "filename": "app/controllers/messages.js",
+    "groupTitle": "Messages",
+    "name": "PostApiMessages",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/messages"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Required fields were not set</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "ValidationError ",
+          "content": "{\n  \"message\": \"Event validation failed\",\n  \"name\": \"ValidationError\",\n  \"errors\": {...}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "POST",
+    "url": "/api/messages",
     "title": "Creates a new message for the 'ministers' group",
     "group": "Messages",
     "version": "1.0.0",
@@ -2317,7 +2464,7 @@ define({ "api": [
         "name": "group canWrite(Msgs)"
       }
     ],
-    "filename": "app/controllers/messages.js",
+    "filename": "app/controllers/_apidoc.js",
     "groupTitle": "Messages",
     "name": "PostApiMessages",
     "sampleRequest": [

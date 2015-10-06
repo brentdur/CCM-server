@@ -144,9 +144,6 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
 	conversation.topic = req.body.topic;
 	conversation.subject = req.body.subject;
 	conversation.messages = [];
-	if(req.body.singleton && req.body.singleton == true){
-		conversation.singleton = true;
-	}
 
 	async.waterfall([
 		function(callback){
@@ -190,6 +187,7 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
 	],
 	function(err, results){
 		if(err) return next(err);
+		gcm.sendGCM(7);
 		res.status(200).send();
 	});
 });
@@ -218,6 +216,10 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 		function(convo, callback){
 			if (!convo.alive){
 				callback("Conversation is dead");
+				return;
+			}
+			else if (convo.singleton){
+				callback("Conversation is a singleton");
 				return;
 			}
 			convo.minister.alive = true;
@@ -256,6 +258,7 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 	],
 	function(err, results){
 		if(err) return next(err);
+		gcm.sendGCM(7);
 		res.status(200).send();
 	});
 	
@@ -308,6 +311,7 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
  		],
  		function(err, results){
  			if (err) return next(err);
+ 			gcm.sendGCM(7);
  			res.status(200).send();
  		});
  });

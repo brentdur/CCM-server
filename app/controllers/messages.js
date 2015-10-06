@@ -37,6 +37,8 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
+  Conversation = mongoose.model('Conversation'),
+  uuid = require('node-uuid'),
   Message = mongoose.model('Message');
   Group = mongoose.model('Group');
   var auth = require('../auth/auth.service');
@@ -112,12 +114,12 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
 });
 
 /**
- * @api {POST} /api/messages Creates a new message for the 'ministers' group
+ * @api {POST} /api/messages Creates a new singleton-convo, deprecated
  * @apiGroup Messages
- * @apiVersion 1.0.0
+ * @apiVersion 1.2.0
  *
- * @apiParam {String} subject Subject/Title of the message
- * @apiParam {String} message Text of the message
+ * @apiParam {String} subject Subject/Title of the convo
+ * @apiParam {String} message Text of the convo
  * @apiParam {Topic} topic id of the topic
  *
  * @apiParamExample {json} Request Example
@@ -126,14 +128,6 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
  *  "message": "Me have question",
  *  "topic": "55c55101cc899eb235a309fd"
  * }
- *
- * @apiError (Error 404) {String} GroupNotFoundError The specified group was not found.
- * @apiErrorExample {json} No Group Found
- * {
- *   "message": "No group found",
- *   "status": 404,
- *   "title": "Group not found"
- * }
  * 
  * @apiUse  VerificationError
  * @apiUse authHeader
@@ -141,40 +135,63 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
  */
 //checks if logged-in user has write permission, then creates the message
 //'to' group is always set to ministers
-router.post('/', auth.canWrite('Msgs'), function(req, res, next){
-  req.body.from = req.user._id;
-  req.body.simpleFrom = req.user.name;
-  console.log(req.body.to);
+router.post('/', auth.canWrite('Conversations'), function(req, res,next){
+  var conversation = new Conversation();
+  var participant = {};
+  participant.user = req.user;
+  participant.senderId = uuid.v4();
+  participant.alive = false;
+
+  conversation.minister.senderId = uuid.v4();
+  conversation.topic = req.body.topic;
+  conversation.subject = req.body.subject;
+  conversation.messages = [];
+  conversation.singleton = true;
+
   async.waterfall([
     function(callback){
-        Group.findOne({name: 'ministers'}, '_id name', function(err, group){
-          if(err) return callback(err);
-          if(!group) return callback({message: 'No group found', status: 404, title:'Group not found'});
-          console.log(group);
-          req.body.to = group._id;
-          req.body.simpleTo = group.name;
-          callback(err);
+      Topic.findById(req.body.topic, function(err, topic){
+        if(!topic) {
+          callback("No Topic");
           return;
-        });
+        }
+        callback(err, topic);
+        return;
+      });
     },
-    function(callback){
-      req.body.date = Date();
-      console.log(req.body.to);
-      var message = new Message(req.body).save(function(err) {
-        console.log('saved');
+    function(topic, callback){
+      var newMessage = new Message({
+      subject: req.body.subject,
+      message: req.body.message,
+      topic: req.body.topic,
+      conversation: conversation,
+      senderId: participant.senderId,
+      date: Date()
+      }).save(function(err, message){
+        callback(err, message, topic);
+        return;
+      });
+    },
+    function(message, topic, callback){
+      conversation.messages.push(message._id);
+      participant.isAnon = topic.isAnon;
+      conversation.participant = participant;
+      conversation.save(function(err, convo){
+        callback(err, convo);
+        return;
+      });
+    },
+    function(convo, callback){
+      participant.user.addConvo(convo._id, function(err){
         callback(err);
         return;
       });
     }
-    ], function(err){
-      console.log(err);
-      if(err) return next(err);
-      console.log('done');
-      gcm.sendGCM(1);
-      res.status(200).send();
+  ],
+  function(err, results){
+    if(err) return next(err);
+    res.status(200).send();
   });
-  
-  
 });
 
 /**

@@ -18,7 +18,7 @@ var func = {
   sendGCM: function(type){
 
     syncTerm = ['events', 'messages', 'talks', 'groups', 'locations', 'topics', 
-      'signups', 'all'];
+      'signups', 'conversations', 'all'];
 
     async.waterfall([function(callback){
       ids = [];
