@@ -6,12 +6,12 @@
  * @apiSuccess {Boolean} alive Whether the conversation is still happening or has been deleted
  * @apiSuccess {Object} minister The minister group participating in the conversation
  * @apiSuccess {Boolean} minister.alive Whether the minister still considers the conversation to be alive
- * @apiSuccess {Boolean} minister.readLast Whether the minister has read the last message sent by another party
+ * @apiSuccess {Boolean} minister.responded Whether the minister has read the last message sent by another party
  * @apiSuccess {Boolean} minister.isAnon Whether the minister is anonymous in this conversation (will be false for the most part)
  * @apiSuccess {String} minister.senderId The string identifier of the sender
  * @apiSuccess {Object[]} participant The participating (initiating) user of this conversation, or users involved in a broadcast
  * @apiSuccess {Boolean} participant.alive Whether the user still considers the conversation to be alive
- * @apiSuccess {Boolean} participant.readLast Whether the user has read the last message sent by another party
+ * @apiSuccess {Boolean} participant.responded Whether the user has read the last message sent by another party
  * @apiSuccess {Boolean} participant.isAnon Whether the user is anonymous in this conversation
  * @apiSuccess {String} participant.senderId The string identifier of the sender
  * @apiSuccess {User} participant.user The user id associated with this participant
@@ -26,13 +26,13 @@
  * 	"alive": true,
  * 	"minister": {
  * 		"alive": true,
- * 		"readLast": false,
+ * 		"responded": false,
  * 		"isAnon": false,
  * 		"senderId": "92920192"
  * 	 	},
  * 	"participant": {
  * 		"alive": false,
- * 		"readLast": true,
+ * 		"responded": true,
  * 		"isAnon": true,
  * 		"senderId": "adfa313g32g231"
  * 		"user":"55c5527f8efd394f3634c762"
@@ -75,7 +75,7 @@ module.exports = function (app) {
  * @apiUse authHeader
  */
 router.get('/', auth.inGroup('admin'), function(req, res, next){
-	Conversation.find(function(err, conversations){
+	Conversation.find().populate('messages', 'message senderId').exec(function(err, conversations){
 		if(err) return next(err);
 		res.json(conversations);
 	});
@@ -92,7 +92,7 @@ router.get('/', auth.inGroup('admin'), function(req, res, next){
  * @apiUse authHeader
  */
 router.get('/minister', auth.inGroup('ministers'), function(req, res, next){
-	Conversation.find({alive:true, "minister.alive":true}, function(err, conversations){
+	Conversation.find({alive:true, "minister.alive":true}).populate('messages', 'message senderId').exec(function(err, conversations){
 		if(err) return next(err);
 		res.json(conversations);
 	});
@@ -110,13 +110,13 @@ router.get('/minister', auth.inGroup('ministers'), function(req, res, next){
  * @apiUse authHeader
  */
 router.get('/mine', auth.isAuthenticated(), function(req, res, next){
-	var convos = [];
-	User.findById(req.user._id).populate('convos').exec(function (err, user) {
-		for (var i = 0; i < user.convos.length; i++){
-			if (user.convos[i].alive && user.convos[i].participant.alive) {
-				convos.push(user.convos[i]);
-			}
-		}
+	console.log(req.user.convos);
+	Conversation
+	.find({'_id': {$in:req.user.convos}})
+	.find({'alive':true})
+	.find({'participant.alive':true})
+	.populate('messages', 'message senderId')
+	.exec(function(err, convos){
 		res.json(convos);
 	});
 });
@@ -139,6 +139,7 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
 	var participant = {};
 	participant.user = req.user;
 	participant.senderId = uuid.v4();
+	participant.alive = true;
 	conversation.minister.senderId = uuid.v4();
 	conversation.topic = req.body.topic;
 	conversation.subject = req.body.subject;
@@ -150,6 +151,10 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
 	async.waterfall([
 		function(callback){
 			Topic.findById(req.body.topic, function(err, topic){
+				if(!topic) {
+					callback("No Topic");
+					return;
+				}
 				callback(err, topic);
 				return;
 			});
@@ -204,6 +209,9 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 	async.waterfall([
 		function(callback){
 			Conversation.findById(req.body.conversation, function(err, convo){
+				if (!convo){
+					err = "403";
+				}
 				callback(err, convo);
 			});
 		},
@@ -214,14 +222,16 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 			}
 			convo.minister.alive = true;
 			convo.participant.alive = true;
-			if (convo.participant.user === req.user){
-				convo.minister.readLast = false;
-				convo.participant.readLast = true;
+			console.log(convo.participant.user);
+			console.log(req.user._id);
+			if (convo.participant.user.toString() === req.user._id.toString()){
+				convo.minister.responded = false;
+				convo.participant.responded = true;
 				callback(null, convo, convo.participant.senderId);
 			}
 			else {
-				convo.minister.readLast = true;
-				convo.participant.readLast = false;
+				convo.minister.responded = true;
+				convo.participant.responded = false;
 				callback(null, convo, convo.minister.senderId);
 			}
 		},
@@ -250,3 +260,54 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 	});
 	
 });
+
+
+/**
+ * @api {put} /api/conversations/kill Marks a conversation as dead for a person and determines its state
+ * @apiGroup Conversations
+ * @apiVersion 1.2.0
+ *
+ * @apiParam {Conversation} conversation The conversation id that the user is killing
+ *
+ * @apiPermission isAuthenticated()
+ * @apiUse authHeader
+ */
+ router.put('/kill', auth.isAuthenticated(), function(req, res, next) {
+ 	async.waterfall([
+ 		function(callback){
+ 			Conversation.findById(req.body.conversation, function(err, convo){
+ 				if(!convo) {
+ 					err = 403;
+ 				}
+ 				callback(err, convo);
+ 			});
+ 		},
+ 		function(convo, callback){
+ 			if (req.user._id.toString() === convo.participant.user.toString()){
+ 				convo.killParticipant(function(err, result){
+ 					callback(err, result);
+ 				});
+ 			}
+ 			else {
+ 				convo.killMinister(function(err, result){
+ 					callback(err, result);
+ 				});
+ 			}
+ 		},
+ 		function(convo, callback){
+ 			console.log(convo);
+ 			if(!convo.participant.alive && !convo.minister.alive) {
+ 				convo.killConvo(function(err, result){
+ 					callback(err, result);
+ 				});
+ 			}
+ 			else {
+ 				callback(null);
+ 			}
+ 		}
+ 		],
+ 		function(err, results){
+ 			if (err) return next(err);
+ 			res.status(200).send();
+ 		});
+ });

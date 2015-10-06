@@ -3,19 +3,19 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var ConversationSchema = new Schema ({
-  subject: {type: String, required:true},
+  subject: {type: String},
   alive: {type: Boolean, default: true},
   minister: {
     alive: {type: Boolean, default: true},
-    readLast: {type: Boolean, default:false},
+    responded: {type: Boolean, default:false},
     isAnon: {type: Boolean, default:false},
-    senderId: {type: String, required:true}
+    senderId: {type: String}
   },
   participant: {
     alive: {type: Boolean, default: true},
-    readLast: {type: Boolean, default:true},
-    isAnon: {type: Boolean, required:true, default:false},
-    senderId: {type: String, required:true},
+    responded: {type: Boolean, default:true},
+    isAnon: {type: Boolean, default:false},
+    senderId: {type: String},
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
   },
   topic: {type: mongoose.Schema.Types.ObjectId, ref: 'Topic'},
@@ -26,6 +26,21 @@ var ConversationSchema = new Schema ({
 ConversationSchema.methods = {
   addMessage: function(id, cb){
     this.messages.push(id);
+    this.save(cb);
+  },
+
+  killMinister: function(cb){
+    this.minister.alive = false;
+    this.save(cb);
+  },
+
+  killParticipant: function(cb){
+    this.participant.alive = false;
+    this.save(cb);
+  },
+
+  killConvo: function(cb){
+    this.alive = false;
     this.save(cb);
   }
 };
