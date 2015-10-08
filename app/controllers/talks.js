@@ -139,7 +139,6 @@ router.put('/note', auth.inGroup("admin"), function(req, res, next){
   Talk.findById(id, function(err, talk){
     if (err) { return next(err); }
     if (!talk) { return next();}
-    console.log(req.body.note);
     talk.addNote(req.body.note, function(err, number){
       if (err) { return next(err); }
       talk.incVersion(function(err){

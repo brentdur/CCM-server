@@ -211,7 +211,6 @@ router.delete('/', auth.inGroup('ministers'), function(req, res,next){
   var msg = req.query.message;
   Message.findById(msg).remove(function(err, data){
     if(err) return next(err);
-    console.log(data.result);
     gcm.sendGCM(1);
     res.status(200).send();
   });

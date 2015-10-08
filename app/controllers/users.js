@@ -94,13 +94,10 @@ router.post('/', function(req, res, next){
           });
         },
         function(group, callback){
-          console.log(group);
-          console.log(user);
           user.addGroup(group._id, function(err, number){
             if(err) {return next(err);}
             group.addUser(user._id, function(err, num ){
               if(err) callback(err);
-              console.log('5');
               callback(null);
             });
         });
@@ -210,7 +207,7 @@ router.post('/gcm', auth.isAuthenticated(), function(req, res, next){
  * @apiSuccess {Group[]} groups An array of populated groups that the user is a member of 
  * @apiSuccess {Conversation[]} convos An array of conversations that the user has participated in
  * @apiSuccess {String} clientType The client that the user is using
- * @apiSuccess {String} clientVersion The version identifier of the client
+ * @apiSuccess {Number} clientVersion The version identifier of the client
  * @apiSuccess {Boolean} opt [Unused] Whether the user has opted in for email delivery or not
  * @apiSuccess {Boolean} confirmed [Unused] Whether the user has confirmed their email address
  * @apiSuccess {String} role [Unusued] The user's specified role. Was deprecated in favor of a group-based system.
@@ -296,10 +293,8 @@ router.put('/group', auth.inGroup('admin'), function(req, res, next){
         }
       	user.addGroup(group._id, function(err, number){
       		if(err) {return next(err);}
-      		console.log('4');
       		group.addUser(user._id, function(err, num ){
       			if(err) callback(err);
-      			console.log('5');
       			callback(null);
       		});
 	    });

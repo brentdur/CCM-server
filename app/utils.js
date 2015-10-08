@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 
 module.exports = {
 	create: {
-		conversation: function (topic, subject, message, user, cb) {
+		conversation: function (topic, subject, message, user, singleton, cb) {
 			var conversation = new Conversation();
 			var participant = {};
 			participant.user = user;

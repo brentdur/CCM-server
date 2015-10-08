@@ -106,10 +106,6 @@ function canWrite(type){
             if(group && group.toString().indexOf('true') > -1) {
               good = true;
             }
-            else {
-              console.log(group.toString());
-              console.log(forward);
-            }
             callback(err);
           });
         }

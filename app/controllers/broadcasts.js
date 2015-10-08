@@ -24,10 +24,14 @@ module.exports = function (app) {
   app.use('/api/broadcasts', router);
 }
 
-To get sent broadcasts
-Sync
-only does gcm sync, no notification
 
+var errorForm = function(title, message, status) {
+  err = {}
+  err.title = title;
+  err.message = message;
+  err.status = status;
+  return err;
+}
 
 /**
  * @api {get} /api/broadcasts Get all broadcasts
@@ -35,14 +39,13 @@ only does gcm sync, no notification
  * @apiVersion 1.2.0
  *
  * @apiSuccess {String} _id Unique string for event
- * @apiSuccess {String} title The simple name for this event.
- * @apiSuccess {String} location The simple name of the venue.
- * @apiSuccess {String} date Date of this event in standard format.
- * @apiSuccess {String} description Full description of this event.
- * @apiSuccess {Number} lat Latitude of venue.
- * @apiSuccess {Number} lng Longitude of venue.
- * @apiSuccess {Signup} [relatedSignup] Signup related to this event
- * @apiSuccess {Number} version Version of event, starting at 0.
+ * @apiSuccess {Group[]} recepients An array of groups that should receive the broadcast
+ * @apiSuccess {String} title The title of the broadcast
+ * @apiSuccess {String} message The text of the message to send
+ * @apiSuccess {Boolean} isNotification Whether the broadcast should notify
+ * @apiSuccess {String[]} syncs Enumerated of: "all", "events", "convos", "signups", "messages", "talks". What the gcm message syncs
+ * @apiSuccess {Date} createdAt When the broadcast was sent
+ * @apiSuccess {User} createdBy The user that sent the broadcast
  *
  * @apiSuccessExample {json} Response Example
  *   
@@ -53,6 +56,13 @@ only does gcm sync, no notification
  *
  */
 
+router.get('/', auth.inGroup('admin'), function(req, res, next){
+	Broadcast.find(function(err, bcs){
+		if (err) return next(err);
+		res.json(bcs);
+	});
+});
+
 
 /**
  * @api {POST} /api/broadcasts/send Create new broadcast
@@ -60,110 +70,156 @@ only does gcm sync, no notification
  *@apiGroup Broadcasts
  *@apiVersion 1.2.0
  *
- * @apiParam {String} title The title for the event
- * @apiParam {String} location The name of the existing location or the simple name for a new location
- * @apiParam {String} [address] If the location name is not an existing one, this field is required. Full address for geocoding
- * @apiParam {String} date In valid format.
- * @apiParam {String} description Full event description.
-
+ * @apiParam {String} title The title of the broadcast
+ * @apiParam {String} message The message text to send
+ * @apiParam {Group[]} [recepients] An array of groups to send the broadcast to, or null if all groups should receive it
+ * @apiParam {Boolean} [isNotification]=false Whether the broadcast is silent or not
+ * @apiParam {String[]} [syncs] What the broadcast syncs, if anything. One of: 'all', 'events', 'conversations', 'signups', 'messages', or 'talks'
  * @apiParamExample {json} Request Example
  * {
-   * "title": "newevent",
-   * "location": "New",
-   * "date": "6/14/2015",
-   * "description": "First Event",
-   * "address": "1003 New Street, New York, New York, 30902"
+ * "title": "new",
+ * "message": "newnew",
+ * "syncs": "all",
+ * "syncs": "messages",
+ * "recepients": "admin"
  * }
  *
- * @apiError (Error 403) {String} LocationError Location field was not an existing event and address field was not set
+ * @apiError (Error 403) {String} Required field missing Title and Message are required fields
  *
- * @apiErrorExample {json} No Location Found
+ * @apiErrorExample {json} Required field missing
  * {
- *   "Error" "No location found and no address given"
+ *   "Error" "Title and Message must be set"
  * }
  *
- * @apiError (Error 403) {String} ValidationError Required fields were not set or cast to date failed
- * @apiErrorExample {json} Validation Error
- *{
- *   "Error": {
- *     "message": "Event validation failed",
- *     "name": "ValidationError",
- *     "errors": {
- *       "title": {
- *         "properties": {
- *           "type": "required",
- *           "message": "Path `{PATH}` is required.",
- *           "path": "title"
- *         },
- *         "message": "Path `title` is required.",
- *         "name": "ValidatorError",
- *         "kind": "required",
- *         "path": "title"
- *       }
- *     }
- *   }
- * }
  *
  * 
- * @apiPermission group canWrite(Events)
+ * @apiPermission group canWrite(Broadcasts)
  * @apiUse authHeader
  * 
  */
+
+router.post('/send', auth.canWrite('Broadcasts'), function(req, res, next) {
+	if (req.body.recepients && !(req.body.recepients instanceof Array)){
+		req.body.recepients = [req.body.recepients];
+	}
+	var search = {
+		'name': {$in: req.body.recepients}
+	};
+	var recepients = [];
+	if (!req.body.recepients) {
+		search = {};
+	}
+	var people = [];
+	if(!req.body.title || !req.body.message) {
+		return next(errorForm("Required field missing", "Title and Message must be set", 403));
+	}
+	async.waterfall([
+		function(callback){
+			Group.find(search).lean().populate('members').exec(function(err, groups){
+				if (err) callback(err);
+				groups.forEach(function(group) {
+					group.members.forEach(function(member){
+						people.push(member._id);
+					})
+					recepients.push(group._id);
+				});
+
+				callback(null);
+			});
+		},
+		function(callback){
+			var bcast = new Broadcast ({
+			recepients: recepients,
+			title: req.body.title,
+			message: req.body.message,
+			isNotification: req.body.isNotification,
+			syncs: req.body.syncs,
+			createdBy: req.user
+			}).save(function(err){
+				callback(err)
+			});
+		},
+		function(callback){
+			callback(null);
+		}
+		//TODO create and send singleton convo
+	], function(err, results){
+		if (err) return next(err);
+		gcm.syncGCM(req.body.syncs, people, gcm.createNotification(req.body.title, req.body.message));
+		res.status(200).send();
+	});
+	
+});
 
 /**
  * @api {POST} /api/broadcasts/sync Create new broadcast that only syncs
- * @apiDescription Creates a new broadcast, which begins to spawn messages and send notifications for every user
  *@apiGroup Broadcasts
  *@apiVersion 1.2.0
  *
- * @apiParam {String} title The title for the event
- * @apiParam {String} location The name of the existing location or the simple name for a new location
- * @apiParam {String} [address] If the location name is not an existing one, this field is required. Full address for geocoding
- * @apiParam {String} date In valid format.
- * @apiParam {String} description Full event description.
-
+ * @apiParam {String[]} syncs What the broadcast syncs, if anything. One of: 'all', 'events', 'convos', 'signups', 'messages', or 'talks'
+ * @apiParam {Group[]} [recepients] An array of groups to send the broadcast to, or null if all groups should receive it
+ * 
  * @apiParamExample {json} Request Example
  * {
-   * "title": "newevent",
-   * "location": "New",
-   * "date": "6/14/2015",
-   * "description": "First Event",
-   * "address": "1003 New Street, New York, New York, 30902"
+ * "syncs": "all",
+ * "recepients": "admin"
  * }
+ * 
+ * @apiError (Error 403) {String} RequiredFieldError Syncs must be set
  *
- * @apiError (Error 403) {String} LocationError Location field was not an existing event and address field was not set
- *
- * @apiErrorExample {json} No Location Found
+ * @apiErrorExample {json} Required Field Missing
  * {
- *   "Error" "No location found and no address given"
- * }
- *
- * @apiError (Error 403) {String} ValidationError Required fields were not set or cast to date failed
- * @apiErrorExample {json} Validation Error
- *{
- *   "Error": {
- *     "message": "Event validation failed",
- *     "name": "ValidationError",
- *     "errors": {
- *       "title": {
- *         "properties": {
- *           "type": "required",
- *           "message": "Path `{PATH}` is required.",
- *           "path": "title"
- *         },
- *         "message": "Path `title` is required.",
- *         "name": "ValidatorError",
- *         "kind": "required",
- *         "path": "title"
- *       }
- *     }
- *   }
+ *   "Error" "Syncs must be set"
  * }
  *
  * 
- * @apiPermission group canWrite(Events)
+ * @apiPermission group canWrite(Broadcasts)
  * @apiUse authHeader
  * 
  */
+
+router.post('/sync', auth.canWrite('Broadcasts'), function(req, res, next) {
+	if (req.body.recepients && !(req.body.recepients instanceof Array)){
+		req.body.recepients = [req.body.recepients];
+	}
+	var search = {
+		'name': {$in: req.body.recepients}
+	};
+	var recepients = [];
+	if (!req.body.recepients) {
+		search = {};
+	}
+	var people = [];
+	if(!req.body.syncs) {
+		return next(errorForm("Required field missing", "Syncs must be set", 403));
+	}
+	async.waterfall([
+		function(callback){
+			Group.find(search).populate('members').exec(function(err, groups){
+				if (err) callback(err);
+				groups.forEach(function(group) {
+					group.members.forEach(function(member){
+						people.push(member._id);
+					});
+					recepients.push(group._id);
+				});
+				callback(null);
+			});
+		},
+		function(callback) {
+			var bcast = new Broadcast ({
+				recepients: recepients,
+				syncs: req.body.syncs,
+				createdBy: req.user
+			}).save(function(err){
+				callback(err);
+			});
+		}
+		], function(err, results){
+			if(err) return next(err);
+			gcm.syncGCM(req.body.syncs, people);
+			res.status(200).send();
+		});
+});
 
 

@@ -16,6 +16,7 @@ var Location = require('../app/models/location');
 var Topic = require('../app/models/topic');
 var Signup = require('../app/models/signup');
 var Conversation = require('../app/models/conversation');
+var Broadcast = require('../app/models/broadcast');
 var async = require('async');
 
 var justPurge = null;
@@ -46,6 +47,9 @@ async.series([
         Conversation.find({}).remove(function(){callback(null)});
     },
     function(callback){
+        Broadcast.find({}).remove(function(){callback(null)});
+    },
+    function(callback){
         Signup.find({}).remove(function(){callback(justPurge)});
     },
     // function(callback){
@@ -56,7 +60,8 @@ async.series([
     //             writeMsgs: true,
     //             writeEvents: true,
     //             writeSignups: true,
-    //             writeConversations: true
+    //             writeConversations: true,
+    //             writeBroadcasts:true
     //         },
     //         {
     //             name: 'users',

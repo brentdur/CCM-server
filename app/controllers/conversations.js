@@ -111,7 +111,6 @@ router.get('/minister', auth.inGroup('ministers'), function(req, res, next){
  * @apiUse authHeader
  */
 router.get('/mine', auth.isAuthenticated(), function(req, res, next){
-	console.log(req.user.convos);
 	Conversation
 	.find({'_id': {$in:req.user.convos}})
 	.find({'alive':true})
@@ -136,7 +135,7 @@ router.get('/mine', auth.isAuthenticated(), function(req, res, next){
  * @apiUse authHeader
  */
 router.post('/', auth.canWrite('Conversations'), function(req, res,next){
-	utils.create.conversation(req.body.topic, req.body.subject, req.body.message, req.user, function(results){
+	utils.create.conversation(req.body.topic, req.body.subject, req.body.message, req.user, false, function(results){
 		res.status(200).send();
 	});
 });
@@ -173,8 +172,6 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 			}
 			convo.minister.alive = true;
 			convo.participant.alive = true;
-			console.log(convo.participant.user);
-			console.log(req.user._id);
 			if (convo.participant.user.toString() === req.user._id.toString()){
 				convo.minister.responded = false;
 				convo.participant.responded = true;
@@ -247,7 +244,6 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
  			}
  		},
  		function(convo, callback){
- 			console.log(convo);
  			if(!convo.participant.alive && !convo.minister.alive) {
  				convo.killConvo(function(err, result){
  					callback(err, result);

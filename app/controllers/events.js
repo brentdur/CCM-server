@@ -91,7 +91,6 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 
 // router.get('/gcm', auth.isAuthenticated(), function (req, res, next) {
 //   gcm.sendGCM(7);
-//   console.log('req');
 //   res.status(200).send();
 //   });
 
@@ -168,7 +167,6 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
       },
       function(skip, lat, lng, callback){
         if(skip){
-          console.log('skip geocode');
           callback(null, lat, lng);
           return;
         }
@@ -179,7 +177,6 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
           }
           var location = req.body.address.toString();
           http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location + '&key=' + key, function(res){
-            console.log(res.statusCode);
             var data = '';
             res.on('data', function (chunk){
                 data += chunk;
@@ -188,7 +185,6 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
                 var obj = JSON.parse(data);
                 if(obj.status==='OK'){
                   obj = obj.results[0].geometry.location;
-                  console.log( obj );
                   callback(null, obj.lat, obj.lng);
                   return;
                 }
@@ -216,7 +212,6 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
  }   ], 
     function(err, results){
       if (err) {return next(err);}
-      console.log(err);
       gcm.sendGCM(0);
       res.status(200).send();
     });

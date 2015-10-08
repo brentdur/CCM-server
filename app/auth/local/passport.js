@@ -3,12 +3,10 @@ var LocalStrategy = require('passport-local').Strategy;
 
 exports.setup = function (User, config) {
   passport.serializeUser(function(user, cb) {
-  console.log('serializeUser');
   cb(null, user.id);
 });
 
 passport.deserializeUser(function(id, cb) {
-  console.log('deserializeUser');
   User.findById(id, function (err, user) {
     if (err) { return cb(err); }
     cb(null, user);

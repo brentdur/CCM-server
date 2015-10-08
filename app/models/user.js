@@ -20,7 +20,7 @@ var UserSchema = new Schema({
   groups: [{type: mongoose.Schema.Types.ObjectId, ref: 'Group'}],
   convos: [{type: mongoose.Schema.Types.ObjectId, ref: 'Conversation'}],
   clientType: {type: String, enum: ['ios', 'android']},
-  clientVersion: {type: String, default: "1.0"},
+  clientVersion: {type: Number, default: 1.0},
   facebookProfile: {},
   twitterProfile: {},
   googleProfile: {},
@@ -175,6 +175,13 @@ UserSchema.methods = {
   addConvo: function(id, cb){
     this.convos.push(id);
     this.save(cb);
+  },
+
+  removeGCM: function(){
+    this.gcm = '';
+    this.save(function(err){
+      if(err) console.log(err);
+    });
   }
 };
 

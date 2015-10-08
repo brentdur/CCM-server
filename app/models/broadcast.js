@@ -4,10 +4,11 @@ var mongoose = require('mongoose'),
 
 var BroadcastSchema = new Schema({
   recepients: [{type: mongoose.Schema.Types.ObjectId, ref: 'Group'}],
-  title: {type: String, required: true},
-  message: {type: String, required: true},
+  title: {type: String},
+  message: {type: String},
   isNotification: {type: Boolean, default: false},
-  syncs: {type: String, enum: ['all', 'events', 'convos', 'signups', 'messages', 'talks']},
+  syncs: [{type: String, enum: ['all', 'events', 'convos', 'signups', 'messages', 'talks']}],
+  createdAt: {type: Date, default: Date.now},
   createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 });
 

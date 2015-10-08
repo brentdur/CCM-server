@@ -93,7 +93,6 @@ router.get('/', function (req, res, next) {
 router.get('/admin', function(req, res, next){
   var token = req.cookies.token;
   req.query.access_token = token;
-  console.log(req.query);
   next();
 }, auth.inGroup('admin'), function(req, res, next) {
     async.series([
@@ -157,7 +156,6 @@ router.get('/admin', function(req, res, next){
 router.get('/admin/edit', function(req, res, next) {
   var token = req.cookies.token;
   req.query.access_token = token;
-  console.log(req.query);
   next();
 }, auth.inGroup('admin'), function(req, res, next) {
     res.render('partials/edit', {
