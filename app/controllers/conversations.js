@@ -56,7 +56,8 @@ var express = require('express'),
 	// http = require('https'),
 	async = require('async'),
 	uuid = require('node-uuid'),
-	gcm = require('../gcm')
+	gcm = require('../gcm'),
+	utils = require('../utils')
 	// config = require('../../config/config')
 	;
 
@@ -135,59 +136,7 @@ router.get('/mine', auth.isAuthenticated(), function(req, res, next){
  * @apiUse authHeader
  */
 router.post('/', auth.canWrite('Conversations'), function(req, res,next){
-	var conversation = new Conversation();
-	var participant = {};
-	participant.user = req.user;
-	participant.senderId = uuid.v4();
-	participant.alive = true;
-	conversation.minister.senderId = uuid.v4();
-	conversation.topic = req.body.topic;
-	conversation.subject = req.body.subject;
-	conversation.messages = [];
-
-	async.waterfall([
-		function(callback){
-			Topic.findById(req.body.topic, function(err, topic){
-				if(!topic) {
-					callback("No Topic");
-					return;
-				}
-				callback(err, topic);
-				return;
-			});
-		},
-		function(topic, callback){
-			var newMessage = new Message({
-			subject: req.body.subject,
-			message: req.body.message,
-			topic: req.body.topic,
-			conversation: conversation,
-			senderId: participant.senderId,
-			date: Date()
-			}).save(function(err, message){
-				callback(err, message, topic);
-				return;
-			});
-		},
-		function(message, topic, callback){
-			conversation.messages.push(message._id);
-			participant.isAnon = topic.isAnon;
-			conversation.participant = participant;
-			conversation.save(function(err, convo){
-				callback(err, convo);
-				return;
-			});
-		},
-		function(convo, callback){
-			participant.user.addConvo(convo._id, function(err){
-				callback(err);
-				return;
-			});
-		}
-	],
-	function(err, results){
-		if(err) return next(err);
-		gcm.sendGCM(7);
+	utils.create.conversation(req.body.topic, req.body.subject, req.body.message, req.user, function(results){
 		res.status(200).send();
 	});
 });

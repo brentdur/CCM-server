@@ -19,6 +19,8 @@ var UserSchema = new Schema({
   gcm: String,
   groups: [{type: mongoose.Schema.Types.ObjectId, ref: 'Group'}],
   convos: [{type: mongoose.Schema.Types.ObjectId, ref: 'Conversation'}],
+  clientType: {type: String, enum: ['ios', 'android']},
+  clientVersion: {type: String, default: "1.0"},
   facebookProfile: {},
   twitterProfile: {},
   googleProfile: {},
