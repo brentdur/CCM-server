@@ -143,7 +143,6 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
  */
 //creates new signup, if the location name exists in the database as a Location then the address is pulled from there,
 router.post('/', auth.canWrite('Signups'), function(req, res, next){
-  //TODO: move key to keys file
   var key = config.key.geocode;
   req.body.creator = req.user._id;
   async.waterfall([

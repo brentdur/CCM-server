@@ -4,9 +4,25 @@ var mongoose = require('mongoose'),
 	Message = mongoose.model('Message'),
 	Topic = mongoose.model('Topic'),
 	async = require('async'),
+	gcm = require('./gcm'),
+	spawn = require('child_process').spawn
 	uuid = require('node-uuid');
 
 module.exports = {
+	purge: function(rootPath){
+		var minutes = 30, the_interval = minutes * 60 * 1000;
+		setInterval(function() {
+		  	console.log("I am doing my 1 minutes check");
+			var deploySh = spawn('sh', [ 'update.sh' ], {
+			  cwd: rootPath + '/scripts',
+			  stdio: 'inherit'
+			});
+			deploySh.on('close', function (code) {
+			  console.log('child process exited with code ' + code);
+			  gcm.syncGCM(gcm.terms.events, null, null);
+			});
+		}, the_interval);
+	},
 	create: {
 		conversation: function (topic, subject, message, user, singleton, cb) {
 			var conversation = new Conversation();

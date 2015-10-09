@@ -152,7 +152,6 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
 //creates new event, if the location name exists in the database as a Location then the lat and lng are pulled from there,
 //else they are geocoded from the address field
 router.post('/', auth.canWrite('Events'), function(req, res, next){
-  //TODO: move key to keys file
   var key = config.key.geocode;
   req.body.creator = req.user._id;
   async.waterfall([

@@ -16,6 +16,7 @@ var exphbs  = require('express-handlebars');
 var session = require('express-session');
 var mongoose = require('mongoose')
 var mongoStore = require('connect-mongo')(session);
+var utils = require('../app/utils');
 
 module.exports = function(app, config) {
   app.engine('handlebars', exphbs({
@@ -48,6 +49,10 @@ module.exports = function(app, config) {
   app.use(methodOverride());
   app.use(passport.initialize());
   app.use(passport.session());
+
+  //starting purging
+  console.log('starting purge');
+  utils.purge(config.root);
 
 
   var controllers = glob.sync(config.root + '/app/controllers/*.js');

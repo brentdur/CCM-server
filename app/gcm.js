@@ -29,7 +29,6 @@ var gcm = {
 
   sendGCM: function(type){
 
-    //TODO; if type is string then set index
     syncTerm = ['events', 'messages', 'talks', 'groups', 'locations', 'topics', 
       'signups', 'conversations', 'all'];
 
@@ -117,10 +116,16 @@ var gcm = {
 
   syncGCM: function(terms, users, notification) {
 
-
+    //TODO add clearing of failed GCM keys
     async.waterfall([function(callback){
       ids = [];
-      User.find({'_id': {$in:users}}).select('gcm').lean().exec(function(err, results){
+      var search = {};
+      if(users){
+        var search = {
+          '_id': {$in:users}
+        }
+      };
+      User.find(search).select('gcm').lean().exec(function(err, results){
         if (err) {console.log(err);}
         for(var i = 0; i < results.length; i++){
           console.log(results[i].gcm);
