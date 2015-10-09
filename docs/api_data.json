@@ -1,6 +1,445 @@
 [
   {
     "type": "get",
+    "url": "/api/broadcasts",
+    "title": "Get all broadcasts",
+    "group": "Broadcasts",
+    "version": "1.2.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique string for event</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Group[]</p> ",
+            "optional": false,
+            "field": "recepients",
+            "description": "<p>An array of groups that should receive the broadcast</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "title",
+            "description": "<p>The title of the broadcast</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "message",
+            "description": "<p>The text of the message to send</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "isNotification",
+            "description": "<p>Whether the broadcast should notify</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String[]</p> ",
+            "optional": false,
+            "field": "syncs",
+            "description": "<p>Enumerated of: &quot;all&quot;, &quot;events&quot;, &quot;convos&quot;, &quot;signups&quot;, &quot;messages&quot;, &quot;talks&quot;. What the gcm message syncs</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Date</p> ",
+            "optional": false,
+            "field": "createdAt",
+            "description": "<p>When the broadcast was sent</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>User</p> ",
+            "optional": false,
+            "field": "createdBy",
+            "description": "<p>The user that sent the broadcast</p> "
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "inGroup(admin)"
+      }
+    ],
+    "filename": "app/controllers/broadcasts.js",
+    "groupTitle": "Broadcasts",
+    "name": "GetApiBroadcasts",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/broadcasts"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/broadcasts/mine",
+    "title": "Get my broadcasts",
+    "group": "Broadcasts",
+    "version": "1.2.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique string for event</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "title",
+            "description": "<p>The title of the broadcast</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "message",
+            "description": "<p>The text of the message to send</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "isNotification",
+            "description": "<p>Whether the broadcast should notify</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String[]</p> ",
+            "optional": false,
+            "field": "syncs",
+            "description": "<p>Enumerated of: &quot;all&quot;, &quot;events&quot;, &quot;convos&quot;, &quot;signups&quot;, &quot;messages&quot;, &quot;talks&quot;. What the gcm message syncs</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Date</p> ",
+            "optional": false,
+            "field": "createdAt",
+            "description": "<p>When the broadcast was sent</p> "
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "isAuthenticated"
+      }
+    ],
+    "filename": "app/controllers/broadcasts.js",
+    "groupTitle": "Broadcasts",
+    "name": "GetApiBroadcastsMine",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/broadcasts/mine"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "POST",
+    "url": "/api/broadcasts/send",
+    "title": "Create new broadcast",
+    "description": "<p>Creates a new broadcast, which begins to spawn notifications for every user</p> ",
+    "group": "Broadcasts",
+    "version": "1.2.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "title",
+            "description": "<p>The title of the broadcast</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "message",
+            "description": "<p>The message text to send</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Group[]</p> ",
+            "optional": true,
+            "field": "recepients",
+            "description": "<p>An array of groups to send the broadcast to, or null if all groups should receive it</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Boolean</p> ",
+            "optional": true,
+            "field": "isNotification",
+            "description": "<p>=false Whether the broadcast is silent or not</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String[]</p> ",
+            "optional": true,
+            "field": "syncs",
+            "description": "<p>What the broadcast syncs, if anything. One of: 'all', 'events', 'conversations', 'signups', 'messages', or 'talks'</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n\"title\": \"new\",\n\"message\": \"newnew\",\n\"syncs\": \"all\",\n\"syncs\": \"messages\",\n\"recepients\": \"admin\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 403": [
+          {
+            "group": "Error 403",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "Required",
+            "description": "<p>field missing Title and Message are required fields</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Required field missing",
+          "content": "{\n  \"Error\" \"Title and Message must be set\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "group canWrite(Broadcasts)"
+      }
+    ],
+    "filename": "app/controllers/broadcasts.js",
+    "groupTitle": "Broadcasts",
+    "name": "PostApiBroadcastsSend",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/broadcasts/send"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "POST",
+    "url": "/api/broadcasts/sync",
+    "title": "Create new broadcast that only syncs",
+    "group": "Broadcasts",
+    "version": "1.2.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String[]</p> ",
+            "optional": false,
+            "field": "syncs",
+            "description": "<p>What the broadcast syncs, if anything. One of: 'all', 'events', 'convos', 'signups', 'messages', or 'talks'</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Group[]</p> ",
+            "optional": true,
+            "field": "recepients",
+            "description": "<p>An array of groups to send the broadcast to, or null if all groups should receive it</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "{\n\"syncs\": \"all\",\n\"recepients\": \"admin\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 403": [
+          {
+            "group": "Error 403",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "RequiredFieldError",
+            "description": "<p>Syncs must be set</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Required Field Missing",
+          "content": "{\n  \"Error\" \"Syncs must be set\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "group canWrite(Broadcasts)"
+      }
+    ],
+    "filename": "app/controllers/broadcasts.js",
+    "groupTitle": "Broadcasts",
+    "name": "PostApiBroadcastsSync",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/broadcasts/sync"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "put",
+    "url": "/api/broadcasts/kill",
+    "title": "Deactivates a broadcast for a user",
+    "group": "Broadcasts",
+    "version": "1.2.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>Broadcast</p> ",
+            "optional": false,
+            "field": "cast",
+            "description": "<p>The broadcast to deactivate</p> "
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "isAuthenticated()"
+      }
+    ],
+    "filename": "app/controllers/broadcasts.js",
+    "groupTitle": "Broadcasts",
+    "name": "PutApiBroadcastsKill",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/broadcasts/kill"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
     "url": "/api/conversations",
     "title": "Get all conversations",
     "group": "Conversations",
@@ -3484,6 +3923,20 @@
           },
           {
             "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "clientType",
+            "description": "<p>The client that the user is using</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "clientVersion",
+            "description": "<p>The version identifier of the client</p> "
+          },
+          {
+            "group": "Success 200",
             "type": "<p>Boolean</p> ",
             "optional": false,
             "field": "opt",
@@ -3734,6 +4187,20 @@
             "optional": false,
             "field": "convos",
             "description": "<p>An array of conversations that the user has participated in</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "clientType",
+            "description": "<p>The client that the user is using</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Number</p> ",
+            "optional": false,
+            "field": "clientVersion",
+            "description": "<p>The version identifier of the client</p> "
           },
           {
             "group": "Success 200",

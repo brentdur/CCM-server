@@ -46,8 +46,6 @@ var errorForm = function(title, message, status) {
  * @apiSuccess {String[]} syncs Enumerated of: "all", "events", "convos", "signups", "messages", "talks". What the gcm message syncs
  * @apiSuccess {Date} createdAt When the broadcast was sent
  * @apiSuccess {User} createdBy The user that sent the broadcast
- *
- * @apiSuccessExample {json} Response Example
  *   
  * 
  *
@@ -63,10 +61,36 @@ router.get('/', auth.inGroup('admin'), function(req, res, next){
 	});
 });
 
+/**
+ * @api {get} /api/broadcasts/mine Get my broadcasts
+ * @apiGroup Broadcasts
+ * @apiVersion 1.2.0
+ *
+ * @apiSuccess {String} _id Unique string for event
+ * @apiSuccess {String} title The title of the broadcast
+ * @apiSuccess {String} message The text of the message to send
+ * @apiSuccess {Boolean} isNotification Whether the broadcast should notify
+ * @apiSuccess {String[]} syncs Enumerated of: "all", "events", "convos", "signups", "messages", "talks". What the gcm message syncs
+ * @apiSuccess {Date} createdAt When the broadcast was sent
+ *
+ * 
+ *
+ * @apiPermission isAuthenticated
+ * @apiUse authHeader
+ *
+ */
+
+router.get('/mine', auth.isAuthenticated(), function(req, res, next){
+	User.findById(req.user._id).lean().select('activeBroadcasts').populate('activeBroadcasts').exec(function(err, bcs){
+		if (err) return next(err);
+		res.json(bcs.activeBroadcasts);
+	});
+});
+
 
 /**
  * @api {POST} /api/broadcasts/send Create new broadcast
- * @apiDescription Creates a new broadcast, which begins to spawn messages and send notifications for every user
+ * @apiDescription Creates a new broadcast, which begins to spawn notifications for every user
  *@apiGroup Broadcasts
  *@apiVersion 1.2.0
  *
@@ -110,15 +134,18 @@ router.post('/send', auth.canWrite('Broadcasts'), function(req, res, next) {
 		search = {};
 	}
 	var people = [];
+	var users = [];
+	var syncs = [];
 	if(!req.body.title || !req.body.message) {
 		return next(errorForm("Required field missing", "Title and Message must be set", 403));
 	}
 	async.waterfall([
 		function(callback){
-			Group.find(search).lean().populate('members').exec(function(err, groups){
+			Group.find(search).populate('members').exec(function(err, groups){
 				if (err) callback(err);
 				groups.forEach(function(group) {
 					group.members.forEach(function(member){
+						users.push(member);
 						people.push(member._id);
 					})
 					recepients.push(group._id);
@@ -135,17 +162,26 @@ router.post('/send', auth.canWrite('Broadcasts'), function(req, res, next) {
 			isNotification: req.body.isNotification,
 			syncs: req.body.syncs,
 			createdBy: req.user
-			}).save(function(err){
-				callback(err)
+			}).save(function(err, bc){
+				syncs = bc.syncs;
+				callback(err, bc);
 			});
 		},
-		function(callback){
+		function(bc, callback){
+			users.forEach(function(user){
+				user.addBroadcast(bc, function(err){
+					if (err) return next(err);
+				});
+			});
 			callback(null);
 		}
-		//TODO create and send singleton convo
 	], function(err, results){
 		if (err) return next(err);
-		gcm.syncGCM(req.body.syncs, people, gcm.createNotification(req.body.title, req.body.message));
+		if (syncs.indexOf(gcm.terms.broadcasts) == -1){
+			syncs.push(gcm.terms.broadcasts);
+		}
+		console.log(syncs);
+		gcm.syncGCM(syncs, people, gcm.createNotification(req.body.title, req.body.message));
 		res.status(200).send();
 	});
 	
@@ -220,6 +256,23 @@ router.post('/sync', auth.canWrite('Broadcasts'), function(req, res, next) {
 			gcm.syncGCM(req.body.syncs, people);
 			res.status(200).send();
 		});
+});
+
+/**
+ * @api {put} /api/broadcasts/kill Deactivates a broadcast for a user
+ * @apiGroup Broadcasts
+ * @apiVersion 1.2.0
+ *
+ * @apiParam {Broadcast} cast The broadcast to deactivate
+ *
+ * @apiPermission isAuthenticated()
+ * @apiUse authHeader
+ */
+router.put('/kill', auth.isAuthenticated(), function(req, res, next){
+	req.user.removeBroadcast(req.body.cast, function(err){
+		if(err) return next(err);
+		res.status(200).send();
+	});
 });
 
 

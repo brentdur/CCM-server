@@ -19,6 +19,7 @@ var UserSchema = new Schema({
   gcm: String,
   groups: [{type: mongoose.Schema.Types.ObjectId, ref: 'Group'}],
   convos: [{type: mongoose.Schema.Types.ObjectId, ref: 'Conversation'}],
+  activeBroadcasts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Broadcast'}],
   clientType: {type: String, enum: ['ios', 'android']},
   clientVersion: {type: Number, default: 1.0},
   facebookProfile: {},
@@ -182,6 +183,21 @@ UserSchema.methods = {
     this.save(function(err){
       if(err) console.log(err);
     });
+  },
+
+  addBroadcast: function(bc, cb){
+    this.activeBroadcasts.push(bc);
+    this.save(cb);
+  },
+
+  removeBroadcast: function(bc, cb){
+    var index = this.activeBroadcasts.indexOf(bc);
+    if (index == -1) {
+      cb("Item not found");
+      return;
+    }
+    this.activeBroadcasts.splice(index);
+    this.save(cb);
   }
 };
 

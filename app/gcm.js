@@ -24,13 +24,14 @@ var gcm = {
     topics: 'topics',
     signups: 'signups',
     conversations: 'conversations',
+    broadcasts: 'broadcasts',
     all: 'all'
   },
 
   sendGCM: function(type){
 
     syncTerm = ['events', 'messages', 'talks', 'groups', 'locations', 'topics', 
-      'signups', 'conversations', 'all'];
+      'signups', 'conversations', 'broadcasts', 'all'];
 
     async.waterfall([function(callback){
       ids = [];
