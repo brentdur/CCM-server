@@ -139,11 +139,11 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
 	utils.create.conversation(req.body.topic, req.body.subject, req.body.message, req.user, false, function(err, results){
 		if (err) return next(err);
 		utils.get.ministerUsers(function(err, ministers){
-			if(err) return next(err);
-			ministers.push(req.user._id);
-			gcm.syncGCM(gcm.terms.conversations, ministers, null);
-			res.status(200).send();
+			gcm.syncGCM(gcm.terms.conversations, ministers, gcm.createNotification('New Message', 'New message from ' + req.user.name));
+			gcm.syncGCM(gcm.terms.conversations, req.user._id, null);
+			
 		});
+		res.status(200).send();
 	});
 });
 
@@ -159,6 +159,7 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
  * @apiUse authHeader
  */
 router.put('/send', auth.isAuthenticated(), function(req, res, next){
+	var ministerSent = false;
 	async.waterfall([
 		function(callback){
 			Conversation.findById(req.body.conversation, function(err, convo){
@@ -185,6 +186,7 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 				callback(null, convo, convo.participant.senderId);
 			}
 			else {
+				ministerSent = true;
 				convo.minister.responded = true;
 				convo.participant.responded = false;
 				callback(null, convo, convo.minister.senderId);
@@ -205,18 +207,25 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 		},
 		function(convo, message, callback){
 			convo.addMessage(message._id, function(err){
-				callback(err);
+				callback(err, convo);
 			});
 		}
 	],
 	function(err, results){
 		if(err) return next(err);
 		utils.get.ministerUsers(function(err, ministers){
-			if(err) return next(err);
-			ministers.push(req.user._id);
-			gcm.syncGCM(gcm.terms.conversations, ministers, null);
-			res.status(200).send();
+			var userNotification = null;
+			var ministerNotifcation = null;
+			if (ministerSent) {
+				userNotification = gcm.createNotification("New Message", "New response from a minister");
+			}
+			else {
+				ministerNotifcation = gcm.createNotification("New Message", "New response from " + req.user.name);
+			}
+			gcm.syncGCM(gcm.terms.conversations, ministers, ministerNotifcation);
+			gcm.syncGCM(gcm.terms.conversations, results.participant.user, userNotification);
 		});
+		res.status(200).send();
 	});
 	
 });
@@ -233,45 +242,49 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
  * @apiUse authHeader
  */
  router.put('/kill', auth.isAuthenticated(), function(req, res, next) {
+ 	var isMinister = false;
  	async.waterfall([
- 		function(callback){
- 			Conversation.findById(req.body.conversation, function(err, convo){
- 				if(!convo) {
- 					err = 403;
- 				}
- 				callback(err, convo);
- 			});
- 		},
- 		function(convo, callback){
- 			if (req.user._id.toString() === convo.participant.user.toString()){
- 				convo.killParticipant(function(err, result){
- 					callback(err, result);
- 				});
- 			}
- 			else {
- 				convo.killMinister(function(err, result){
- 					callback(err, result);
- 				});
- 			}
- 		},
- 		function(convo, callback){
- 			if(!convo.participant.alive && !convo.minister.alive) {
- 				convo.killConvo(function(err, result){
- 					callback(err, result);
- 				});
- 			}
- 			else {
- 				callback(null);
- 			}
- 		}
- 		],
- 		function(err, results){
- 			if (err) return next(err);
- 			utils.get.ministerUsers(function(err, ministers){
-				if(err) return next(err);
-				ministers.push(req.user._id);
-				gcm.syncGCM(gcm.terms.conversations, ministers, null);
-				res.status(200).send();
+		function(callback){
+			Conversation.findById(req.body.conversation, function(err, convo){
+				if(!convo) {
+					err = 403;
+				}
+				callback(err, convo);
 			});
- 		});
+		},
+		function(convo, callback){
+			if (req.user._id.toString() === convo.participant.user.toString()){
+				convo.killParticipant(function(err, result){
+					callback(err, result);
+				});
+			}
+			else {
+				isMinister = true;
+				convo.killMinister(function(err, result){
+					callback(err, result);
+				});
+			}
+		},
+		function(convo, callback){
+			if(!convo.participant.alive && !convo.minister.alive) {
+				convo.killConvo(function(err, result){
+					callback(err, result);
+				});
+			}
+			else {
+				callback(null);
+			}
+		}
+	], function(err, results){
+			if (err) return next(err);
+			if (isMinister) {
+				utils.get.ministerUsers(function(err, ministers){
+					gcm.syncGCM(gcm.terms.conversations, ministers, null);
+				});
+			}
+			else {
+				gcm.syncGCM(gcm.terms.conversations, req.user._id, null);
+			}
+		res.status(200).send();
+	});
  });
