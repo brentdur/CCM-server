@@ -11,6 +11,7 @@ var SignupSchema = new Schema({
   address: {type: String, required: true},
   relatedEvent: {type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
   description: {type: String, required: true},
+  worksheetLink: {type: String},
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   version: {type:Number, default: 0}
 })
@@ -24,6 +25,11 @@ SignupSchema.methods.addMember = function(id, cb){
   this.members.push(id);
   this.memberCount = this.memberCount + 1;
   this.version = this.version + 1;
+  this.save(cb);
+}
+
+SignupSchema.methods.addWorksheet = function(link, cb){
+  this.worksheetLink = link;
   this.save(cb);
 }
 

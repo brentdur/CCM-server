@@ -12,6 +12,7 @@ var http = require('https');
 var async = require('async');
 var gcm = require('../gcm');
 var config = require('../../config/config');
+var sheets = require('../google-sheets.js');
 
 module.exports = function (app) {
   app.use('/api/signups', router);
@@ -37,6 +38,7 @@ var errorForm = function(title, message, status) {
  * @apiSuccess {String} location The simple name of the venue.
  * @apiSuccess {String} address The full address for the venue the signup is for
  * @apiSuccess {String} description Full description of this event.
+ * @apiSuccess {String} worksheetLink The link for the worksheet list
  * @apiSuccess {Number} version Version of event, starting at 0.
  * @apiSuccess {Number} memberCount number of total members
  * @apiSuccess {Boolean} isMemberOf whether the user is a member of this event
@@ -177,14 +179,19 @@ router.post('/', auth.canWrite('Signups'), function(req, res, next){
           relatedEvent: req.body.eventid,
           description: req.body.description,
           creator: req.body.creator
-        }).save(function(err) {
-          callback(err, 'done');
+        }).save(function(err, signup) {
+          callback(err, signup);
         });
       
  }   ], 
     function(err, results){
       if (err) {return next(err);}
       gcm.sendGCM(6);
+      sheets.setupSheet(results.name, function(link){
+        results.addWorksheet(link, function(){
+          console.log('Finished with Sheets Creation');
+        });
+      });
       res.status(200).send();
     });
 });
@@ -219,6 +226,7 @@ router.put('/addme', auth.isAuthenticated(), function(req, res, next){
     signup.addMember(req.user._id, function(err, number){
       if (err) return next(err);
       gcm.sendGCM(6);
+      sheets.updateSheet(new Date(), req.user.name, req.user.email, signup.worksheetLink);
       res.status(200).send();
     });
   });

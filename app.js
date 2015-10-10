@@ -5,6 +5,7 @@
 var express = require('express'),
   config = require('./config/config'),
   glob = require('glob'),
+  googleAuth = require('./app/google-auth');
   mongoose = require('mongoose');
 
 // var mongoStore = require('connect-mongo')(session);
@@ -21,13 +22,13 @@ models.forEach(function (model) {
 });
 
 if(config.seed) { require('./config/seed'); }
-var app = express();
 
-require('./config/express')(app, config);
+googleAuth.getSecrets(null, function(){
+	var app = express();
+	require('./config/express')(app, config);
+	app.listen(config.port);
+	console.log('Server started on port '+ config.port + ' in ' + config.env + ' mode');
+});
 
-app.listen(config.port);
 
-
-
-console.log('Server started on port '+ config.port + ' in ' + config.env + ' mode');
 
