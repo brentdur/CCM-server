@@ -69,7 +69,7 @@ router.get('/', auth.isAuthenticated(), function(req, res, next){
 router.post('/', auth.inGroup('admin'), function(req, res, next){
   var topic = new Topic(req.body).save(function(err) {
         if(err) return next(err);
-        gcm.sendGCM(5);
+        gcm.syncGCM(gcm.terms.topics, null, null);
         res.status(200).end();
       });
 })

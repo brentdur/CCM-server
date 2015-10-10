@@ -2,6 +2,7 @@
 var mongoose = require('mongoose'),
 	Conversation = mongoose.model('Conversation'),
 	Message = mongoose.model('Message'),
+	Group = mongoose.model('Group'),
 	Topic = mongoose.model('Topic'),
 	async = require('async'),
 	gcm = require('./gcm'),
@@ -76,9 +77,15 @@ module.exports = {
 				}
 			],
 			function(err, results){
-				if(err) return next(err);
-				cb(results);
+				cb(err, results);
 				return;
+			});
+		}
+	},
+	get :{
+		ministerUsers: function(cb){
+			Group.findOne({name: 'ministers'}).select('members').lean().exec(function(err, group){
+				return cb(err, group.members);
 			});
 		}
 	}

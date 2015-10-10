@@ -186,7 +186,7 @@ router.post('/', auth.canWrite('Signups'), function(req, res, next){
  }   ], 
     function(err, results){
       if (err) {return next(err);}
-      gcm.sendGCM(6);
+      gcm.syncGCM(gcm.terms.signups, null, null);
       sheets.setupSheet(results.name, function(link){
         results.addWorksheet(link, function(){
           console.log('Finished with Sheets Creation');
@@ -225,7 +225,7 @@ router.put('/addme', auth.isAuthenticated(), function(req, res, next){
     if(!signup) return next(errorForm('Signup Error', 'No signup found', 403));
     signup.addMember(req.user._id, function(err, number){
       if (err) return next(err);
-      gcm.sendGCM(6);
+      gcm.syncGCM(gcm.terms.signups, null, null);
       sheets.updateSheet(new Date(), req.user.name, req.user.email, signup.worksheetLink);
       res.status(200).send();
     });
@@ -249,7 +249,7 @@ router.put('/addme', auth.isAuthenticated(), function(req, res, next){
 router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
   Signup.findOneAndRemove({'id':req.item}, function(err){
     if(err) return next(err);
-    gcm.sendGCM(6);
+    gcm.syncGCM(gcm.terms.signups, null, null);
     res.status(200).send();
   });
 });

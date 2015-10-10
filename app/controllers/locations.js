@@ -77,7 +77,7 @@ router.get('/', auth.isAuthenticated(), function(req, res, next){
 router.post('/', auth.inGroup('admin'), function(req, res, next){
 	var location = new Location(req.body).save(function(err) {
         if(err) return next(err);
-        gcm.sendGCM(4);
+        gcm.syncGCM(gcm.terms.locations, null, null);
       	res.status(200).end();
       });
 })

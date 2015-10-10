@@ -53,6 +53,7 @@ var express = require('express'),
 	Message = mongoose.model('Message'),
 	Topic = mongoose.model('Topic'),
 	User = mongoose.model('User'),
+	Group = mongoose.model('Group'),
 	// http = require('https'),
 	async = require('async'),
 	uuid = require('node-uuid'),
@@ -135,8 +136,14 @@ router.get('/mine', auth.isAuthenticated(), function(req, res, next){
  * @apiUse authHeader
  */
 router.post('/', auth.canWrite('Conversations'), function(req, res,next){
-	utils.create.conversation(req.body.topic, req.body.subject, req.body.message, req.user, false, function(results){
-		res.status(200).send();
+	utils.create.conversation(req.body.topic, req.body.subject, req.body.message, req.user, false, function(err, results){
+		if (err) return next(err);
+		utils.get.ministerUsers(function(err, ministers){
+			if(err) return next(err);
+			ministers.push(req.user._id);
+			gcm.syncGCM(gcm.terms.conversations, ministers, null);
+			res.status(200).send();
+		});
 	});
 });
 
@@ -204,8 +211,12 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 	],
 	function(err, results){
 		if(err) return next(err);
-		gcm.sendGCM(7);
-		res.status(200).send();
+		utils.get.ministerUsers(function(err, ministers){
+			if(err) return next(err);
+			ministers.push(req.user._id);
+			gcm.syncGCM(gcm.terms.conversations, ministers, null);
+			res.status(200).send();
+		});
 	});
 	
 });
@@ -256,7 +267,11 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
  		],
  		function(err, results){
  			if (err) return next(err);
- 			gcm.sendGCM(7);
- 			res.status(200).send();
+ 			utils.get.ministerUsers(function(err, ministers){
+				if(err) return next(err);
+				ministers.push(req.user._id);
+				gcm.syncGCM(gcm.terms.conversations, ministers, null);
+				res.status(200).send();
+			});
  		});
  });

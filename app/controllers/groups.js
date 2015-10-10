@@ -103,7 +103,7 @@ router.post('/', auth.inGroup('admin'), function(req, res, next){
   req.body.creator = req.user._id;
   var group = new Group(req.body).save(function(err){
     if (err) return next(err);
-    gcm.sendGCM(3);
+    gcm.syncGCM(gcm.terms.groups, null, null);
     res.status(200).send();
   });
 });

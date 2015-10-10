@@ -211,7 +211,7 @@ router.delete('/', auth.inGroup('ministers'), function(req, res,next){
   var msg = req.query.message;
   Message.findById(msg).remove(function(err, data){
     if(err) return next(err);
-    gcm.sendGCM(1);
+    gcm.syncGCM(gcm.terms.messages, null, null);
     res.status(200).send();
   });
 });
@@ -233,7 +233,7 @@ router.delete('/', auth.inGroup('ministers'), function(req, res,next){
 router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
   Message.findOneAndRemove({'id':req.item}, function(err){
     if(err) return next(err);
-    gcm.sendGCM(1);
+    gcm.syncGCM(gcm.terms.messages, null, null);
     res.status(200).send();
   });
 });

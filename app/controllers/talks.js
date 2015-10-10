@@ -110,7 +110,7 @@ router.post('/', auth.canWrite('Talks'), function(req, res, next){
     ], 
     function(err, results){
       if (err) { return next(err); }
-      gcm.sendGCM(2);
+      gcm.syncGCM(gcm.terms.talks, null, null);
       res.status(200).send();
     });
 });
@@ -143,7 +143,7 @@ router.put('/note', auth.inGroup("admin"), function(req, res, next){
       if (err) { return next(err); }
       talk.incVersion(function(err){
         if(err) { return next(err); }
-        gcm.sendGCM(2);
+        gcm.syncGCM(gcm.terms.talks, null, null);
         res.json(number);
       });
     });
@@ -167,7 +167,7 @@ router.put('/note', auth.inGroup("admin"), function(req, res, next){
 router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
   Talk.findOneAndRemove({'id':req.item}, function(err){
     if(err) return next(err);
-    gcm.sendGCM(2);
+    gcm.syncGCM(gcm.terms.talks, null, null);
     res.status(200).send();
   });
 });

@@ -90,7 +90,7 @@ router.get('/', auth.isAuthenticated(), function (req, res, next) {
   });
 
 // router.get('/gcm', auth.isAuthenticated(), function (req, res, next) {
-//   gcm.sendGCM(7);
+//   gcm.syncGCM(gcm.terms.events, null, null);
 //   res.status(200).send();
 //   });
 
@@ -211,7 +211,7 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
  }   ], 
     function(err, results){
       if (err) {return next(err);}
-      gcm.sendGCM(0);
+      gcm.syncGCM(gcm.terms.events, null, null);
       res.status(200).send();
     });
 });
@@ -233,7 +233,7 @@ router.post('/', auth.canWrite('Events'), function(req, res, next){
 router.delete('/delete', auth.inGroup('admin'), function(req, res, next){
   Event.findOneAndRemove({'id':req.item}, function(err){
     if(err) return next(err);
-    gcm.sendGCM(0);
+    gcm.syncGCM(gcm.terms.events, null, null);
     res.status(200).send();
   });
 });

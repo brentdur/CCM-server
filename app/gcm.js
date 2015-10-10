@@ -28,82 +28,6 @@ var gcm = {
     all: 'all'
   },
 
-  sendGCM: function(type){
-
-    syncTerm = ['events', 'messages', 'talks', 'groups', 'locations', 'topics', 
-      'signups', 'conversations', 'broadcasts', 'all'];
-
-    async.waterfall([function(callback){
-      ids = [];
-      User.find().lean().exec(function(err, results){
-        if (err) {console.log(err);}
-        for(var i = 0; i < results.length; i++){
-          console.log(results[i].gcm);
-          if(results[i].gcm != null){
-            ids.push(results[i].gcm);
-          }
-        }
-        if (ids.length < 1){
-          callback('done');
-          return;
-        }
-        callback(null, ids);
-      })
-    },
-    function(ids, callback){
-      var query = {
-        "registration_ids": ids,
-        "content_available": true,
-          // "notification": {
-          //     "title": "hello",
-          //     "text": "hello",
-          //     "icon": "icon",
-          //     "click_action": "OPEN_CCM"
-          // },
-          "data": {
-              "sync":syncTerm[type]
-          }
-      };
-      query = JSON.stringify(query);
-
-      console.log(query);
-
-      var options = {
-        hostname: 'gcm-http.googleapis.com',
-        path: '/gcm/send',
-        port: 443,
-        method: 'POST',
-        headers: {
-          'Authorization': 'key=' + config.key.gcm,
-          'Content-Type': 'application/json'
-        }
-      };
-
-      console.log('sending gcm');
-      var req = http.request(options, function(res){
-        console.log('STATUS: ' + res.statusCode);
-        // console.log('HEADERS: ' + JSON.stringify(res.headers));
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) {
-          console.log('BODY: ' + chunk);
-        });
-      });
-      req.on('error', function(e) {
-        console.log('problem with request: ' + e.message);
-      });
-
-      // write data to request body
-      req.write(query);
-      req.end();
-      callback(null);
-    }
-    ], function(err, results){
-      console.log(err);
-      return;
-    });
-    
-  },
-
   createNotification: function(title, text) {
     return {
       "payload": {
@@ -119,19 +43,20 @@ var gcm = {
 
     //TODO add clearing of failed GCM keys
     async.waterfall([function(callback){
-      ids = [];
+      var ids = [];
       var search = {};
       if(users){
         var search = {
           '_id': {$in:users}
         }
       };
-      User.find(search).select('gcm').lean().exec(function(err, results){
+      users = [];
+      User.find(search).select('gcm').exec(function(err, results){
         if (err) {console.log(err);}
         for(var i = 0; i < results.length; i++){
-          console.log(results[i].gcm);
-          if(results[i].gcm != null){
+          if(results[i].gcm && results[i].gcm.length > 0){
             ids.push(results[i].gcm);
+            users.push(results[i]);
           }
         }
         if (ids.length < 1){
@@ -145,13 +70,17 @@ var gcm = {
       var query = {
         "registration_ids": ids,
         "content_available": terms && terms.length != 0,
-        "notification": notification.payload,
         "data": {
               "sync":terms.toString()
           }
       };
+
+      if (notification && notification.payload){
+        query.notification = notification.payload;
+      }
       query = JSON.stringify(query);
 
+      console.log('GCM');
       console.log(query);
 
       var options = {
@@ -165,14 +94,27 @@ var gcm = {
         }
       };
 
-      console.log('sending gcm');
       var req = http.request(options, function(res){
         console.log('STATUS: ' + res.statusCode);
-        // console.log('HEADERS: ' + JSON.stringify(res.headers));
         res.setEncoding('utf8');
+        var body = '';
         res.on('data', function (chunk) {
-          console.log('BODY: ' + chunk);
+          body += chunk;
         });
+
+        res.on('end', function(err){
+          body = JSON.parse(body);
+          console.log(body);
+          
+          for (var i = 0; i < body.results.length; i++){
+            var error = body.results[i].error || null;
+            if (error && ( error === 'InvalidRegistration' || error === 'NotRegistered' )) {
+              console.log('FAILED USER ID: ' + users[i]);
+              users[i].removeGCM();
+            }
+          }
+        })
+
       });
       req.on('error', function(e) {
         console.log('problem with request: ' + e.message);
