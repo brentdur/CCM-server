@@ -26,3 +26,12 @@ Talks
 
 
 Designed as a unique and accessible platform as an escape from the limitations and restrictions of Facebook Groups.
+
+### Upgrade to 1.2
+* `npm install`
+* update `key.js`
+* authorize the app
+* change admin group to `writeBroadcasts=true` and `writeConversations=true`
+* change user group to `writeConversations`
+* disable crontab pruge
+* verify that the server runs as root
