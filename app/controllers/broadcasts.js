@@ -150,8 +150,16 @@ router.post('/send', auth.canWrite('Broadcasts'), function(req, res, next) {
 					})
 					recepients.push(group._id);
 				});
-
 				callback(null);
+			});
+		},
+		function(callback){
+			utils.uniqueArray(users, function(uniqueUsers){
+				utils.uniqueArray(people, function(uniquePeople){
+					users = uniqueUsers;
+					people = uniquePeople;
+					callback(null);
+				});
 			});
 		},
 		function(callback){

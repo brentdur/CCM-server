@@ -13,7 +13,7 @@ module.exports = {
 	purge: function(rootPath){
 		var minutes = 30, the_interval = minutes * 60 * 1000;
 		setInterval(function() {
-		  	console.log("I am doing my 1 minutes check");
+		  	console.log("Purging...");
 			var deploySh = spawn('sh', [ 'update.sh' ], {
 			  cwd: rootPath + '/scripts',
 			  stdio: 'inherit'
@@ -23,6 +23,14 @@ module.exports = {
 			  gcm.syncGCM(gcm.terms.events, null, null);
 			});
 		}, the_interval);
+	},
+	uniqueArray: function(array, cb){
+		var unique = array.reduce(function(a,b){
+			if (a.indexOf(b) < 0) a.push(b);
+			return a;
+		},[]);
+
+		cb(unique);
 	},
 	create: {
 		conversation: function (topic, subject, message, user, singleton, cb) {
