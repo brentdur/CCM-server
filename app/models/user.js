@@ -191,12 +191,17 @@ UserSchema.methods = {
   },
 
   removeBroadcast: function(bc, cb){
-    var index = this.activeBroadcasts.indexOf(bc);
-    if (index == -1) {
-      cb("Item not found");
-      return;
+    var startLen = this.activeBroadcasts.length;
+    var unique = this.activeBroadcasts.reduce(function(a,b){
+      if (bc.toString() !== b.toString()){
+        a.push(b);
+      }
+      return a;
+    },[]);
+    if(startLen == unique.length) {
+      cb("No Broadcast found");
     }
-    this.activeBroadcasts.splice(index);
+    this.activeBroadcasts = unique;
     this.save(cb);
   }
 };

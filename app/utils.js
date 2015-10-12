@@ -16,10 +16,9 @@ module.exports = {
 		  	console.log("Purging...");
 			var deploySh = spawn('sh', [ 'update.sh' ], {
 			  cwd: rootPath + '/scripts',
-			  stdio: 'inherit'
+			  stdio: 'ignore'
 			});
 			deploySh.on('close', function (code) {
-			  console.log('child process exited with code ' + code);
 			  gcm.syncGCM(gcm.terms.events, null, null);
 			});
 		}, the_interval);
