@@ -39,7 +39,8 @@ var express = require('express'),
   mongoose = require('mongoose'),
   Conversation = mongoose.model('Conversation'),
   uuid = require('node-uuid'),
-  Message = mongoose.model('Message');
+  utils = require('../utils'),
+  Message = mongoose.model('Message'),
   Group = mongoose.model('Group');
   var auth = require('../auth/auth.service');
   var async = require('async');
@@ -160,13 +161,24 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
       });
     },
     function(topic, callback){
+      Group.findOne({name:"ministers"}, function(err, group){
+        if(err) callback(err);
+        if(!group) callback("No Group");
+        callback(null, topic, group);
+      });
+    },
+    function(topic, group, callback){
       var newMessage = new Message({
-      subject: req.body.subject,
-      message: req.body.message,
-      topic: req.body.topic,
-      conversation: conversation,
-      senderId: participant.senderId,
-      date: Date()
+        from: req.user,
+        to: group,
+        simpleTo: req.user.name,
+        simpleFrom: group.name,
+        subject: req.body.subject,
+        message: req.body.message,
+        topic: req.body.topic,
+        conversation: conversation,
+        senderId: participant.senderId,
+        date: Date()
       }).save(function(err, message){
         callback(err, message, topic);
         return;
@@ -190,6 +202,9 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
   ],
   function(err, results){
     if(err) return next(err);
+    utils.get.ministerUsers(function(err, ministers){
+      gcm.syncGCM(gcm.terms.conversations, ministers, gcm.createNotification('New Message', 'New message from ' + req.user.name));      
+    });
     res.status(200).send();
   });
 });
