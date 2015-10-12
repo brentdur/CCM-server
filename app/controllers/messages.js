@@ -106,8 +106,8 @@ router.get('/mine', auth.isAuthenticated(), function (req, res, next) {
     if (err) return next(err);
     for (var i = 0; i < messages.length; i++){
       if(messages[i].topic.isAnon){
-        messages[i].from = '';
-        messages[i].simpleFrom = '';
+        messages[i].from = 'Anonymous';
+        messages[i].simpleFrom = 'Anonymous';
       }
     }
     res.json(messages);
@@ -171,8 +171,8 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
       var newMessage = new Message({
         from: req.user,
         to: group,
-        simpleTo: req.user.name,
-        simpleFrom: group.name,
+        simpleTo: group.name,
+        simpleFrom: req.user.name,
         subject: req.body.subject,
         message: req.body.message,
         topic: req.body.topic,
