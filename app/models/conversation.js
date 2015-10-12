@@ -23,6 +23,15 @@ var ConversationSchema = new Schema ({
   messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}]
 });
 
+ConversationSchema.set('toJSON', {
+  transform: function(doc, ret, options) {
+    if (ret.participant.isAnon){
+      delete ret.participant.user;
+    }
+    return ret;
+  }
+});
+
 ConversationSchema.methods = {
   addMessage: function(id, cb){
     this.messages.push(id);
