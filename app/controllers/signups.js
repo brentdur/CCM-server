@@ -226,7 +226,9 @@ router.put('/addme', auth.isAuthenticated(), function(req, res, next){
     signup.addMember(req.user._id, function(err, number){
       if (err) return next(err);
       gcm.syncGCM(gcm.terms.signups, null, null);
-      sheets.updateSheet(new Date(), req.user.name, req.user.email, signup.worksheetLink);
+      if(signup.worksheetLink){
+        sheets.updateSheet(new Date(), req.user.name, req.user.email, signup.worksheetLink);
+      }
       res.status(200).send();
     });
   });

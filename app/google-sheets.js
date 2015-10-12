@@ -50,7 +50,7 @@ ret.createSpreadsheet = function(auth, obj) {
 
   var req = https.request(options, function(res) {
     if(res.statusCode == 401){
-      googleAuth.refresh(auth, obj, this.createSpreadsheet);
+      googleAuth.refresh(auth, obj, ret.createSpreadsheet);
       return;
     }
     res.setEncoding('utf8');
