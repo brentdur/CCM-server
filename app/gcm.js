@@ -28,13 +28,13 @@ var gcm = {
     all: 'all'
   },
 
-  createNotification: function(title, text) {
+  createNotification: function(title, text, action) {
     return {
       "payload": {
         "title" : title,
         "text" : text,
         "icon": "icon",
-        "click_action": "OPEN_CCM"
+        "click_action": action || "OPEN_CCM"
       }
     };
   },
