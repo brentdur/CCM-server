@@ -217,10 +217,10 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 			var userNotification = null;
 			var ministerNotifcation = null;
 			if (ministerSent) {
-				userNotification = gcm.createNotification("New Message", "New response from a minister", "OPEN_CCM_INBOX"));
+				userNotification = gcm.createNotification("New Message", "New response from a minister", "OPEN_CCM_INBOX");
 			}
 			else {
-				ministerNotifcation = gcm.createNotification("New Message", "New response", "OPEN_CCM_INBOX"));
+				ministerNotifcation = gcm.createNotification("New Message", "New response", "OPEN_CCM_INBOX");
 			}
 			gcm.syncGCM(gcm.terms.conversations, ministers, ministerNotifcation);
 			gcm.syncGCM(gcm.terms.conversations, results.participant.user, userNotification);
