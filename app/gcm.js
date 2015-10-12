@@ -45,14 +45,20 @@ var gcm = {
     async.waterfall([function(callback){
       var ids = [];
       var search = {};
-      if(users){
+      if(users && (users instanceof Array)){
         var search = {
           '_id': {$in:users}
-        }
+        };
+      }
+      else if(users){
+        var search = {
+          '_id': users
+        };
       };
       users = [];
       User.find(search).select('gcm').exec(function(err, results){
         if (err) {console.log(err);}
+        if (!results) {console.log('GCM Error: No users found')};
         for(var i = 0; i < results.length; i++){
           if(results[i].gcm && results[i].gcm.length > 0){
             ids.push(results[i].gcm);
