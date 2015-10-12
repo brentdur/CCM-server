@@ -203,7 +203,7 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
   function(err, results){
     if(err) return next(err);
     utils.get.ministerUsers(function(err, ministers){
-      gcm.syncGCM(gcm.terms.conversations, ministers, gcm.createNotification('New Message', 'New message from ' + req.user.name));      
+      gcm.syncGCM(gcm.terms.conversations, ministers, gcm.createNotification('New Message', 'New message', 'OPEN_CCM_INBOX'));      
     });
     res.status(200).send();
   });
