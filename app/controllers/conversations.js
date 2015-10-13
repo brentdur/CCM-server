@@ -118,7 +118,102 @@ router.get('/mine', auth.isAuthenticated(), function(req, res, next){
 	.find({'participant.alive':true})
 	.populate('messages', 'message senderId')
 	.exec(function(err, convos){
+		if (err) return next(err);
 		res.json(convos);
+	});
+});
+
+/**
+ * @api {get} /api/conversations/android Get all conversations for a user that are still alive and returns them in an android format
+ * @apiGroup Conversations
+ * @apiVersion 1.2.0
+ *
+ * @apiUse convoGet
+ *
+ * @apiPermission isAuthenticated()
+ * @apiUse authHeader
+ */
+router.get('/android', auth.isAuthenticated(), function(req, res, next){
+	async.waterfall([
+		function(callback){
+			Group.findOne({name:"ministers"}).lean().exec(function(err, group){
+				if(err) {
+					callback(err);
+					return;
+				}
+				var found = false;
+				group.members.forEach(function(member){
+					if(member.toString() === req.user._id.toString()){
+						callback(null, true);
+						found = true;
+						return;
+					}
+				});
+				if(found){
+					return;
+				}
+				callback(null, false);
+			});
+		},
+		function(isMinister, callback){
+			if(isMinister){
+				console.log('isminister');
+				Conversation.find({alive:true, "minister.alive":true}).populate('messages', 'message senderId').exec(function(err, conversations){
+					callback(err, isMinister, conversations);
+					return;
+				});
+			}
+			else {
+				console.log('isuser');
+				Conversation
+				.find({'_id': {$in:req.user.convos}})
+				.find({'alive':true})
+				.find({'participant.alive':true})
+				.populate('messages', 'message senderId')
+				.exec(function(err, convos){
+					callback(err, isMinister, convos);
+				});
+			}
+		},
+		function(isMinister, convos, callback){
+			var ret = [];
+
+			convos.forEach(function(convo){
+				var part = convo.participant.senderId.toString();
+				var minister = convo.minister.senderId.toString();
+				var minMessages = [];
+				var partMessages = [];
+				convo.messages.forEach(function(message){
+					if(message.senderId.toString() === part) {
+						partMessages.push(message.message);
+					}
+					else {
+						minMessages.push(message.message);
+						partMessages.push('');
+					}
+				});
+				var user = "";
+				if(!convo.participant.isAnon){
+					user=convo.participant.user;
+				}
+				var obj = {
+					_id: convo._id,
+					subject: convo.subject,
+					topic: convo.topic,
+					singleton: convo.singleton,
+					user: user,
+					minMessage: minMessages,
+					messages: partMessages
+				};
+				ret.push(obj);
+			});
+			callback(null, ret);
+		}
+
+	], function(err, results){
+		console.log('err:' + err);
+		if (err) return next(err);
+		res.json(results);
 	});
 });
 
