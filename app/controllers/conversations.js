@@ -128,7 +128,31 @@ router.get('/mine', auth.isAuthenticated(), function(req, res, next){
  * @apiGroup Conversations
  * @apiVersion 1.2.0
  *
- * @apiUse convoGet
+ * @apiSuccess {String} id The id of the conversation
+ * @apiSuccess {String} subject The subject of the conversation
+ * @apiSuccess {Topic} topic The id of the topic of the conversation
+ * @apiSuccess {User} user The participant user of the conversation, hidden if the topic isAnon
+ * @apiSuccess {Boolean} singleton Whether the conversation is a single, one way, message or not
+ * @apiSuccess {String[]} minMessage An array of strings representing the minsters messages
+ * @apiSuccess {String[]} messages An array of strings for the participant messages, blank strings represent where a minster's message goes
+ *
+ * @apiSuccessExample {json} Response Example
+ * [
+ * {
+ *   "_id": "561c54ad17c852f777fe0663",
+ *   "subject": "anon convo",
+ *   "topic": "561c549917c852f777fe0656",
+ *   "user": "",
+ *   "singleton": false,
+ *   "minMessage": [
+ *   	"yo!"
+ *   ],
+ *   "messages": [
+ *     "Testing the new convo!",
+ *     ""
+ *   ]
+ * }
+ * ]
  *
  * @apiPermission isAuthenticated()
  * @apiUse authHeader

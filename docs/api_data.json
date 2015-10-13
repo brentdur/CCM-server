@@ -605,6 +605,108 @@
   },
   {
     "type": "get",
+    "url": "/api/conversations/android",
+    "title": "Get all conversations for a user that are still alive and returns them in an android format",
+    "group": "Conversations",
+    "version": "1.2.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The id of the conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>The subject of the conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Topic</p> ",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>The id of the topic of the conversation</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>User</p> ",
+            "optional": false,
+            "field": "user",
+            "description": "<p>The participant user of the conversation, hidden if the topic isAnon</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>Boolean</p> ",
+            "optional": false,
+            "field": "singleton",
+            "description": "<p>Whether the conversation is a single, one way, message or not</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String[]</p> ",
+            "optional": false,
+            "field": "minMessage",
+            "description": "<p>An array of strings representing the minsters messages</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String[]</p> ",
+            "optional": false,
+            "field": "messages",
+            "description": "<p>An array of strings for the participant messages, blank strings represent where a minster's message goes</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response Example",
+          "content": "[\n{\n  \"_id\": \"561c54ad17c852f777fe0663\",\n  \"subject\": \"anon convo\",\n  \"topic\": \"561c549917c852f777fe0656\",\n  \"user\": \"\",\n  \"singleton\": false,\n  \"minMessage\": [\n  \t\"yo!\"\n  ],\n  \"messages\": [\n    \"Testing the new convo!\",\n    \"\"\n  ]\n}\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "isAuthenticated()"
+      }
+    ],
+    "filename": "app/controllers/conversations.js",
+    "groupTitle": "Conversations",
+    "name": "GetApiConversationsAndroid",
+    "sampleRequest": [
+      {
+        "url": "http://ccm.brentondurkee.com/api/conversations/android"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization Key Header needed for almost all calls.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Example",
+          "content": "{\n  \"Authorization\": \"Bearer {your key goes here}\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
     "url": "/api/conversations/mine",
     "title": "Get all conversations for a user that are still alive",
     "group": "Conversations",
@@ -3042,6 +3144,13 @@
             "optional": false,
             "field": "description",
             "description": "<p>Full description of this event.</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "worksheetLink",
+            "description": "<p>The link for the worksheet list</p> "
           },
           {
             "group": "Success 200",
