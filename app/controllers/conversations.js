@@ -268,7 +268,7 @@ router.post('/', auth.canWrite('Conversations'), function(req, res,next){
 	utils.create.conversation(req.body.topic, req.body.subject, req.body.message, req.user, false, function(err, results){
 		if (err) return next(err);
 		utils.get.ministerUsers(function(err, ministers){
-			gcm.syncGCM(gcm.terms.conversations, ministers, gcm.createNotification('New Message', 'New message', "OPEN_CCM_INBOX"));
+			gcm.syncGCM(gcm.terms.conversations, ministers, gcm.createNotification('New Message', 'New message', "OPEN_CCM_INBOX"), 'high');
 			gcm.syncGCM(gcm.terms.conversations, req.user._id, null);
 			
 		});
@@ -351,8 +351,8 @@ router.put('/send', auth.isAuthenticated(), function(req, res, next){
 			else {
 				ministerNotifcation = gcm.createNotification("New Message", "New response", "OPEN_CCM_INBOX");
 			}
-			gcm.syncGCM(gcm.terms.conversations, ministers, ministerNotifcation);
-			gcm.syncGCM(gcm.terms.conversations, results.participant.user, userNotification);
+			gcm.syncGCM(gcm.terms.conversations, ministers, ministerNotifcation, 'high');
+			gcm.syncGCM(gcm.terms.conversations, results.participant.user, userNotification, 'high');
 		});
 		res.status(200).send();
 	});

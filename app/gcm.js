@@ -39,7 +39,7 @@ var gcm = {
     };
   },
 
-  syncGCM: function(terms, users, notification) {
+  syncGCM: function(terms, users, notification, priority) {
 
     //TODO add clearing of failed GCM keys
     async.waterfall([function(callback){
@@ -78,7 +78,9 @@ var gcm = {
         "content_available": terms && terms.length != 0,
         "data": {
               "sync":terms.toString()
-          }
+          },
+        "priority": priority || 'normal'
+
       };
 
       if (notification && notification.payload){
