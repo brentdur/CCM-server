@@ -34,7 +34,7 @@ var gcm = {
         "title" : title,
         "text" : text,
         "icon": "icon",
-        "click_action": action || "OPEN_CCM"
+        "click_action": action || "OPEN_CCM_INBOX"
       }
     };
   },
