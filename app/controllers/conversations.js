@@ -132,6 +132,7 @@ router.get('/mine', auth.isAuthenticated(), function(req, res, next){
  * @apiSuccess {String} subject The subject of the conversation
  * @apiSuccess {Topic} topic The id of the topic of the conversation
  * @apiSuccess {User} user The participant user of the conversation, hidden if the topic isAnon
+ * @apiSuccess {String} from The simple name of who the convo is with
  * @apiSuccess {Boolean} singleton Whether the conversation is a single, one way, message or not
  * @apiSuccess {String[]} minMessage An array of strings representing the minsters messages
  * @apiSuccess {String[]} messages An array of strings for the participant messages, blank strings represent where a minster's message goes
@@ -150,7 +151,8 @@ router.get('/mine', auth.isAuthenticated(), function(req, res, next){
  *   "messages": [
  *     "Testing the new convo!",
  *     ""
- *   ]
+ *   ],
+ *   "from": "minister"
  * }
  * ]
  *
@@ -207,6 +209,7 @@ router.get('/android', auth.isAuthenticated(), function(req, res, next){
 				var minister = convo.minister.senderId.toString();
 				var minMessages = [];
 				var partMessages = [];
+				var from = "";
 				convo.messages.forEach(function(message){
 					if(message.senderId.toString() === part) {
 						partMessages.push(message.message);
@@ -219,6 +222,10 @@ router.get('/android', auth.isAuthenticated(), function(req, res, next){
 				var user = "";
 				if(!convo.participant.isAnon){
 					user=convo.participant.user;
+					from = convo.participant.name;
+				}
+				if (!isMinister) {
+					from = "minister";
 				}
 				var obj = {
 					_id: convo._id,
@@ -227,7 +234,8 @@ router.get('/android', auth.isAuthenticated(), function(req, res, next){
 					singleton: convo.singleton,
 					user: user,
 					minMessage: minMessages,
-					messages: partMessages
+					messages: partMessages,
+					from: from
 				};
 				ret.push(obj);
 			});

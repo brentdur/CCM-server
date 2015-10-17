@@ -16,7 +16,8 @@ var ConversationSchema = new Schema ({
     responded: {type: Boolean, default:true},
     isAnon: {type: Boolean, default:false},
     senderId: {type: String},
-    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    name: {type: String}
   },
   topic: {type: mongoose.Schema.Types.ObjectId, ref: 'Topic'},
   singleton :{type: Boolean, default:false},

@@ -36,6 +36,7 @@ module.exports = {
 			var conversation = new Conversation();
 			var participant = {};
 			participant.user = user;
+			participant.name = '';
 			participant.senderId = uuid.v4();
 			participant.alive = true;
 			conversation.minister.senderId = uuid.v4();
@@ -55,6 +56,9 @@ module.exports = {
 					});
 				},
 				function(topic, callback){
+					if (!topic.isAnon) {
+						participant.name = user.name;
+					}
 					var newMessage = new Message({
 					subject: subject,
 					message: message,
