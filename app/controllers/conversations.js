@@ -207,6 +207,7 @@ router.get('/android', auth.isAuthenticated(), function(req, res, next){
 			convos.forEach(function(convo){
 				var part = convo.participant.senderId.toString();
 				var minister = convo.minister.senderId.toString();
+				var version = convo.version;
 				var minMessages = [];
 				var partMessages = [];
 				var from = "";
@@ -235,6 +236,7 @@ router.get('/android', auth.isAuthenticated(), function(req, res, next){
 					user: user,
 					minMessage: minMessages,
 					messages: partMessages,
+					version: version,
 					from: from
 				};
 				ret.push(obj);

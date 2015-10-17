@@ -21,7 +21,8 @@ var ConversationSchema = new Schema ({
   },
   topic: {type: mongoose.Schema.Types.ObjectId, ref: 'Topic'},
   singleton :{type: Boolean, default:false},
-  messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}]
+  messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],
+  version: {type: Number, default: 0}
 });
 
 ConversationSchema.set('toJSON', {
@@ -36,21 +37,25 @@ ConversationSchema.set('toJSON', {
 ConversationSchema.methods = {
   addMessage: function(id, cb){
     this.messages.push(id);
+    this.version = this.version+1;
     this.save(cb);
   },
 
   killMinister: function(cb){
     this.minister.alive = false;
+    this.version = this.version+1;
     this.save(cb);
   },
 
   killParticipant: function(cb){
     this.participant.alive = false;
+    this.version = this.version+1;
     this.save(cb);
   },
 
   killConvo: function(cb){
     this.alive = false;
+    this.version = this.version+1;
     this.save(cb);
   }
 };
