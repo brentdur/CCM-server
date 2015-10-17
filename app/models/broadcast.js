@@ -11,7 +11,7 @@ var BroadcastSchema = new Schema({
   syncs: [{type: String, enum: ['all', 'events', 'convos', 'signups', 'messages', 'talks']}],
   createdAt: {type: Date, default: Date.now},
   createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  version: {type: Number, default: 0}
+  version: {type: Number, default: 0, required:true}
 });
 
 
