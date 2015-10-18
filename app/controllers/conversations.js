@@ -162,24 +162,18 @@ router.get('/mine', auth.isAuthenticated(), function(req, res, next){
 router.get('/android', auth.isAuthenticated(), function(req, res, next){
 	async.waterfall([
 		function(callback){
-			Group.findOne({name:"ministers"}).lean().exec(function(err, group){
-				if(err) {
+			utils.get.ministerUsers(function(err, members){
+				if(err){
 					callback(err);
 					return;
 				}
-				var found = false;
-				group.members.forEach(function(member){
+				members.forEach(function(member){
 					if(member.toString() === req.user._id.toString()){
 						callback(null, true);
-						found = true;
-						return;
 					}
 				});
-				if(found){
-					return;
-				}
 				callback(null, false);
-			});
+			})
 		},
 		function(isMinister, callback){
 			if(isMinister){
