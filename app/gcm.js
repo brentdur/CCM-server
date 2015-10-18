@@ -84,6 +84,7 @@ var gcm = {
 
       if (priority && priority === 'high'){
         query.time_to_live = 0;
+        query.collapse_key = 'highpriccm';
       }
       if (notification && notification.payload){
         query.notification = notification.payload;
