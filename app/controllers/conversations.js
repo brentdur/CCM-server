@@ -170,6 +170,7 @@ router.get('/android', auth.isAuthenticated(), function(req, res, next){
 				members.forEach(function(member){
 					if(member.toString() === req.user._id.toString()){
 						callback(null, true);
+						return;
 					}
 				});
 				callback(null, false);
