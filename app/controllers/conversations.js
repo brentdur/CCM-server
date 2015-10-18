@@ -221,7 +221,7 @@ router.get('/android', auth.isAuthenticated(), function(req, res, next){
 				var user = "";
 				if(!convo.participant.isAnon){
 					user=convo.participant.user;
-					from = convo.participant.name;
+					from = convo.participant.name || '';
 				}
 				if (!isMinister) {
 					from = "minister";
