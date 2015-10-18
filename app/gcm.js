@@ -80,9 +80,11 @@ var gcm = {
               "sync":terms.toString()
           },
         "priority": priority || 'normal'
-
       };
 
+      if (priority && priority === 'high'){
+        query.time_to_live = 0;
+      }
       if (notification && notification.payload){
         query.notification = notification.payload;
       }
