@@ -167,13 +167,16 @@ router.get('/android', auth.isAuthenticated(), function(req, res, next){
 					callback(err);
 					return;
 				}
+				var found = false
 				members.forEach(function(member){
 					if(member.toString() === req.user._id.toString()){
 						callback(null, true);
-						return;
+						found=true;
 					}
 				});
-				callback(null, false);
+				if(!found){
+					callback(null, false);
+				}
 			})
 		},
 		function(isMinister, callback){
